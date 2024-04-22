@@ -1,0 +1,19 @@
+#
+# Copyright 2023, Colias Group, LLC
+#
+# SPDX-License-Identifier: BSD-2-Clause
+#
+
+name: "CI"
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+jobs:
+  check-licenses:
+    name: Check licenses
+    runs-on: ubuntu-latest
+    steps:
+      - uses: seL4/ci-actions/license-check@master
