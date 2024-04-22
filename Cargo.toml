@@ -9,4 +9,6 @@
 resolver = "2"
 
 members = [
+    "examples/root-task/hello",
+    "examples/microkit/hello/pds/hello",
 ]

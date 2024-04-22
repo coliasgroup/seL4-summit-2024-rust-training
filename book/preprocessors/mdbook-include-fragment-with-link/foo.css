@@ -1,0 +1,15 @@
+.foo > .foo-header > pre > code {
+    background-color: color-mix(in srgb, var(--bg), #777 20%);
+    padding: .5rem;
+    /* text-align: right; */
+}
+
+.foo > .foo-header > pre {
+    margin-bottom: 0;
+    /* margin-top: 0; */
+}
+
+.foo > .foo-body > pre {
+    margin-top: 0;
+    /* margin-bottom: 0; */
+}

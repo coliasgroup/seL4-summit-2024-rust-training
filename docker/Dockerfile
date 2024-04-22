@@ -1,0 +1,165 @@
+#
+# Copyright 2024, Colias Group, LLC
+#
+# SPDX-License-Identifier: BSD-2-Clause
+#
+
+FROM trustworthysystems/sel4
+
+WORKDIR /tmp
+
+RUN rm -r *
+
+RUN apt-get update -q && apt-get install -y --no-install-recommends \
+    # for qemu
+    pkg-config \
+    libglib2.0-dev \
+    libaio-dev \
+    libpixman-1-dev \
+    libslirp-dev \
+    # for microkit
+    python3-venv \
+    musl-tools \
+    pandoc \
+    texlive-latex-base \
+    texlive-latex-extra \
+    texlive-fonts-recommended \
+    # for test scripts
+    python3-requests \
+    # for hacking
+    bash-completion man sudo \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN curl -sSf https://sh.rustup.rs | \
+        bash -s -- -y --no-modify-path --default-toolchain none
+
+ENV PATH=/root/.cargo/bin:$PATH
+
+RUN set -eux; \
+    url="https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-x86_64-aarch64-none-elf.tar.xz"; \
+    wget -nv "$url"; \
+    tar -xf arm-gnu-toolchain-*.tar.xz; \
+    rm arm-gnu-toolchain-*.tar.xz; \
+    mv arm-gnu-toolchain-* /opt/gcc-aarch64-none-elf;
+
+ENV PATH=/opt/gcc-aarch64-none-elf/bin:$PATH
+
+RUN set -eux; \
+    version=7.2.0; \
+    url="https://download.qemu.org/qemu-${version}.tar.xz"; \
+    wget -nv "$url"; \
+    tar -xf qemu-*.tar.xz; \
+    rm qemu-*.tar.xz; \
+    cd qemu-*; \
+    qemu_arm_virt_sp804_url="https://github.com/coliasgroup/qemu/commit/cd3b78de4b5a8d7c79ae99dab2b5e0ab1ba0ffac.patch"; \
+    curl -sSL "$qemu_arm_virt_sp804_url" | patch -p1; \
+    ./configure \
+        --prefix=/opt/qemu \
+        --enable-linux-aio \
+        --enable-slirp \
+        --target-list=aarch64-softmmu; \
+    make -j$(nproc) all; \
+    make install; \
+    cd ..; \
+    rm -rf qemu-*;
+
+ENV PATH=/opt/qemu/bin:$PATH
+
+ENV SEL4_INSTALL_DIR=/opt/seL4
+
+RUN set -eux; \
+    git clone \
+        https://github.com/seL4/seL4.git \
+        --config advice.detachedHead=false; \
+    cd seL4; \
+    git checkout a58480425c5b4c7a3d5000c797f083bc7d5fd532;
+
+RUN set -eux; \
+    cd seL4; \
+    cmake \
+        -DCROSS_COMPILER_PREFIX=aarch64-linux-gnu- \
+        -DCMAKE_INSTALL_PREFIX=$SEL4_INSTALL_DIR \
+        -DKernelPlatform=qemu-arm-virt \
+        -DKernelArmHypervisorSupport=ON \
+        -DKernelVerificationBuild=OFF \
+        -DARM_CPU=cortex-a57 \
+        -G Ninja \
+        -S . \
+        -B build; \
+    ninja -C build all; \
+    ninja -C build install; \
+    git clean -fxd;
+
+RUN set -eux; \
+    export RUSTUP_TOOLCHAIN=nightly-2024-03-09; \
+    rustup component add rust-src; \
+    url="https://github.com/seL4/rust-sel4"; \
+    rev="a20aab14c0533d3145a2db75020e60151ce9b78f"; \
+    common_flags="--git $url --rev $rev --root $SEL4_INSTALL_DIR"; \
+    CC_aarch64_unknown_none=aarch64-linux-gnu-gcc \
+    SEL4_PREFIX=$SEL4_INSTALL_DIR \
+        cargo install \
+            -Z build-std=core,compiler_builtins \
+            -Z build-std-features=compiler-builtins-mem \
+            --target aarch64-unknown-none \
+            $common_flags \
+            sel4-kernel-loader; \
+    cargo install \
+        $common_flags \
+        sel4-kernel-loader-add-payload;
+
+ENV MICROKIT_SDK_VERSION=1.2.6
+ENV MICROKIT_SDK=/opt/microkit/microkit-sdk-$MICROKIT_SDK_VERSION
+
+RUN set -eux; \
+    git clone \
+        https://github.com/seL4/microkit.git \
+        --config advice.detachedHead=false; \
+    cd microkit; \
+    git checkout 35978315953532d3d2aca3faa82eda54d2a9172f;
+
+# TODO use upstream microkit branch after merge
+# branch: rust-microkit
+RUN git clone \
+        https://github.com/coliasgroup/seL4.git \
+        --branch keep/1daabe63fd34ae3d348b8e4a4057bd1a \
+        --config advice.detachedHead=false \
+        microkit/seL4
+
+RUN set -eux; \
+    cd microkit; \
+    python3.9 -m venv pyenv; \
+    ./pyenv/bin/pip install --upgrade pip setuptools wheel; \
+    ./pyenv/bin/pip install -r requirements.txt; \
+    ./pyenv/bin/pip install sel4-deps; \
+    ./pyenv/bin/python3 build_sdk.py --sel4 ./seL4; \
+    chmod a+rX release/microkit-sdk-$MICROKIT_SDK_VERSION/bin/microkit; \
+    mkdir /opt/microkit; \
+    mv release/microkit-sdk-$MICROKIT_SDK_VERSION /opt/microkit; \
+    git clean -fxd;
+
+ARG UID
+ARG GID
+
+RUN set -eux; \
+    if ! getent group $GID; then \
+        groupadd -g $GID x; \
+    fi; \
+    if ! getent passwd $UID; then \
+        useradd -u $UID -g $GID -m -p x x; \
+    else \
+        usermod -l x $(id -un $UID); \
+    fi; \
+    usermod -a -G sudo x;
+
+RUN echo 'x ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers # TODO replace 'x' with '%sudo'
+
+USER $UID:$GID
+
+# This time, for $UID
+RUN curl -sSf https://sh.rustup.rs | \
+        bash -s -- -y --no-modify-path --default-toolchain none
+
+ENV PATH=/home/x/.cargo/bin:$PATH
+
+WORKDIR /work

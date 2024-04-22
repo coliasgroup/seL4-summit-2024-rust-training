@@ -1,0 +1,20 @@
+#
+# Copyright 2024, Colias Group, LLC
+#
+# SPDX-License-Identifier: BSD-2-Clause
+#
+
+[package]
+name = "mdbook-include-fragment-with-link"
+version = "0.1.0"
+authors = ["Nick Spinale <nick.spinale@coliasgroup.com>"]
+edition = "2021"
+license = "BSD-2-Clause"
+
+[dependencies]
+mdbook = "*"
+clap = "*"
+semver = "*"
+anyhow = "*"
+serde_json = "*"
+regex = "*"

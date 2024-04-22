@@ -17,3 +17,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: seL4/ci-actions/license-check@master
+  build-book:
+    name: Build book
+    runs-on: ubuntu-latest
+    steps:
+      - uses: cachix/install-nix-action@v25
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+      - uses: actions/checkout@v4
+      - run: make -C book build-preprocessors
+      - run: make -C book build
+      - run: make -C book check
+      - name: Upload Pages artifact
+        if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: book/out
+  deploy-book:
+    name: Deploy book
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    needs: [check-licenses, build-book]
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
