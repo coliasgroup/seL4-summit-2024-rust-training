@@ -1,3 +1,10 @@
+/*
+ * Copyright 2024, Colias Group, LLC
+ *
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ */
+
 .foo > .foo-header > pre > code {
     background-color: color-mix(in srgb, var(--bg), #777 20%);
     padding: .5rem;
