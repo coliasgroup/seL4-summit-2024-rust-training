@@ -21,19 +21,15 @@ clean:
 
 ### Protection domains
 
-rust_target_path := support/targets
-rust_microkit_target := aarch64-sel4-microkit
-target_dir := $(build_dir)/target
-
 common_env := \
 	SEL4_INCLUDE_DIRS=$(abspath $(microkit_sdk_config_dir)/include)
 
 common_options := \
 	-Z build-std=core,alloc,compiler_builtins \
 	-Z build-std-features=compiler-builtins-mem \
-	--target $(rust_microkit_target) \
+	--target aarch64-sel4-microkit \
 	--release \
-	--target-dir $(abspath $(target_dir)) \
+	--target-dir $(abspath $(build_dir)/target) \
 	--out-dir $(abspath $(build_dir))
 
 target_for_crate = $(build_dir)/$(1).elf
@@ -71,8 +67,8 @@ $(loader): $(system_description) $(built_crates)
 		--search-path $(build_dir) \
 		--board $(microkit_board) \
 		--config $(microkit_config) \
-		-r $(build_dir)/report.txt \
-		-o $@
+		--report $(build_dir)/report.txt \
+		--output $@
 
 ### Run
 
