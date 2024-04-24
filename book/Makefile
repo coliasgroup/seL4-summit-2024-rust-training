@@ -15,15 +15,15 @@ none:
 clean:
 	rm -rf $(build_dir)
 
-.PHONY: build-preprocessors
-build-preprocessors:
-	cargo build --manifest-path preprocessors/Cargo.toml
+.PHONY: build-preprocessor
+build-preprocessor:
+	cargo build --manifest-path preprocessor/Cargo.toml
 
 .PHONY: build
 build:
 	MDBOOK_FRAGMENT_WITH_CONTEXT_LOCAL_ROOT=$(abspath ..) \
 	MDBOOK_FRAGMENT_WITH_CONTEXT_REMOTE_PREFIX=$(rev_url_prefix)/$$(git rev-parse HEAD) \
-	PATH=preprocessors/target/debug:$$PATH \
+	PATH=preprocessor/target/debug:$$PATH \
 		mdbook build
 
 .PHONY: check

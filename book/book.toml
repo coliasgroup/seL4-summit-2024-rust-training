@@ -17,5 +17,5 @@ build-dir = "build"
 before = [ "links" ]
 
 [output.html]
-additional-css = ["preprocessors/mdbook-fragment-with-context/fragment-with-context.css"]
+additional-css = ["preprocessor/fragment-with-context.css"]
 git-repository-url = "https://github.com/coliasgroup/rust-sel4-tutorial"

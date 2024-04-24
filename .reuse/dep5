@@ -5,7 +5,7 @@ Source: http://sel4.systems
 
 Files:
   Cargo.lock
-  book/preprocessors/Cargo.lock
+  book/preprocessor/Cargo.lock
   support/*.json
 Copyright: 2023, Colias Group, LLC
 License: BSD-2-Clause
