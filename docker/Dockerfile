@@ -82,7 +82,7 @@ RUN set -eux; \
         -DCROSS_COMPILER_PREFIX=aarch64-linux-gnu- \
         -DCMAKE_INSTALL_PREFIX=$SEL4_INSTALL_DIR \
         -DKernelPlatform=qemu-arm-virt \
-        # TODO
+        # TODO further develop kernel loader to make KernelArmHypervisorSupport=ON unecessary
         -DKernelArmHypervisorSupport=ON \
         -DKernelVerificationBuild=OFF \
         -DARM_CPU=cortex-a57 \
@@ -120,9 +120,9 @@ RUN set -eux; \
     git checkout c2cfd9a37cefd136650c2ab53e61f7cb2ec67653;
 
 # TODO use upstream microkit branch after merge
-# branch: rust-microkit
 RUN git clone \
         https://github.com/coliasgroup/seL4.git \
+        # branch: rust-microkit
         --branch keep/1daabe63fd34ae3d348b8e4a4057bd1a \
         --config advice.detachedHead=false \
         microkit/seL4
@@ -142,26 +142,32 @@ RUN set -eux; \
 ARG UID
 ARG GID
 
-# TODO
 RUN set -eux; \
-    if ! getent group $GID; then \
-        groupadd -g $GID x; \
-    fi; \
-    if ! getent passwd $UID; then \
-        useradd -u $UID -g $GID -m -p x x; \
+    if [ $UID -eq 0 ]; then \
+        if [ $GID -ne 0 ]; then \
+            echo "error: \$UID == 0 but \$GID != 0" >&2; \
+            exit 1; \
+        fi; \
     else \
-        usermod -l x $(id -un $UID); \
-    fi; \
-    usermod -a -G sudo x;
+        if getent passwd $UID; then \
+            echo "error: \$UID $UID already exists" >&2; \
+            exit 1; \
+        fi; \
+        if ! getent group $GID; then \
+            groupadd --gid $GID x; \
+        fi; \
+        useradd --uid $UID --gid $GID --groups sudo --create-home x; \
+    fi;
 
-# TODO replace 'x' with '%sudo'
 RUN echo 'x ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 USER $UID:$GID
 
-# This time, for $UID
-RUN curl -sSf https://sh.rustup.rs | \
-        bash -s -- -y --no-modify-path --default-toolchain none
+RUN set -eux; \
+    if [ $UID -ne 0 ]; then \
+        curl -sSf https://sh.rustup.rs | \
+            bash -s -- -y --no-modify-path --default-toolchain none; \
+    fi;
 
 ENV PATH=/home/x/.cargo/bin:$PATH
 
