@@ -68,7 +68,13 @@ impl This {
         }
     }
 
-    fn render(&self, attrs: &str, path: &str, start: &str, end: &str) -> String {
+    fn render_fragment_with_context(
+        &self,
+        attrs: &str,
+        path: &str,
+        start: &str,
+        end: &str,
+    ) -> String {
         let abs_path = format!("{}", self.local_root.join(path).display());
         let url = format!("{}/{path}#L{start}-L{end}", self.remote_prefix);
 
@@ -95,6 +101,28 @@ impl This {
 
         s
     }
+
+    fn render_link(
+        &self,
+        reference: &str,
+        path: &str,
+        start: Option<&str>,
+        end: Option<&str>,
+    ) -> String {
+        // HACK take advantage of the fact that .../blob/.../$d redirects to .../tree/.../$d
+        let url = {
+            let mut s = format!("{}/{path}", self.remote_prefix);
+            if let Some(start) = start {
+                write!(&mut s, "#L{start}").unwrap();
+                if let Some(end) = end {
+                    write!(&mut s, "-L{end}").unwrap();
+                }
+            }
+            s
+        };
+
+        format!("[{reference}]({url})")
+    }
 }
 
 impl Preprocessor for This {
@@ -109,15 +137,28 @@ impl Preprocessor for This {
     fn run(&self, _ctx: &PreprocessorContext, mut book: Book) -> Result<Book, Error> {
         book.for_each_mut(|section: &mut BookItem| {
             if let BookItem::Chapter(ref mut ch) = *section {
-                let r = Regex::new("\\{\\{\\s*#fragement_with_context\\s+\"(?<attrs>.*)\"\\s+(?<path>.*):(?<start>\\d+):(?<end>\\d+)\\s*\\}\\}").unwrap();
-                ch.content = r.replace_all(&ch.content, |captures: &Captures| {
-                    self.render(
-                        captures.name("attrs").unwrap().as_str(),
-                        captures.name("path").unwrap().as_str(),
-                        captures.name("start").unwrap().as_str(),
-                        captures.name("end").unwrap().as_str(),
-                    )
-                }).into_owned();
+                {
+                    let r = Regex::new("\\{\\{\\s*#fragement_with_context\\s+\"(?<attrs>[^}]*)\"\\s+(?<path>[^}]*):(?<start>\\d+):(?<end>\\d+)\\s*\\}\\}").unwrap();
+                    ch.content = r.replace_all(&ch.content, |captures: &Captures| {
+                        self.render_fragment_with_context(
+                            captures.name("attrs").unwrap().as_str(),
+                            captures.name("path").unwrap().as_str(),
+                            captures.name("start").unwrap().as_str(),
+                            captures.name("end").unwrap().as_str(),
+                        )
+                    }).into_owned();
+                }
+                {
+                    let r = Regex::new("\\{\\{\\s*#link\\s+(?<reference>(?<path>[^:}]*)(:(?<start>\\d+)(:(?<end>\\d+))?)?)\\s*\\}\\}").unwrap();
+                    ch.content = r.replace_all(&ch.content, |captures: &Captures| {
+                        self.render_link(
+                            captures.name("reference").unwrap().as_str(),
+                            captures.name("path").unwrap().as_str(),
+                            captures.name("start").map(|m| m.as_str()),
+                            captures.name("end").map(|m| m.as_str()),
+                        )
+                    }).into_owned();
+                }
             }
         });
 
