@@ -26,33 +26,36 @@ RUN apt-get update -q && apt-get install -y --no-install-recommends \
     texlive-fonts-recommended \
     # for test scripts
     python3-requests \
+    # for book
+    linkchecker \
     # for hacking
     bash-completion man sudo \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl -sSf https://sh.rustup.rs | \
-        bash -s -- -y --no-modify-path --default-toolchain none
+        bash -s -- -y --no-modify-path \
+            --default-toolchain nightly-2024-03-09 \
+            --component rust-src
 
 ENV PATH=/root/.cargo/bin:$PATH
 
+RUN cargo install mdbook@0.4.36
+
 RUN set -eux; \
     url="https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-x86_64-aarch64-none-elf.tar.xz"; \
-    wget -nv "$url"; \
-    tar -xf arm-gnu-toolchain-*.tar.xz; \
-    rm arm-gnu-toolchain-*.tar.xz; \
-    mv arm-gnu-toolchain-* /opt/gcc-aarch64-none-elf;
+    dst=/opt/gcc-aarch64-none-elf; \
+    mkdir -p $dst; \
+    curl -sSfL "$url" | tar -xJ -C $dst --strip-components=1;
 
 ENV PATH=/opt/gcc-aarch64-none-elf/bin:$PATH
 
 RUN set -eux; \
     version=7.2.0; \
     url="https://download.qemu.org/qemu-${version}.tar.xz"; \
-    wget -nv "$url"; \
-    tar -xf qemu-*.tar.xz; \
-    rm qemu-*.tar.xz; \
+    curl -sSfL "$url" | tar -xJ; \
     cd qemu-*; \
     qemu_arm_virt_sp804_url="https://github.com/coliasgroup/qemu/commit/cd3b78de4b5a8d7c79ae99dab2b5e0ab1ba0ffac.patch"; \
-    curl -sSL "$qemu_arm_virt_sp804_url" | patch -p1; \
+    curl -sSfL "$qemu_arm_virt_sp804_url" | patch -p1; \
     ./configure \
         --prefix=/opt/qemu \
         --enable-linux-aio \
@@ -60,8 +63,7 @@ RUN set -eux; \
         --target-list=aarch64-softmmu; \
     make -j$(nproc) all; \
     make install; \
-    cd ..; \
-    rm -rf qemu-*;
+    rm -rf $(pwd);
 
 ENV PATH=/opt/qemu/bin:$PATH
 
@@ -80,6 +82,7 @@ RUN set -eux; \
         -DCROSS_COMPILER_PREFIX=aarch64-linux-gnu- \
         -DCMAKE_INSTALL_PREFIX=$SEL4_INSTALL_DIR \
         -DKernelPlatform=qemu-arm-virt \
+        # TODO
         -DKernelArmHypervisorSupport=ON \
         -DKernelVerificationBuild=OFF \
         -DARM_CPU=cortex-a57 \
@@ -88,11 +91,9 @@ RUN set -eux; \
         -B build; \
     ninja -C build all; \
     ninja -C build install; \
-    git clean -fxd;
+    rm -rf $(pwd);
 
 RUN set -eux; \
-    export RUSTUP_TOOLCHAIN=nightly-2024-03-09; \
-    rustup component add rust-src; \
     url="https://github.com/seL4/rust-sel4"; \
     rev="a20aab14c0533d3145a2db75020e60151ce9b78f"; \
     common_flags="--git $url --rev $rev --root $SEL4_INSTALL_DIR"; \
@@ -133,10 +134,11 @@ RUN set -eux; \
     ./pyenv/bin/pip install -r requirements.txt; \
     ./pyenv/bin/pip install sel4-deps; \
     ./pyenv/bin/python3 build_sdk.py --sel4 ./seL4; \
-    chmod a+rX release/microkit-sdk-$MICROKIT_SDK_VERSION/bin/microkit; \
-    mkdir /opt/microkit; \
-    mv release/microkit-sdk-$MICROKIT_SDK_VERSION /opt/microkit; \
-    git clean -fxd;
+    mkdir $(dirname $MICROKIT_SDK); \
+    mv release/microkit-sdk-$MICROKIT_SDK_VERSION $MICROKIT_SDK; \
+    chmod a+rX $MICROKIT_SDK/bin/microkit; \
+    rm -rf $HOME/.cache/pyoxidizer; \
+    rm -rf $(pwd);
 
 ARG UID
 ARG GID
