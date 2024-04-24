@@ -5,18 +5,19 @@
  *
  */
 
-.foo > .foo-header > pre > code {
+.fragment-with-context > .fragment-with-context-context > pre > code {
     background-color: color-mix(in srgb, var(--bg), #777 20%);
-    padding: .5rem;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
     /* text-align: right; */
 }
 
-.foo > .foo-header > pre {
+.fragment-with-context > .fragment-with-context-context > pre {
     margin-bottom: 0;
     /* margin-top: 0; */
 }
 
-.foo > .foo-body > pre {
+.fragment-with-context > .fragment-with-context-fragment > pre {
     margin-top: 0;
     /* margin-bottom: 0; */
 }

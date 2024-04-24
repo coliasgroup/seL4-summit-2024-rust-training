@@ -9,5 +9,5 @@
 resolver = "2"
 
 members = [
-    "mdbook-include-fragment-with-link",
+    "mdbook-fragment-with-context",
 ]

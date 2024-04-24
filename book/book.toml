@@ -11,11 +11,11 @@ multilingual = false
 src = "src"
 
 [build]
-build-dir = "out"
+build-dir = "build"
 
-[preprocessor.include-fragment-with-link]
+[preprocessor.fragment-with-context]
 before = [ "links" ]
 
 [output.html]
-additional-css = ["preprocessors/mdbook-include-fragment-with-link/foo.css"]
+additional-css = ["preprocessors/mdbook-fragment-with-context/fragment-with-context.css"]
 git-repository-url = "https://github.com/coliasgroup/rust-sel4-tutorial"

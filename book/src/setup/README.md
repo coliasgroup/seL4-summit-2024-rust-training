@@ -6,4 +6,4 @@
 
 # Foo
 
-{{#foo "rust,ignore" examples/root-task/hello/src/main.rs:12:17}}
+{{#fragement_with_context "rust,ignore" examples/root-task/hello/src/main.rs:12:17}}

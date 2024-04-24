@@ -5,16 +5,15 @@
 #
 
 [package]
-name = "mdbook-include-fragment-with-link"
+name = "mdbook-fragment-with-context"
 version = "0.1.0"
 authors = ["Nick Spinale <nick.spinale@coliasgroup.com>"]
 edition = "2021"
 license = "BSD-2-Clause"
 
 [dependencies]
-mdbook = "*"
-clap = "*"
-semver = "*"
-anyhow = "*"
-serde_json = "*"
-regex = "*"
+clap = "4.5"
+mdbook = "0.4.36"
+regex = "1.10"
+semver = "1"
+serde_json = "1"

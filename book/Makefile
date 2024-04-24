@@ -4,38 +4,32 @@
 # SPDX-License-Identifier: BSD-2-Clause
 #
 
-ifeq ($(IN_NIX_SHELL),)
-	run_in_nix_shell := nix-shell -A shell --run
-else
-	run_in_nix_shell := $(SHELL) -c
-endif
+build_dir := build
+
+rev_url_prefix := https://github.com/coliasgroup/rust-sel4-tutorial/blob
 
 .PHONY: none
 none:
 
 .PHONY: clean
 clean:
-	rm -rf out
-
-.PHONY: shell
-shell:
-	nix-shell -A shell
+	rm -rf $(build_dir)
 
 .PHONY: build-preprocessors
 build-preprocessors:
-	$(run_in_nix_shell) "cargo build --manifest-path preprocessors/Cargo.toml"
+	cargo build --manifest-path preprocessors/Cargo.toml
 
 .PHONY: build
 build:
-	FOO_LOCAL_ROOT=$(abspath ..) \
-	FOO_REMOTE_PREFIX=https://github.com/coliasgroup/rust-sel4-tutorial/blob/$$(git rev-parse HEAD) \
+	MDBOOK_FRAGMENT_WITH_CONTEXT_LOCAL_ROOT=$(abspath ..) \
+	MDBOOK_FRAGMENT_WITH_CONTEXT_REMOTE_PREFIX=$(rev_url_prefix)/$$(git rev-parse HEAD) \
 	PATH=preprocessors/target/debug:$$PATH \
-		$(run_in_nix_shell) "mdbook build"
+		mdbook build
 
 .PHONY: check
 check:
-	$(run_in_nix_shell) "linkchecker out"
+	linkchecker $(build_dir)
 
 .PHONY: open
 open:
-	open out/index.html
+	open $(build_dir)/index.html
