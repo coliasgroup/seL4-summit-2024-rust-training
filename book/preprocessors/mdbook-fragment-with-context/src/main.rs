@@ -104,14 +104,15 @@ impl This {
 
     fn render_link(
         &self,
-        reference: &str,
-        path: &str,
+        hidden: &str,
+        visible: &str,
+        visible_path: &str,
         start: Option<&str>,
         end: Option<&str>,
     ) -> String {
         // HACK take advantage of the fact that .../blob/.../$d redirects to .../tree/.../$d
         let url = {
-            let mut s = format!("{}/{path}", self.remote_prefix);
+            let mut s = format!("{}/{hidden}{visible_path}", self.remote_prefix);
             if let Some(start) = start {
                 write!(&mut s, "#L{start}").unwrap();
                 if let Some(end) = end {
@@ -121,7 +122,7 @@ impl This {
             s
         };
 
-        format!("[{reference}]({url})")
+        format!("[{visible}]({url})")
     }
 }
 
@@ -149,11 +150,12 @@ impl Preprocessor for This {
                     }).into_owned();
                 }
                 {
-                    let r = Regex::new("\\{\\{\\s*#link\\s+(?<reference>(?<path>[^:}]*)(:(?<start>\\d+)(:(?<end>\\d+))?)?)\\s*\\}\\}").unwrap();
+                    let r = Regex::new("\\{\\{\\s*#link\\s+(\\((?<hidden>[^\\)]*)\\))?(?<visible>(?<visible_path>[^:}]*)(:(?<start>\\d+)(:(?<end>\\d+))?)?)\\s*\\}\\}").unwrap();
                     ch.content = r.replace_all(&ch.content, |captures: &Captures| {
                         self.render_link(
-                            captures.name("reference").unwrap().as_str(),
-                            captures.name("path").unwrap().as_str(),
+                            captures.name("hidden").map(|m| m.as_str()).unwrap_or(""),
+                            captures.name("visible").unwrap().as_str(),
+                            captures.name("visible_path").unwrap().as_str(),
                             captures.name("start").map(|m| m.as_str()),
                             captures.name("end").map(|m| m.as_str()),
                         )

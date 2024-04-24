@@ -14,4 +14,6 @@ Foo {{#link examples/root-task/hello/src/main.rs:12}} bar
 
 Foo {{#link examples/root-task/hello/src/main.rs}} bar
 
+Foo {{#link (examples/root-task/hello/)src/main.rs}} bar
+
 Foo {{#link examples/root-task/hello/src/}} bar
