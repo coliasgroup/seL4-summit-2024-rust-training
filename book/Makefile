@@ -6,7 +6,7 @@
 
 build_dir := build
 
-rev_url_prefix := https://github.com/coliasgroup/rust-sel4-tutorial/blob
+repo := coliasgroup/rust-sel4-tutorial
 
 .PHONY: none
 none:
@@ -21,8 +21,9 @@ build-preprocessor:
 
 .PHONY: build
 build:
-	MDBOOK_FRAGMENT_WITH_CONTEXT_LOCAL_ROOT=$(abspath ..) \
-	MDBOOK_FRAGMENT_WITH_CONTEXT_REMOTE_PREFIX=$(rev_url_prefix)/$$(git rev-parse HEAD) \
+	MDBOOK_GH_LINKS_LOCAL_ROOT=$(abspath ..) \
+	MDBOOK_GH_LINKS_REPO=$(repo) \
+	MDBOOK_GH_LINKS_REV=$$(git rev-parse HEAD) \
 	PATH=preprocessor/target/debug:$$PATH \
 		mdbook build
 

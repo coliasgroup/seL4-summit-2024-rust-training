@@ -5,19 +5,19 @@
  *
  */
 
-.fragment-with-context > .fragment-with-context-context > pre > code {
+.fragment-with-gh-link > .fragment-with-gh-link-link > pre > code {
     background-color: color-mix(in srgb, var(--bg), #777 20%);
     padding-top: .5rem;
     padding-bottom: .5rem;
     /* text-align: right; */
 }
 
-.fragment-with-context > .fragment-with-context-context > pre {
+.fragment-with-gh-link > .fragment-with-gh-link-link > pre {
     margin-bottom: 0;
     /* margin-top: 0; */
 }
 
-.fragment-with-context > .fragment-with-context-fragment > pre {
+.fragment-with-gh-link > .fragment-with-gh-link-fragment > pre {
     margin-top: 0;
     /* margin-bottom: 0; */
 }
