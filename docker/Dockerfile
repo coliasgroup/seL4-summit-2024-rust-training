@@ -117,7 +117,7 @@ RUN set -eux; \
         https://github.com/seL4/microkit.git \
         --config advice.detachedHead=false; \
     cd microkit; \
-    git checkout 35978315953532d3d2aca3faa82eda54d2a9172f;
+    git checkout c2cfd9a37cefd136650c2ab53e61f7cb2ec67653;
 
 # TODO use upstream microkit branch after merge
 # branch: rust-microkit
@@ -136,13 +136,13 @@ RUN set -eux; \
     ./pyenv/bin/python3 build_sdk.py --sel4 ./seL4; \
     mkdir $(dirname $MICROKIT_SDK); \
     mv release/microkit-sdk-$MICROKIT_SDK_VERSION $MICROKIT_SDK; \
-    chmod a+rX $MICROKIT_SDK/bin/microkit; \
     rm -rf $HOME/.cache/pyoxidizer; \
     rm -rf $(pwd);
 
 ARG UID
 ARG GID
 
+# TODO
 RUN set -eux; \
     if ! getent group $GID; then \
         groupadd -g $GID x; \
@@ -154,7 +154,8 @@ RUN set -eux; \
     fi; \
     usermod -a -G sudo x;
 
-RUN echo 'x ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers # TODO replace 'x' with '%sudo'
+# TODO replace 'x' with '%sudo'
+RUN echo 'x ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 USER $UID:$GID
 
