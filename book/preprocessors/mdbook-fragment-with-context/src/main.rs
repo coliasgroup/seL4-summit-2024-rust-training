@@ -71,11 +71,13 @@ impl This {
     fn render_fragment_with_context(
         &self,
         attrs: &str,
-        path: &str,
+        hidden: &str,
+        visible_path: &str,
         start: &str,
         end: &str,
     ) -> String {
-        let abs_path = format!("{}", self.local_root.join(path).display());
+        let path = format!("{hidden}{visible_path}");
+        let abs_path = format!("{}", self.local_root.join(&path).display());
         let url = format!("{}/{path}#L{start}-L{end}", self.remote_prefix);
 
         let mut s = String::new();
@@ -84,7 +86,7 @@ impl This {
 
         writeln!(&mut s, "<div class=\"fragment-with-context-context\">").unwrap();
         write!(&mut s, "<pre><code>").unwrap();
-        write!(&mut s, "<a href=\"{url}\">{path}:{start}:{end}</a>").unwrap();
+        write!(&mut s, "<a href=\"{url}\">{visible_path}:{start}:{end}</a>").unwrap();
         write!(&mut s, "</code></pre>").unwrap();
         writeln!(&mut s, "").unwrap();
         writeln!(&mut s, "</div>").unwrap();
@@ -139,11 +141,12 @@ impl Preprocessor for This {
         book.for_each_mut(|section: &mut BookItem| {
             if let BookItem::Chapter(ref mut ch) = *section {
                 {
-                    let r = Regex::new("\\{\\{\\s*#fragement_with_context\\s+\"(?<attrs>[^}]*)\"\\s+(?<path>[^}]*):(?<start>\\d+):(?<end>\\d+)\\s*\\}\\}").unwrap();
+                    let r = Regex::new("\\{\\{\\s*#fragement_with_context\\s+\"(?<attrs>[^}]*)\"\\s+(\\((?<hidden>[^\\)]*)\\))?(?<visible_path>[^}]*):(?<start>\\d+):(?<end>\\d+)\\s*\\}\\}").unwrap();
                     ch.content = r.replace_all(&ch.content, |captures: &Captures| {
                         self.render_fragment_with_context(
                             captures.name("attrs").unwrap().as_str(),
-                            captures.name("path").unwrap().as_str(),
+                            captures.name("hidden").map(|m| m.as_str()).unwrap_or(""),
+                            captures.name("visible_path").unwrap().as_str(),
                             captures.name("start").unwrap().as_str(),
                             captures.name("end").unwrap().as_str(),
                         )
