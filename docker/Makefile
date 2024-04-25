@@ -40,9 +40,9 @@ rm-container:
 		docker rm -f $$id; \
 	done
 
-.PHONY: test
-test: build
+.PHONY: check-examples
+check-examples: build
 	docker run --rm \
 		--mount type=bind,readonly,src=$(abspath $(work_root)),dst=/work \
 		-i $(image_tag) \
-		make test BUILD=/tmp/build
+		make -C examples test BUILD=/tmp/build

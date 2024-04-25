@@ -8,7 +8,7 @@ include ../common.mk
 
 crate_name := hello
 crate := $(build_dir)/$(crate_name).elf
-crate_intermediate := $(build_dir)/$(crate_name).intermediate
+crate_intermediate := $(crate).intermediate
 
 $(crate): $(crate_intermediate)
 

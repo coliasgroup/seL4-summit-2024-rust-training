@@ -26,8 +26,10 @@ $(image): $(app) $(loader) $(loader_cli)
 qemu_cmd := \
 	qemu-system-aarch64 \
 		-machine virt,virtualization=on -cpu cortex-a57 -m 1024 \
-		-nographic -serial mon:stdio \
-		-kernel $(image)
+		-serial mon:stdio \
+		-nographic \
+		-kernel $(image) \
+		$(extra_qemu_args)
 
 .PHONY: run
 run: $(image)

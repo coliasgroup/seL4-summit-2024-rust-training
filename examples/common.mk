@@ -18,3 +18,6 @@ none:
 .PHONY: clean
 clean:
 	rm -rf $(build_dir)
+
+$(build_dir):
+	mkdir -p $(build_dir)
