@@ -5,8 +5,8 @@
 #
 
 examples := \
-	root-task/hello \
-	microkit/hello
+	examples/root-task/hello \
+	examples/microkit/hello
 
 .PHONY: none
 none:

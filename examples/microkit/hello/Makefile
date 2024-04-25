@@ -4,43 +4,33 @@
 # SPDX-License-Identifier: BSD-2-Clause
 #
 
-include ../common.mk
+include ../../../mk/microkit.mk
 
-common_env := \
-	SEL4_INCLUDE_DIRS=$(sel4_include_dirs)
-
-common_options := \
-	-Z build-std=core,alloc,compiler_builtins \
-	-Z build-std-features=compiler-builtins-mem \
-	--target aarch64-sel4-microkit \
-	--release \
-	--target-dir $(build_dir)/target \
-	--out-dir $(build_dir)
-
-target_for_crate = $(build_dir)/$(1).elf
-intermediate_target_for_crate = $(build_dir)/$(1).intermediate
+crate = $(build_dir)/$(1).elf
 
 define build_crate
 
-$(target_for_crate): $(intermediate_target_for_crate)
+$(crate): $(crate).intermediate
 
-.INTERMDIATE: $(intermediate_target_for_crate)
-$(intermediate_target_for_crate):
-	$$(common_env) \
+.INTERMDIATE: $(crate).intermediate
+$(crate).intermediate:
+	$$(common_cargo_env) \
 		cargo build \
-			$$(common_options) \
+			$$(common_cargo_flags) \
+			--target aarch64-sel4-microkit \
+			--release \
 			-p $(1)
 
 endef
 
-crates := \
+crate_names := \
 	microkit-hello
 
-built_crates := $(foreach crate,$(crates),$(call target_for_crate,$(crate)))
+crates := $(foreach crate_name,$(crate_names),$(call crate,$(crate_name)))
 
-$(eval $(foreach crate,$(crates),$(call build_crate,$(crate))))
+$(eval $(foreach crate_name,$(crate_names),$(call build_crate,$(crate_name))))
 
 $(system_description): hello.system
 	cp $< $@
 
-$(image): $(built_crates)
+$(image): $(crates)

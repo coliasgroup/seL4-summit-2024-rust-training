@@ -44,5 +44,6 @@ rm-container:
 check-examples: build
 	docker run --rm \
 		--mount type=bind,readonly,src=$(abspath $(work_root)),dst=/work \
-		-i $(image_tag) \
-		make -C examples test BUILD=/tmp/build
+		-i $$([ -t 0 ] && echo -t) \
+		$(image_tag) \
+		make test BUILD=/tmp/build

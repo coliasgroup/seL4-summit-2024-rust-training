@@ -4,4 +4,4 @@
 # SPDX-License-Identifier: BSD-2-Clause
 #
 
-**/build/
+/examples/**/build/

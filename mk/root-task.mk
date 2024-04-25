@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 #
 
-include $(dir $(lastword $(MAKEFILE_LIST)))/../common.mk
+include $(dir $(lastword $(MAKEFILE_LIST)))/base.mk
 
 sel4_prefix := $(SEL4_INSTALL_DIR)
 
@@ -38,3 +38,12 @@ run: $(image)
 .PHONY: test
 test: test.py $(image)
 	python3 $< $(qemu_cmd)
+
+common_cargo_env := \
+	SEL4_PREFIX=$(sel4_prefix)
+
+common_cargo_flags := \
+	-Z build-std=core,alloc,compiler_builtins \
+	-Z build-std-features=compiler-builtins-mem \
+	--target-dir $(build_dir)/target \
+	--out-dir $(build_dir)

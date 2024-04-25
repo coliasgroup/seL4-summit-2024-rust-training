@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 #
 
-include $(dir $(lastword $(MAKEFILE_LIST)))/../common.mk
+include $(dir $(lastword $(MAKEFILE_LIST)))/base.mk
 
 microkit_board := qemu_virt_aarch64
 microkit_config := debug
@@ -42,3 +42,12 @@ run: $(image)
 .PHONY: test
 test: test.py $(image)
 	python3 $< $(qemu_cmd)
+
+common_cargo_env := \
+	SEL4_INCLUDE_DIRS=$(sel4_include_dirs)
+
+common_cargo_flags := \
+	-Z build-std=core,alloc,compiler_builtins \
+	-Z build-std-features=compiler-builtins-mem \
+	--target-dir $(build_dir)/target \
+	--out-dir $(build_dir)

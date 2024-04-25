@@ -4,23 +4,19 @@
 # SPDX-License-Identifier: BSD-2-Clause
 #
 
-include ../common.mk
+include ../../../mk/root-task.mk
 
 crate_name := hello
 crate := $(build_dir)/$(crate_name).elf
-crate_intermediate := $(crate).intermediate
 
-$(crate): $(crate_intermediate)
+$(crate): $(crate).intermediate
 
-.INTERMDIATE: $(crate_intermediate)
-$(crate_intermediate):
-	SEL4_PREFIX=$(sel4_prefix) \
+.INTERMDIATE: $(crate).intermediate
+$(crate).intermediate:
+	$(common_cargo_env) \
 		cargo build \
-			-Z build-std=core,alloc,compiler_builtins \
-			-Z build-std-features=compiler-builtins-mem \
+			$(common_cargo_flags) \
 			--target aarch64-sel4 \
-			--target-dir $(build_dir)/target \
-			--out-dir $(build_dir) \
 			-p $(crate_name)
 
 $(app): $(crate)
