@@ -21,9 +21,9 @@ fn main() {
         .get_matches();
 
     let preprocessor = This {
-        local_root: env::var("MDBOOK_GH_LINKS_LOCAL_ROOT").unwrap().into(),
-        repo: env::var("MDBOOK_GH_LINKS_REPO").unwrap(),
-        rev: env::var("MDBOOK_GH_LINKS_REV").unwrap(),
+        gh_link_local_root: env::var("MDBOOK_GH_LINK_LOCAL_ROOT").unwrap().into(),
+        gh_link_repo: env::var("MDBOOK_GH_LINK_REPO").unwrap(),
+        gh_link_rev: env::var("MDBOOK_GH_LINK_REV").unwrap(),
         manual_url: env::var("MDBOOK_MANUAL_URL").unwrap(),
     };
 
@@ -58,28 +58,22 @@ fn handle_preprocessing(pre: &dyn Preprocessor) -> Result<(), Error> {
 }
 
 struct This {
-    local_root: PathBuf,
-    repo: String,
-    rev: String,
+    gh_link_local_root: PathBuf,
+    gh_link_repo: String,
+    gh_link_rev: String,
     manual_url: String,
 }
 
 impl This {
-    fn url(&self, path: &str, is_directory: bool) -> String {
-        format!(
-            "https://github.com/{}/{}/{}/{path}",
-            self.repo,
-            if is_directory { "tree" } else { "blob" },
-            self.rev
-        )
-    }
-
-    fn render_fragment_with_context(&self, attrs: &str, link: &Link) -> String {
+    fn render_fragment_with_gh_link(&self, attrs: &str, link: &GitHubLink) -> String {
         let link_text = link.text();
         let range_suffix = link.range_suffix();
-        let path = link.path();
-        let local_path = self.local_root.join(&path).display().to_string();
-        let url = format!("{}{}", self.url(&path, false), link.url_fragment());
+        let local_path = self
+            .gh_link_local_root
+            .join(&link.path())
+            .display()
+            .to_string();
+        let url = self.gh_link_url(link, false);
 
         let mut s = String::new();
 
@@ -105,31 +99,27 @@ impl This {
         s
     }
 
-    fn render_link(&self, link: &Link) -> String {
-        let path = link.path();
-        let local_path = self.local_root.join(&path);
-        format!(
-            "[{}]({}{})",
-            link.text(),
-            self.url(&path, local_path.is_dir()),
-            link.url_fragment()
-        )
-    }
-
-    fn render_manual_link(&self, text: &str, fragment: Option<&str>) -> String {
+    fn render_gh_link(&self, link: &GitHubLink) -> String {
+        let local_path = self.gh_link_local_root.join(link.path());
         format!(
             "[{}]({})",
-            text,
-            self.manual_url(fragment),
+            link.text(),
+            self.gh_link_url(link, local_path.is_dir()),
         )
     }
 
-    fn manual_url(&self, fragment: Option<&str>) -> String {
-        let mut s = self.manual_url.clone();
-        if let Some(fragment) = fragment {
-            write!(&mut s, "#{}", fragment).unwrap();
-        }
-        s
+    fn gh_link_url(&self, link: &GitHubLink, is_directory: bool) -> String {
+        format!(
+            "https://github.com/{}/{}/{}/{}",
+            self.gh_link_repo,
+            if is_directory { "tree" } else { "blob" },
+            self.gh_link_rev,
+            link.url_suffix(),
+        )
+    }
+
+    fn render_manual_link(&self, link: &ManualLink) -> String {
+        link.render(&self.manual_url)
     }
 }
 
@@ -148,26 +138,25 @@ impl Preprocessor for This {
                 {
                     let r = Regex::new("\\{\\{\\s*#fragment_with_gh_link\\s+\"(?<attrs>[^}]*)\"\\s+(?<link>.*?)\\s*\\}\\}").unwrap();
                     ch.content = r.replace_all(&ch.content, |captures: &Captures| {
-                        self.render_fragment_with_context(
+                        self.render_fragment_with_gh_link(
                             captures.name("attrs").unwrap().as_str(),
-                            &Link::parse(captures.name("link").unwrap().as_str()).unwrap(),
+                            &GitHubLink::parse(captures.name("link").unwrap().as_str()).unwrap(),
                         )
                     }).into_owned();
                 }
                 {
                     let r = Regex::new(r"\{\{\s*#gh_link\s+(?<link>.*?)\s*\}\}").unwrap();
                     ch.content = r.replace_all(&ch.content, |captures: &Captures| {
-                        self.render_link(
-                            &Link::parse(captures.name("link").unwrap().as_str()).unwrap(),
+                        self.render_gh_link(
+                            &GitHubLink::parse(captures.name("link").unwrap().as_str()).unwrap(),
                         )
                     }).into_owned();
                 }
                 {
-                    let r = Regex::new(r"\{\{\s*#manual_link\s+\[(?<text>.*?)\](\s+(?<fragment>.*+))?\}\}").unwrap();
+                    let r = Regex::new(r"\{\{\s*#manual_link\s+(?<link>.*?)\s*\}\}").unwrap();
                     ch.content = r.replace_all(&ch.content, |captures: &Captures| {
                         self.render_manual_link(
-                            captures.name("text").unwrap().as_str(),
-                            captures.name("fragment").map(|m| m.as_str()),
+                            &ManualLink::parse(captures.name("link").unwrap().as_str()).unwrap(),
                         )
                     }).into_owned();
                 }
@@ -180,7 +169,7 @@ impl Preprocessor for This {
 }
 
 #[derive(Debug)]
-struct Link {
+struct GitHubLink {
     text: Option<String>,
     hidden_path_part: Option<String>,
     visible_path_part: String,
@@ -188,8 +177,8 @@ struct Link {
     end: Option<String>,
 }
 
-impl Link {
-    fn parse(s: &str) -> Option<Link> {
+impl GitHubLink {
+    fn parse(s: &str) -> Option<Self> {
         let r = Regex::new(
             r"(?x)
             ^
@@ -250,8 +239,8 @@ impl Link {
         s
     }
 
-    fn url_fragment(&self) -> String {
-        let mut s = String::new();
+    fn url_suffix(&self) -> String {
+        let mut s = self.path();
         if let Some(start) = &self.start {
             write!(&mut s, "#L{start}").unwrap();
             if let Some(end) = &self.end {
@@ -259,5 +248,71 @@ impl Link {
             }
         }
         s
+    }
+}
+
+#[derive(Debug)]
+struct ManualLink {
+    text: Option<String>,
+    section: Option<String>,
+    section_name: Option<String>,
+}
+
+impl ManualLink {
+    fn parse(s: &str) -> Option<Self> {
+        let r = Regex::new(
+            r"(?x)
+            ^
+            (
+                \[
+                    (?<text>.*?)
+                \]
+                (\s+|$)
+            )?
+            (
+                \#
+                (?<section>.*?)
+                (\s+|$)
+            )?
+            (
+                \(
+                    (?<section_name>.*?)
+                \)
+                (\s+|$)
+            )?
+            $
+        ",
+        )
+        .unwrap();
+        eprintln!("{}", s);
+        r.captures(s).map(|captures| Self {
+            text: captures.name("text").map(|m| m.as_str().to_owned()),
+            section: captures.name("section").map(|m| m.as_str().to_owned()),
+            section_name: captures.name("section_name").map(|m| m.as_str().to_owned()),
+        })
+    }
+
+    fn render(&self, url: &str) -> String {
+        let text = self.text.clone().unwrap_or_else(|| {
+            let mut s = format!("seL4 Reference Manual");
+            if let Some(section) = &self.section {
+                write!(&mut s, " § {section}").unwrap();
+                if let Some(section_name) = &self.section_name {
+                    write!(&mut s, " ({section_name})").unwrap();
+                }
+            }
+            s
+        });
+        let fragment = if let Some(section) = &self.section {
+            let ty = if section.contains('.') {
+                "section"
+            } else {
+                "chapter"
+            };
+            format!("#{ty}.{section}")
+        } else {
+            String::new()
+        };
+        format!("[{text}]({url}{fragment})")
     }
 }

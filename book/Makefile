@@ -22,9 +22,9 @@ build-preprocessor:
 
 .PHONY: build
 build:
-	MDBOOK_GH_LINKS_LOCAL_ROOT=$(abspath ..) \
-	MDBOOK_GH_LINKS_REPO=$(repo) \
-	MDBOOK_GH_LINKS_REV=$$(git rev-parse HEAD) \
+	MDBOOK_GH_LINK_LOCAL_ROOT=$(abspath ..) \
+	MDBOOK_GH_LINK_REPO=$(repo) \
+	MDBOOK_GH_LINK_REV=$$(git rev-parse HEAD) \
 	MDBOOK_MANUAL_URL=$(manual_url) \
 	PATH=preprocessor/target/debug:$$PATH \
 		mdbook build
