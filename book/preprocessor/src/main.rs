@@ -93,7 +93,7 @@ impl This {
         writeln!(&mut s, "<div class=\"fragment-with-gh-link-fragment\">").unwrap();
         writeln!(&mut s, "").unwrap();
         writeln!(&mut s, "```{attrs}").unwrap();
-        writeln!(&mut s, "{{{{#include {local_path}:{range_suffix}}}}}").unwrap();
+        writeln!(&mut s, "{{{{#include {local_path}{range_suffix}}}}}").unwrap();
         writeln!(&mut s, "```").unwrap();
         writeln!(&mut s, "").unwrap();
         writeln!(&mut s, "</div>").unwrap();
