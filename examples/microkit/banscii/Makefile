@@ -16,7 +16,7 @@ $(crate): $(crate).intermediate
 $(crate).intermediate:
 	$(common_cargo_env) \
 		cargo build \
-			$(common_cargo_flags) \
+			$(common_cargo_args) \
 			--target aarch64-sel4-microkit \
 			--release \
 			-p $(1)

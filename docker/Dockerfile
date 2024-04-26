@@ -96,17 +96,17 @@ RUN set -eux; \
 RUN set -eux; \
     url="https://github.com/seL4/rust-sel4"; \
     rev="a20aab14c0533d3145a2db75020e60151ce9b78f"; \
-    common_flags="--git $url --rev $rev --root $SEL4_INSTALL_DIR"; \
+    common_args="--git $url --rev $rev --root $SEL4_INSTALL_DIR"; \
     CC_aarch64_unknown_none=aarch64-linux-gnu-gcc \
     SEL4_PREFIX=$SEL4_INSTALL_DIR \
         cargo install \
             -Z build-std=core,compiler_builtins \
             -Z build-std-features=compiler-builtins-mem \
             --target aarch64-unknown-none \
-            $common_flags \
+            $common_args \
             sel4-kernel-loader; \
     cargo install \
-        $common_flags \
+        $common_args \
         sel4-kernel-loader-add-payload;
 
 ENV MICROKIT_SDK_VERSION=1.2.6

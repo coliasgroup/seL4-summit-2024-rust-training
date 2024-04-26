@@ -24,7 +24,7 @@ $(crate).intermediate:
 	$(common_cargo_env) \
 	$(cc_cargo_env) \
 		cargo build \
-			$(common_cargo_flags) \
+			$(common_cargo_args) \
 			--target $(target) \
 			--release \
 			-p $(1)

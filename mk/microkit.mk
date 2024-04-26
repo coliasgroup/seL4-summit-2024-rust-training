@@ -49,7 +49,7 @@ test: test.py run-context
 common_cargo_env := \
 	SEL4_INCLUDE_DIRS=$(sel4_include_dirs)
 
-common_cargo_flags := \
+common_cargo_args := \
 	-Z build-std=core,alloc,compiler_builtins \
 	-Z build-std-features=compiler-builtins-mem \
 	--target-dir $(build_dir)/target \

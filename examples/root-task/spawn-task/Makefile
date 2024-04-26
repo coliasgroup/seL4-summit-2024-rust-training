@@ -15,7 +15,7 @@ $(child_crate): $(child_crate).intermediate
 $(child_crate).intermediate:
 	$(common_cargo_env) \
 		cargo build \
-			$(common_cargo_flags) \
+			$(common_cargo_args) \
 			--target aarch64-sel4 \
 			-p $(child_crate_name)
 
@@ -29,7 +29,7 @@ $(crate).intermediate: $(child_crate)
 	$(common_cargo_env) \
 	CHILD_ELF=$(abspath $(child_crate)) \
 		cargo build \
-			$(common_cargo_flags) \
+			$(common_cargo_args) \
 			--target aarch64-sel4 \
 			-p $(crate_name)
 

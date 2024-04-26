@@ -45,7 +45,7 @@ test: test.py run-context
 common_cargo_env := \
 	SEL4_PREFIX=$(sel4_prefix)
 
-common_cargo_flags := \
+common_cargo_args := \
 	-Z build-std=core,alloc,compiler_builtins \
 	-Z build-std-features=compiler-builtins-mem \
 	--target-dir $(build_dir)/target \
