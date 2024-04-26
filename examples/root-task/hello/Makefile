@@ -4,7 +4,14 @@
 # SPDX-License-Identifier: BSD-2-Clause
 #
 
-include ../../../mk/base.mk
+build_dir := build
+
+.PHONY: none
+none:
+
+.PHONY: clean
+clean:
+	rm -rf $(build_dir)
 
 sel4_prefix := $(SEL4_INSTALL_DIR)
 
@@ -50,4 +57,4 @@ run: $(image)
 
 .PHONY: test
 test: test.py $(image)
-	PYTHONPATH=$(root_dir)/testing python3 $< $(qemu_cmd)
+	PYTHONPATH=../../../testing python3 $< $(qemu_cmd)

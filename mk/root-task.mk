@@ -4,7 +4,19 @@
 # SPDX-License-Identifier: BSD-2-Clause
 #
 
-include $(dir $(lastword $(MAKEFILE_LIST)))/base.mk
+root_dir := $(dir $(lastword $(MAKEFILE_LIST)))/..
+
+build_dir := build
+
+.PHONY: none
+none:
+
+.PHONY: clean
+clean:
+	rm -rf $(build_dir)
+
+$(build_dir):
+	mkdir -p $(build_dir)
 
 sel4_prefix := $(SEL4_INSTALL_DIR)
 
