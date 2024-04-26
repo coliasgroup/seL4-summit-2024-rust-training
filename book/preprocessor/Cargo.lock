@@ -886,7 +886,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "mdbook-gh-links"
+name = "mdbook-sel4-tutorial"
 version = "0.1.0"
 dependencies = [
  "clap",

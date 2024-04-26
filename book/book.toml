@@ -13,9 +13,9 @@ src = "src"
 [build]
 build-dir = "build"
 
-[preprocessor.gh-links]
+[preprocessor.sel4-tutorial]
 before = [ "links" ]
 
 [output.html]
-additional-css = ["preprocessor/gh-links.css"]
+additional-css = ["preprocessor/sel4-tutorial.css"]
 git-repository-url = "https://github.com/coliasgroup/rust-sel4-tutorial"

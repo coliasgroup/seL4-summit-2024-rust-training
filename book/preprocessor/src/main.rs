@@ -135,7 +135,7 @@ impl This {
 
 impl Preprocessor for This {
     fn name(&self) -> &str {
-        "gh-links"
+        "sel4-tutorial"
     }
 
     fn supports_renderer(&self, renderer: &str) -> bool {
