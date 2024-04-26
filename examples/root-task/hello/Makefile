@@ -46,7 +46,7 @@ $(image): $(crate) $(loader) $(loader_cli)
 
 qemu_cmd = \
 	qemu-system-aarch64 \
-		-machine virt,virtualization=on -cpu cortex-a57 -m 1024 \
+		-machine virt,virtualization=on -cpu cortex-a57 -m size=1G \
 		-serial mon:stdio \
 		-nographic \
 		-kernel $(image)
