@@ -8,6 +8,26 @@
 
 [Introduction](README.md)
 
-# Setting up your environment
+# Setup
 
-- [Setting up your environment](setup/README.md)
+- [Requirements]()
+- [Docker Container]()
+
+# Background
+
+- [seL4]()
+- [seL4 Microkit]()
+- [`#[no_std]`]()
+
+# Root Tasks
+
+- [Hello, World!]()
+- [Serial Driver]()
+- [Spawning a Thread]()
+- [Spawning a Task]()
+
+# Microkit Systems
+
+- [Hello, World!]()
+- [Bancii]()
+- [HTTP Server]()
