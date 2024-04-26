@@ -19,3 +19,5 @@ Foo {{#gh_link examples/root-task/hello/src/main.rs}} bar
 Foo {{#gh_link (examples/root-task/hello/)src/main.rs}} bar
 
 Foo {{#gh_link examples/root-task/hello/src/}} bar
+
+Foo {{#gh_link [foo] examples/root-task/hello/src/}} bar

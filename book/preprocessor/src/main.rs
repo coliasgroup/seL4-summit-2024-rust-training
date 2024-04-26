@@ -56,7 +56,7 @@ fn handle_preprocessing(pre: &dyn Preprocessor) -> Result<(), Error> {
     Ok(())
 }
 
-pub struct This {
+struct This {
     local_root: PathBuf,
     repo: String,
     rev: String,
@@ -72,17 +72,12 @@ impl This {
         )
     }
 
-    fn render_fragment_with_context(
-        &self,
-        attrs: &str,
-        hidden_path_part: &str,
-        visible_path_part: &str,
-        start: &str,
-        end: &str,
-    ) -> String {
-        let path = format!("{hidden_path_part}{visible_path_part}");
+    fn render_fragment_with_context(&self, attrs: &str, link: &Link) -> String {
+        let link_text = link.text();
+        let range_suffix = link.range_suffix();
+        let path = link.path();
         let local_path = self.local_root.join(&path).display().to_string();
-        let url = format!("{}#L{start}-L{end}", self.url(&path, false));
+        let url = format!("{}{}", self.url(&path, false), link.url_fragment());
 
         let mut s = String::new();
 
@@ -90,11 +85,7 @@ impl This {
 
         writeln!(&mut s, "<div class=\"fragment-with-gh-link-link\">").unwrap();
         write!(&mut s, "<pre><code>").unwrap();
-        write!(
-            &mut s,
-            "<a href=\"{url}\">{visible_path_part}:{start}:{end}</a>"
-        )
-        .unwrap();
+        write!(&mut s, "<a href=\"{url}\">{link_text}</a>").unwrap();
         write!(&mut s, "</code></pre>").unwrap();
         writeln!(&mut s, "").unwrap();
         writeln!(&mut s, "</div>").unwrap();
@@ -102,7 +93,7 @@ impl This {
         writeln!(&mut s, "<div class=\"fragment-with-gh-link-fragment\">").unwrap();
         writeln!(&mut s, "").unwrap();
         writeln!(&mut s, "```{attrs}").unwrap();
-        writeln!(&mut s, "{{{{#include {local_path}:{start}:{end}}}}}").unwrap();
+        writeln!(&mut s, "{{{{#include {local_path}:{range_suffix}}}}}").unwrap();
         writeln!(&mut s, "```").unwrap();
         writeln!(&mut s, "").unwrap();
         writeln!(&mut s, "</div>").unwrap();
@@ -112,27 +103,15 @@ impl This {
         s
     }
 
-    fn render_link(
-        &self,
-        hidden_path_part: &str,
-        visible: &str,
-        visible_path_part: &str,
-        start: Option<&str>,
-        end: Option<&str>,
-    ) -> String {
-        let path = format!("{hidden_path_part}{visible_path_part}");
+    fn render_link(&self, link: &Link) -> String {
+        let path = link.path();
         let local_path = self.local_root.join(&path);
-        let url = {
-            let mut s = self.url(&path, local_path.is_dir());
-            if let Some(start) = start {
-                write!(&mut s, "#L{start}").unwrap();
-                if let Some(end) = end {
-                    write!(&mut s, "-L{end}").unwrap();
-                }
-            }
-            s
-        };
-        format!("[{visible}]({url})")
+        format!(
+            "[{}]({}{})",
+            link.text(),
+            self.url(&path, local_path.is_dir()),
+            link.url_fragment()
+        )
     }
 }
 
@@ -149,26 +128,19 @@ impl Preprocessor for This {
         book.for_each_mut(|section: &mut BookItem| {
             if let BookItem::Chapter(ref mut ch) = *section {
                 {
-                    let r = Regex::new("\\{\\{\\s*#fragment_with_gh_link\\s+\"(?<attrs>[^}]*)\"\\s+(\\((?<hidden_path_part>[^\\)]*)\\))?(?<visible_path_part>[^}]*):(?<start>\\d+):(?<end>\\d+)\\s*\\}\\}").unwrap();
+                    let r = Regex::new("\\{\\{\\s*#fragment_with_gh_link\\s+\"(?<attrs>[^}]*)\"\\s+(?<link>.*?)\\s*\\}\\}").unwrap();
                     ch.content = r.replace_all(&ch.content, |captures: &Captures| {
                         self.render_fragment_with_context(
                             captures.name("attrs").unwrap().as_str(),
-                            captures.name("hidden_path_part").map(|m| m.as_str()).unwrap_or(""),
-                            captures.name("visible_path_part").unwrap().as_str(),
-                            captures.name("start").unwrap().as_str(),
-                            captures.name("end").unwrap().as_str(),
+                            &Link::parse(captures.name("link").unwrap().as_str()).unwrap(),
                         )
                     }).into_owned();
                 }
                 {
-                    let r = Regex::new("\\{\\{\\s*#gh_link\\s+(\\((?<hidden_path_part>[^\\)]*)\\))?(?<visible>(?<visible_path_part>[^:}]*)(:(?<start>\\d+)(:(?<end>\\d+))?)?)\\s*\\}\\}").unwrap();
+                    let r = Regex::new("\\{\\{\\s*#gh_link\\s+(?<link>.*?)\\s*\\}\\}").unwrap();
                     ch.content = r.replace_all(&ch.content, |captures: &Captures| {
                         self.render_link(
-                            captures.name("hidden_path_part").map(|m| m.as_str()).unwrap_or(""),
-                            captures.name("visible").unwrap().as_str(),
-                            captures.name("visible_path_part").unwrap().as_str(),
-                            captures.name("start").map(|m| m.as_str()),
-                            captures.name("end").map(|m| m.as_str()),
+                            &Link::parse(captures.name("link").unwrap().as_str()).unwrap(),
                         )
                     }).into_owned();
                 }
@@ -176,5 +148,88 @@ impl Preprocessor for This {
         });
 
         Ok(book)
+    }
+}
+
+#[derive(Debug)]
+struct Link {
+    text: Option<String>,
+    hidden_path_part: Option<String>,
+    visible_path_part: String,
+    start: Option<String>,
+    end: Option<String>,
+}
+
+impl Link {
+    fn parse(s: &str) -> Option<Link> {
+        let r = Regex::new(
+            r"(?x)
+            ^
+            (\[(?<text>[^\]]*)\]\s+)?
+            (\((?<hidden_path_part>[^\)]*)\))?
+            (?<visible_path_part>[^:]*)(:(?<start>\d+)(:(?<end>\d+))?)?
+            $
+        ",
+        )
+        .unwrap();
+        r.captures(s).map(|captures| Self {
+            text: captures.name("text").map(|m| m.as_str().to_owned()),
+            hidden_path_part: captures
+                .name("hidden_path_part")
+                .map(|m| m.as_str().to_owned()),
+            visible_path_part: captures
+                .name("visible_path_part")
+                .unwrap()
+                .as_str()
+                .to_owned(),
+            start: captures.name("start").map(|m| m.as_str().to_owned()),
+            end: captures.name("end").map(|m| m.as_str().to_owned()),
+        })
+    }
+
+    fn path(&self) -> String {
+        let mut s = String::new();
+        if let Some(hidden_path_part) = &self.hidden_path_part {
+            write!(&mut s, "{hidden_path_part}").unwrap();
+        }
+        write!(&mut s, "{}", self.visible_path_part).unwrap();
+        s
+    }
+
+    fn text(&self) -> String {
+        if let Some(text) = &self.text {
+            text.to_owned()
+        } else {
+            self.visible()
+        }
+    }
+
+    fn visible(&self) -> String {
+        let mut s = String::new();
+        write!(&mut s, "{}", self.visible_path_part).unwrap();
+        write!(&mut s, "{}", self.range_suffix()).unwrap();
+        s
+    }
+
+    fn range_suffix(&self) -> String {
+        let mut s = String::new();
+        if let Some(start) = &self.start {
+            write!(&mut s, ":{start}").unwrap();
+            if let Some(end) = &self.end {
+                write!(&mut s, ":{end}").unwrap();
+            }
+        }
+        s
+    }
+
+    fn url_fragment(&self) -> String {
+        let mut s = String::new();
+        if let Some(start) = &self.start {
+            write!(&mut s, "#L{start}").unwrap();
+            if let Some(end) = &self.end {
+                write!(&mut s, "-L{end}").unwrap();
+            }
+        }
+        s
     }
 }
