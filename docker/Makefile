@@ -10,6 +10,8 @@ id := rust-sel4-tutorial
 image_tag := $(id)
 container_name := $(id)
 
+mount_arg := --mount type=bind,src=$(abspath $(work_root)),dst=/work
+
 uid := $(shell id -u)
 gid := $(shell id -g)
 
@@ -25,10 +27,11 @@ build:
 .PHONY: run
 run: build
 	docker run -d --name $(container_name) \
-		--mount type=bind,src=$(abspath $(work_root)),dst=/work \
+		$(mount_arg) \
 		--publish 9080:8080/tcp \
 		--publish 9443:8443/tcp \
-		$(image_tag) sleep inf
+		$(image_tag) \
+		sleep inf
 
 .PHONY: exec
 exec:
@@ -43,7 +46,7 @@ rm-container:
 .PHONY: check-examples
 check-examples: build
 	docker run --rm \
-		--mount type=bind,readonly,src=$(abspath $(work_root)),dst=/work \
+		$(mount_arg) \
 		-i $$([ -t 0 ] && echo -t) \
 		$(image_tag) \
-		make test BUILD=/tmp/build
+		make test
