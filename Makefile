@@ -16,10 +16,6 @@ examples := \
 .PHONY: none
 none:
 
-.PHONY: clean
-clean:
-	$(foreach example,$(examples),$(MAKE) -C $(example) $@ &&) true
-
-.PHONY: test
-test:
+.PHONY: clean test
+clean test:
 	$(foreach example,$(examples),$(MAKE) -C $(example) $@ &&) true

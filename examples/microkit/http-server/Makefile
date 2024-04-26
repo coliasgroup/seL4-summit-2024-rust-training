@@ -4,14 +4,6 @@
 # SPDX-License-Identifier: BSD-2-Clause
 #
 
-disk_img = $(build_dir)/disk.img
-
-extra_qemu_args = \
-	-device virtio-net-device,netdev=netdev0 \
-	-netdev user,id=netdev0,hostfwd=tcp::8080-:80,hostfwd=tcp::8443-:443 \
-	-device virtio-blk-device,drive=blkdev0 \
-	-blockdev node-name=blkdev0,read-only=on,driver=file,filename=$(disk_img)
-
 include ../../../mk/microkit.mk
 
 target := aarch64-sel4-microkit
@@ -55,13 +47,16 @@ $(system_description): http-server.system
 
 $(image): $(crates)
 
+disk_img := $(build_dir)/disk.img
 compressed_disk_img := resources/disk.img.gz
 
 $(disk_img): $(compressed_disk_img)
 	gunzip < $< > $@
 
-# TODO deduplicate
+extra_qemu_args := \
+	-device virtio-net-device,netdev=netdev0 \
+	-netdev user,id=netdev0,hostfwd=tcp::8080-:80,hostfwd=tcp::8443-:443 \
+	-device virtio-blk-device,drive=blkdev0 \
+	-blockdev node-name=blkdev0,read-only=on,driver=file,filename=$(disk_img)
 
-run: $(disk_img)
-
-test: $(disk_img)
+run-context: $(disk_img)

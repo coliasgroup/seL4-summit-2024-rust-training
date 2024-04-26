@@ -23,7 +23,7 @@ $(image): $(app) $(loader) $(loader_cli)
 		--app $(app) \
 		-o $@
 
-qemu_cmd := \
+qemu_cmd = \
 	qemu-system-aarch64 \
 		-machine virt,virtualization=on -cpu cortex-a57 -m 1024 \
 		-serial mon:stdio \
@@ -31,12 +31,15 @@ qemu_cmd := \
 		-kernel $(image) \
 		$(extra_qemu_args)
 
+.PHONY: run-context
+run-context: $(image)
+
 .PHONY: run
-run: $(image)
+run: run-context
 	$(qemu_cmd)
 
 .PHONY: test
-test: test.py $(image)
+test: test.py run-context
 	PYTHONPATH=$(root_dir)/testing python3 $< $(qemu_cmd)
 
 common_cargo_env := \

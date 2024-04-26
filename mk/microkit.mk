@@ -27,7 +27,7 @@ $(image): $(system_description)
 		--report $(build_dir)/report.txt \
 		--output $@
 
-qemu_cmd := \
+qemu_cmd = \
 	qemu-system-aarch64 \
 		-machine virt -cpu cortex-a53 -m size=2G \
 		-serial mon:stdio \
@@ -35,12 +35,15 @@ qemu_cmd := \
 		-device loader,file=$(image),addr=0x70000000,cpu-num=0 \
 		$(extra_qemu_args)
 
+.PHONY: run-context
+run-context: $(image)
+
 .PHONY: run
-run: $(image)
+run: run-context
 	$(qemu_cmd)
 
 .PHONY: test
-test: test.py $(image)
+test: test.py run-context
 	PYTHONPATH=$(root_dir)/testing python3 $< $(qemu_cmd)
 
 common_cargo_env := \
