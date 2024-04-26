@@ -41,7 +41,7 @@ run: $(image)
 
 .PHONY: test
 test: test.py $(image)
-	python3 $< $(qemu_cmd)
+	PYTHONPATH=$(root_dir)/testing python3 $< $(qemu_cmd)
 
 common_cargo_env := \
 	SEL4_INCLUDE_DIRS=$(sel4_include_dirs)
