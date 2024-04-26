@@ -1,0 +1,17 @@
+#
+# Copyright 2023, Colias Group, LLC
+#
+# SPDX-License-Identifier: BSD-2-Clause
+#
+
+[package]
+name = "spawn-task"
+version = "0.1.0"
+authors = ["Nick Spinale <nick.spinale@coliasgroup.com>"]
+edition = "2021"
+license = "BSD-2-Clause"
+
+[dependencies]
+object = { version = "0.32.1", default-features = false, features = ["read"] }
+sel4 = { git = "https://github.com/seL4/rust-sel4" }
+sel4-root-task = { git = "https://github.com/seL4/rust-sel4" }

@@ -5,8 +5,13 @@
 #
 
 examples := \
-	examples/root-task/hello \
-	examples/microkit/hello
+    examples/root-task/hello \
+    examples/root-task/serial-device \
+    examples/root-task/spawn-task \
+    examples/root-task/spawn-thread \
+    examples/microkit/banscii \
+    examples/microkit/hello \
+    examples/microkit/http-server
 
 .PHONY: none
 none:

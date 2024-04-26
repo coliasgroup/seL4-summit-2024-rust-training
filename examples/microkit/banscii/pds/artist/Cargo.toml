@@ -1,0 +1,26 @@
+#
+# Copyright 2023, Colias Group, LLC
+#
+# SPDX-License-Identifier: BSD-2-Clause
+#
+
+[package]
+name = "banscii-artist"
+version = "0.1.0"
+authors = ["Nick Spinale <nick.spinale@coliasgroup.com>"]
+edition = "2021"
+license = "BSD-2-Clause"
+
+[dependencies]
+banscii-artist-interface-types = { path = "interface-types" }
+rsa = { version = "0.8.1", default-features = false, features = ["pem", "sha2"] }
+sel4-externally-shared = { git = "https://github.com/seL4/rust-sel4", features = ["unstable"] }
+sel4-microkit-message = { git = "https://github.com/seL4/rust-sel4" }
+
+[dependencies.sel4-microkit]
+git = "https://github.com/seL4/rust-sel4"
+default-features = false
+features = ["alloc"]
+
+[build-dependencies]
+rsa = "0.8.1"

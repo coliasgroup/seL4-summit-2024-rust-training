@@ -21,7 +21,15 @@ find examples -type f \( -name '*.rs' -o -name '*.toml' -o -name '*.system' \) -
 
 find examples -type d -empty -delete
 
-examples="root-task/hello microkit/hello"
+examples="\
+    root-task/hello \
+    root-task/serial-device \
+    root-task/spawn-task \
+    root-task/spawn-thread \
+    microkit/hello \
+    microkit/banscii \
+    microkit/http-server \
+"
 
 for example in $examples; do
     for file in $(find $external_examples_dir/$example -type f \( -name '*.rs' -o -name '*.toml' -o -name '*.system' \) -printf "%P\n"); do

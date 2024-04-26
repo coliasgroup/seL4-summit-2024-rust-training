@@ -20,3 +20,13 @@ class Simulation:
         child = pexpect.spawn(args.cmd[0], args.cmd[1:], encoding='utf-8')
         child.logfile = sys.stdout
         return cls(child)
+
+    def flush_read(self):
+        while True:
+            try:
+                self.child.read_nonblocking(timeout=0)
+            except pexpect.TIMEOUT:
+                break
+
+    def simple_test(self, timeout=20):
+        self.child.expect('TEST_PASS', timeout=timeout)
