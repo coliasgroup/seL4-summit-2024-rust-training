@@ -24,6 +24,7 @@ fn main() {
         local_root: env::var("MDBOOK_GH_LINKS_LOCAL_ROOT").unwrap().into(),
         repo: env::var("MDBOOK_GH_LINKS_REPO").unwrap(),
         rev: env::var("MDBOOK_GH_LINKS_REV").unwrap(),
+        manual_url: env::var("MDBOOK_MANUAL_URL").unwrap(),
     };
 
     if let Some(sub_args) = matches.subcommand_matches("supports") {
@@ -60,6 +61,7 @@ struct This {
     local_root: PathBuf,
     repo: String,
     rev: String,
+    manual_url: String,
 }
 
 impl This {
@@ -113,6 +115,22 @@ impl This {
             link.url_fragment()
         )
     }
+
+    fn render_manual_link(&self, text: &str, fragment: Option<&str>) -> String {
+        format!(
+            "[{}]({})",
+            text,
+            self.manual_url(fragment),
+        )
+    }
+
+    fn manual_url(&self, fragment: Option<&str>) -> String {
+        let mut s = self.manual_url.clone();
+        if let Some(fragment) = fragment {
+            write!(&mut s, "#{}", fragment).unwrap();
+        }
+        s
+    }
 }
 
 impl Preprocessor for This {
@@ -137,13 +155,23 @@ impl Preprocessor for This {
                     }).into_owned();
                 }
                 {
-                    let r = Regex::new("\\{\\{\\s*#gh_link\\s+(?<link>.*?)\\s*\\}\\}").unwrap();
+                    let r = Regex::new(r"\{\{\s*#gh_link\s+(?<link>.*?)\s*\}\}").unwrap();
                     ch.content = r.replace_all(&ch.content, |captures: &Captures| {
                         self.render_link(
                             &Link::parse(captures.name("link").unwrap().as_str()).unwrap(),
                         )
                     }).into_owned();
                 }
+                {
+                    let r = Regex::new(r"\{\{\s*#manual_link\s+\[(?<text>.*?)\](\s+(?<fragment>.*+))?\}\}").unwrap();
+                    ch.content = r.replace_all(&ch.content, |captures: &Captures| {
+                        self.render_manual_link(
+                            captures.name("text").unwrap().as_str(),
+                            captures.name("fragment").map(|m| m.as_str()),
+                        )
+                    }).into_owned();
+                }
+
             }
         });
 
@@ -165,9 +193,9 @@ impl Link {
         let r = Regex::new(
             r"(?x)
             ^
-            (\[(?<text>[^\]]*)\]\s+)?
-            (\((?<hidden_path_part>[^\)]*)\))?
-            (?<visible_path_part>[^:]*)(:(?<start>\d+)(:(?<end>\d+))?)?
+            (\[(?<text>.*?)\]\s+)?
+            (\((?<hidden_path_part>.*?)\))?
+            (?<visible_path_part>.*?)(:(?<start>\d+)(:(?<end>\d+))?)?
             $
         ",
         )

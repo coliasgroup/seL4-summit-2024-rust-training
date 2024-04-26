@@ -21,3 +21,7 @@ Foo {{#gh_link (examples/root-task/hello/)src/main.rs}} bar
 Foo {{#gh_link examples/root-task/hello/src/}} bar
 
 Foo {{#gh_link [foo] examples/root-task/hello/src/}} bar
+
+Foo {{#manual_link [manual]}} bar
+
+Foo {{#manual_link [seL4 Reference Manual § 4.1 (Message Registers)] section.4.1}} bar
