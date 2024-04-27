@@ -284,7 +284,6 @@ impl ManualLink {
         ",
         )
         .unwrap();
-        eprintln!("{}", s);
         r.captures(s).map(|captures| Self {
             text: captures.name("text").map(|m| m.as_str().to_owned()),
             section: captures.name("section").map(|m| m.as_str().to_owned()),
