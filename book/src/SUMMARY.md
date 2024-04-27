@@ -19,15 +19,16 @@
 - [seL4 Microkit]()
 - [`#[no_std]`]()
 
-# Root Tasks
+# Using the seL4 API
 
 - [Hello, World!]()
-- [Serial Driver]()
 - [Spawning a Thread]()
 - [Spawning a Task]()
+- [Serial Device]()
 
-# Microkit Systems
+# Microkit
 
 - [Hello, World!]()
-- [Bancii]()
+- [Banscii]()
+<!-- - [A Componentized Interactive Application]() -->
 - [HTTP Server]()

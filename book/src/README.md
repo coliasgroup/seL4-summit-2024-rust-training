@@ -29,3 +29,5 @@ Foo {{#manual_link [foo] #4.1}} bar
 Foo {{#manual_link #4.1 (bar)}} bar
 
 Foo {{#manual_link #4 (bar)}} bar
+
+[`sel4_immediate_sync_once_cell::ImmediateSyncOnceCell`](https://sel4.github.io/rust-sel4/views/aarch64-root-task/aarch64-sel4/doc/sel4_immediate_sync_once_cell/struct.ImmediateSyncOnceCell.html)
