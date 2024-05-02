@@ -158,9 +158,9 @@ RUN set -eux; \
         useradd --uid $UID --gid $GID --groups sudo --create-home x; \
     fi;
 
-RUN echo 'x ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-USER $UID:$GID
+USER $UID
 
 RUN set -eux; \
     if [ $UID -ne 0 ]; then \
