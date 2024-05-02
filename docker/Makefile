@@ -6,7 +6,7 @@
 
 work_root := ..
 
-id := rust-sel4-tutorial
+id := sel4-rust--tutorial
 image_tag := $(id)
 container_name := $(id)
 
