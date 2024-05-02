@@ -117,9 +117,7 @@ RUN set -eux; \
         https://github.com/seL4/microkit.git \
         --config advice.detachedHead=false; \
     cd microkit; \
-    git checkout f0939852c62c629346cd3eddbe7d8922eca8530a;
-
-RUN set -eux; \
+    git checkout f0939852c62c629346cd3eddbe7d8922eca8530a; \
     git clone \
         https://github.com/seL4/seL4.git \
         --config advice.detachedHead=false; \
