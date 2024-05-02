@@ -74,7 +74,7 @@ RUN set -eux; \
         https://github.com/seL4/seL4.git \
         --config advice.detachedHead=false; \
     cd seL4; \
-    git checkout a58480425c5b4c7a3d5000c797f083bc7d5fd532;
+    git checkout 0260fba168b74dd2504c9447f2fa8da1161ead87;
 
 RUN set -eux; \
     cd seL4; \
@@ -117,15 +117,14 @@ RUN set -eux; \
         https://github.com/seL4/microkit.git \
         --config advice.detachedHead=false; \
     cd microkit; \
-    git checkout c2cfd9a37cefd136650c2ab53e61f7cb2ec67653;
+    git checkout f0939852c62c629346cd3eddbe7d8922eca8530a;
 
-# TODO use upstream microkit branch after merge
-RUN git clone \
-        https://github.com/coliasgroup/seL4.git \
-        # branch: rust-microkit
-        --branch keep/1daabe63fd34ae3d348b8e4a4057bd1a \
-        --config advice.detachedHead=false \
-        microkit/seL4
+RUN set -eux; \
+    git clone \
+        https://github.com/seL4/seL4.git \
+        --config advice.detachedHead=false; \
+    cd seL4; \
+    git checkout 57975d485397ce1744f7163644dd530560d0b7ec;
 
 RUN set -eux; \
     cd microkit; \
