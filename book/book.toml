@@ -18,4 +18,4 @@ before = [ "links" ]
 
 [output.html]
 additional-css = ["preprocessor/sel4-tutorial.css"]
-git-repository-url = "https://github.com/coliasgroup/rust-sel4-tutorial"
+git-repository-url = "https://github.com/coliasgroup/sel4-rust-tutorial"
