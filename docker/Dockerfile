@@ -34,7 +34,7 @@ RUN apt-get update -q && apt-get install -y --no-install-recommends \
 
 RUN curl -sSf https://sh.rustup.rs | \
         bash -s -- -y --no-modify-path \
-            --default-toolchain nightly-2024-03-09 \
+            --default-toolchain nightly-2024-05-01 \
             --component rust-src
 
 ENV PATH=/root/.cargo/bin:$PATH
