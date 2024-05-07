@@ -4,33 +4,44 @@
 # SPDX-License-Identifier: BSD-2-Clause
 #
 
-FROM trustworthysystems/sel4
-
-WORKDIR /tmp
-
-RUN rm -r *
+FROM debian:bookworm
 
 RUN apt-get update -q && apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    git \
     # for qemu
     pkg-config \
     libglib2.0-dev \
     libaio-dev \
     libpixman-1-dev \
     libslirp-dev \
-    # for microkit
+    # for seL4
+    python3-dev \
     python3-venv \
-    musl-tools \
+    cmake \
+    ninja-build \
+    device-tree-compiler \
+    libxml2-utils \
+    # for microkit
     pandoc \
     texlive-latex-base \
     texlive-latex-extra \
     texlive-fonts-recommended \
+    # for bindgen
+    libclang-dev \
     # for test scripts
+    python3-pexpect \
     python3-requests \
     # for book
     linkchecker \
     # for hacking
-    bash-completion man sudo \
+    bash-completion \
+    man \
+    sudo \
     && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /tmp
 
 RUN curl -sSf https://sh.rustup.rs | \
         bash -s -- -y --no-modify-path \
@@ -42,7 +53,8 @@ ENV PATH=/root/.cargo/bin:$PATH
 RUN cargo install mdbook@0.4.36
 
 RUN set -eux; \
-    url="https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-x86_64-aarch64-none-elf.tar.xz"; \
+    host=$(uname -m); \
+    url="https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-$host-aarch64-none-elf.tar.xz"; \
     dst=/opt/gcc-aarch64-none-elf; \
     mkdir -p $dst; \
     curl -sSfL "$url" | tar -xJ -C $dst --strip-components=1;
@@ -78,8 +90,11 @@ RUN set -eux; \
 
 RUN set -eux; \
     cd seL4; \
+    python3 -m venv pyenv; \
+    export PATH=$(realpath ./pyenv/bin):$PATH; \
+    pip install tools/python-deps; \
     cmake \
-        -DCROSS_COMPILER_PREFIX=aarch64-linux-gnu- \
+        -DCROSS_COMPILER_PREFIX=aarch64-none-elf- \
         -DCMAKE_INSTALL_PREFIX=$SEL4_INSTALL_DIR \
         -DKernelPlatform=qemu-arm-virt \
         # TODO further develop kernel loader to make KernelArmHypervisorSupport=ON unecessary
@@ -97,7 +112,7 @@ RUN set -eux; \
     url="https://github.com/seL4/rust-sel4"; \
     rev="a20aab14c0533d3145a2db75020e60151ce9b78f"; \
     common_args="--git $url --rev $rev --root $SEL4_INSTALL_DIR"; \
-    CC_aarch64_unknown_none=aarch64-linux-gnu-gcc \
+    CC_aarch64_unknown_none=aarch64-none-elf-gcc \
     SEL4_PREFIX=$SEL4_INSTALL_DIR \
         cargo install \
             -Z build-std=core,compiler_builtins \
@@ -126,11 +141,11 @@ RUN set -eux; \
 
 RUN set -eux; \
     cd microkit; \
-    python3.9 -m venv pyenv; \
-    ./pyenv/bin/pip install --upgrade pip setuptools wheel; \
-    ./pyenv/bin/pip install -r requirements.txt; \
-    ./pyenv/bin/pip install sel4-deps; \
-    ./pyenv/bin/python3 build_sdk.py --sel4 ./seL4; \
+    python3 -m venv pyenv; \
+    export PATH=$(realpath ./pyenv/bin):$PATH; \
+    pip install seL4/tools/python-deps; \
+    pip install -r requirements.txt; \
+    python3 build_sdk.py --sel4 ./seL4 --tool-target-triple $(uname -m)-unknown-linux-gnu; \
     mkdir $(dirname $MICROKIT_SDK); \
     mv release/microkit-sdk-$MICROKIT_SDK_VERSION $MICROKIT_SDK; \
     rm -rf $HOME/.cache/pyoxidizer; \
