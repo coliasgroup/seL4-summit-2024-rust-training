@@ -51,8 +51,8 @@ qemu_cmd = \
 		-nographic \
 		-kernel $(image)
 
-.PHONY: run
-run: $(image)
+.PHONY: simulate
+simulate: $(image)
 	$(qemu_cmd)
 
 .PHONY: test

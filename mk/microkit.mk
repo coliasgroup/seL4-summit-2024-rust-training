@@ -47,15 +47,15 @@ qemu_cmd = \
 		-device loader,file=$(image),addr=0x70000000,cpu-num=0 \
 		$(extra_qemu_args)
 
-.PHONY: run-context
-run-context: $(image)
+.PHONY: simulation-context
+simulation-context: $(image)
 
-.PHONY: run
-run: run-context
+.PHONY: simulate
+simulate: simulation-context
 	$(qemu_cmd)
 
 .PHONY: test
-test: test.py run-context
+test: test.py simulation-context
 	PYTHONPATH=$(root_dir)/testing python3 $< $(qemu_cmd)
 
 common_cargo_env := \

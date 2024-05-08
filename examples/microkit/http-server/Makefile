@@ -59,4 +59,4 @@ extra_qemu_args := \
 	-device virtio-blk-device,drive=blkdev0 \
 	-blockdev node-name=blkdev0,read-only=on,driver=file,filename=$(disk_img)
 
-run-context: $(disk_img)
+simulation-context: $(disk_img)

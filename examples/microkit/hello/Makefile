@@ -55,8 +55,8 @@ qemu_cmd = \
 		-nographic \
 		-device loader,file=$(image),addr=0x70000000,cpu-num=0
 
-.PHONY: run
-run: $(image)
+.PHONY: simulate
+simulate: $(image)
 	$(qemu_cmd)
 
 .PHONY: test
