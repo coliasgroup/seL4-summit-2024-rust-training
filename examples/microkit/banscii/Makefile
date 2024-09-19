@@ -26,7 +26,7 @@ endef
 crate_names := \
 	banscii-artist \
 	banscii-assistant \
-	banscii-pl011-driver
+	banscii-serial-driver
 
 crates := $(foreach crate_name,$(crate_names),$(call crate,$(crate_name)))
 

@@ -9,8 +9,6 @@
 
 use sel4_microkit::{memory_region_symbol, protection_domain, Channel, Handler};
 use sel4_microkit_driver_adapters::serial::driver::HandlerImpl;
-
-#[cfg(feature = "board-qemu_virt_aarch64")]
 use sel4_pl011_driver::Driver;
 
 const DEVICE: Channel = Channel::new(0);
