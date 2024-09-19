@@ -18,3 +18,9 @@ none:
 .PHONY: clean test
 clean test:
 	$(foreach example,$(examples),$(MAKE) -C $(example) $@ &&) true
+
+clean: clean-top-level
+
+.PHONY: clean-top-level
+clean-top-level:
+	rm -rf target
