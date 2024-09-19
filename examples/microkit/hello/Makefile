@@ -31,7 +31,7 @@ $(crate).intermediate:
 			-Z build-std=core,alloc,compiler_builtins \
 			-Z build-std-features=compiler-builtins-mem \
 			--target-dir $(build_dir)/target \
-			--out-dir $(build_dir) \
+			--artifact-dir $(build_dir) \
 			--target aarch64-sel4-microkit \
 			-p $(crate_name)
 
