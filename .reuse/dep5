@@ -8,6 +8,5 @@ Files:
   book/preprocessor/Cargo.lock
   support/*.json
   examples/microkit/banscii/pds/assistant/core/assets/fonts/rock-salt/*.ttf
-  examples/microkit/http-server/resources/disk.img.gz
 Copyright: 2023, Colias Group, LLC
 License: BSD-2-Clause

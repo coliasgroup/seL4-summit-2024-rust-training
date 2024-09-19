@@ -10,8 +10,7 @@ examples := \
     examples/root-task/spawn-task \
     examples/root-task/spawn-thread \
     examples/microkit/banscii \
-    examples/microkit/hello \
-    examples/microkit/http-server
+    examples/microkit/hello
 
 .PHONY: none
 none:

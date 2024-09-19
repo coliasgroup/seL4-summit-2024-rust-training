@@ -10,12 +10,10 @@ RUN apt-get update -q && apt-get install -y --no-install-recommends \
     build-essential \
     curl \
     git \
-    # for qemu
-    pkg-config \
-    libglib2.0-dev \
-    libaio-dev \
-    libpixman-1-dev \
-    libslirp-dev \
+    qemu-utils \
+    qemu-system-arm \
+    qemu-efi-aarch64 \
+    ipxe-qemu \
     # for seL4
     python3-dev \
     python3-venv \
@@ -60,24 +58,6 @@ RUN set -eux; \
     curl -sSfL "$url" | tar -xJ -C $dst --strip-components=1;
 
 ENV PATH=/opt/gcc-aarch64-none-elf/bin:$PATH
-
-RUN set -eux; \
-    version=7.2.0; \
-    url="https://download.qemu.org/qemu-${version}.tar.xz"; \
-    curl -sSfL "$url" | tar -xJ; \
-    cd qemu-*; \
-    qemu_arm_virt_sp804_url="https://github.com/coliasgroup/qemu/commit/cd3b78de4b5a8d7c79ae99dab2b5e0ab1ba0ffac.patch"; \
-    curl -sSfL "$qemu_arm_virt_sp804_url" | patch -p1; \
-    ./configure \
-        --prefix=/opt/qemu \
-        --enable-linux-aio \
-        --enable-slirp \
-        --target-list=aarch64-softmmu; \
-    make -j$(nproc) all; \
-    make install; \
-    rm -rf $(pwd);
-
-ENV PATH=/opt/qemu/bin:$PATH
 
 ENV SEL4_INSTALL_DIR=/opt/seL4
 

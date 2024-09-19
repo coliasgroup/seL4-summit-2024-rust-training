@@ -13,19 +13,9 @@ members = [
     "examples/microkit/banscii/pds/assistant",
     "examples/microkit/banscii/pds/pl011-driver",
     "examples/microkit/hello/pds/hello",
-    "examples/microkit/http-server/pds/pl031-driver",
-    "examples/microkit/http-server/pds/server",
-    "examples/microkit/http-server/pds/sp804-driver",
-    "examples/microkit/http-server/pds/virtio-blk-driver",
-    "examples/microkit/http-server/pds/virtio-net-driver",
     "examples/root-task/hello",
     "examples/root-task/serial-device",
     "examples/root-task/spawn-task",
     "examples/root-task/spawn-task/child",
     "examples/root-task/spawn-thread",
 ]
-
-# TODO remove once https://github.com/briansmith/ring/pull/1937 is merged
-[patch.crates-io.ring]
-git = "https://github.com/coliasgroup/ring.git"
-rev = "0e644b7837cffcd53a3ff67d7f478801b4e9e0ed"

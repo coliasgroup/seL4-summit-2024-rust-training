@@ -27,8 +27,7 @@ examples="\
     root-task/spawn-task \
     root-task/spawn-thread \
     microkit/hello \
-    microkit/banscii \
-    microkit/http-server \
+    microkit/banscii
 "
 
 for example in $examples; do
