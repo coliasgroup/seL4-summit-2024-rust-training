@@ -6,38 +6,37 @@
 
 FROM debian:bookworm
 
-RUN apt-get update -q && apt-get install -y --no-install-recommends \
-    build-essential \
-    curl \
-    git \
-    qemu-utils \
-    qemu-system-arm \
-    qemu-efi-aarch64 \
-    ipxe-qemu \
-    # for seL4
-    python3-dev \
-    python3-venv \
-    cmake \
-    ninja-build \
-    device-tree-compiler \
-    libxml2-utils \
-    # for microkit
-    pandoc \
-    texlive-latex-base \
-    texlive-latex-extra \
-    texlive-fonts-recommended \
-    # for bindgen
-    libclang-dev \
-    # for test scripts
-    python3-pexpect \
-    python3-requests \
-    # for book
-    linkchecker \
-    # for hacking
-    bash-completion \
-    man \
-    sudo \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update -q && \
+    apt-get install -y --no-install-recommends \
+        build-essential \
+        curl \
+        git \
+        # for seL4
+        python3-dev \
+        python3-venv \
+        cmake \
+        ninja-build \
+        device-tree-compiler \
+        libxml2-utils \
+        gcc-riscv64-unknown-elf \
+        # for bindgen
+        libclang-dev \
+        # for test scripts
+        python3-pexpect \
+        python3-requests \
+        # for book
+        linkchecker \
+        # for hacking
+        bash-completion \
+        man \
+        sudo \
+    && \
+    # install these without --no-install-recommends
+    apt-get install -y \
+        qemu-system-arm \
+        qemu-system-misc \
+    && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /tmp
 
@@ -66,7 +65,7 @@ RUN set -eux; \
         https://github.com/seL4/seL4.git \
         --config advice.detachedHead=false; \
     cd seL4; \
-    git checkout 0260fba168b74dd2504c9447f2fa8da1161ead87;
+    git checkout cd6d3b8c25d49be2b100b0608cf0613483a6fffa;
 
 RUN set -eux; \
     cd seL4; \
@@ -90,7 +89,7 @@ RUN set -eux; \
 
 RUN set -eux; \
     url="https://github.com/seL4/rust-sel4"; \
-    rev="a20aab14c0533d3145a2db75020e60151ce9b78f"; \
+    rev="1cd063a0f69b2d2045bfa224a36c9341619f0e9b"; \
     common_args="--git $url --rev $rev --root $SEL4_INSTALL_DIR"; \
     CC_aarch64_unknown_none=aarch64-none-elf-gcc \
     SEL4_PREFIX=$SEL4_INSTALL_DIR \
@@ -104,31 +103,33 @@ RUN set -eux; \
         $common_args \
         sel4-kernel-loader-add-payload;
 
-ENV MICROKIT_SDK_VERSION=1.2.6
-ENV MICROKIT_SDK=/opt/microkit/microkit-sdk-$MICROKIT_SDK_VERSION
+ENV MICROKIT_SDK=/opt/microkit/sdk
 
 RUN set -eux; \
     git clone \
         https://github.com/seL4/microkit.git \
         --config advice.detachedHead=false; \
     cd microkit; \
-    git checkout f0939852c62c629346cd3eddbe7d8922eca8530a; \
+    git checkout 395cf0e5be489bbd7586b012188fc1f712cd1a57; \
     git clone \
         https://github.com/seL4/seL4.git \
         --config advice.detachedHead=false; \
     cd seL4; \
-    git checkout 57975d485397ce1744f7163644dd530560d0b7ec;
+    git checkout 4cae30a6ef166a378d4d23697b00106ce7e4e76f;
 
 RUN set -eux; \
     cd microkit; \
     python3 -m venv pyenv; \
     export PATH=$(realpath ./pyenv/bin):$PATH; \
-    pip install seL4/tools/python-deps; \
+    pip install --upgrade pip setuptools wheel; \
     pip install -r requirements.txt; \
-    python3 build_sdk.py --sel4 ./seL4 --tool-target-triple $(uname -m)-unknown-linux-gnu; \
+    python3 build_sdk.py \
+        --sel4 ./seL4 \
+        --tool-target-triple $(uname -m)-unknown-linux-gnu \
+        --skip-docs \
+        --skip-tar; \
     mkdir $(dirname $MICROKIT_SDK); \
-    mv release/microkit-sdk-$MICROKIT_SDK_VERSION $MICROKIT_SDK; \
-    rm -rf $HOME/.cache/pyoxidizer; \
+    mv release/microkit-sdk-* $MICROKIT_SDK; \
     rm -rf $(pwd);
 
 ARG UID
