@@ -41,7 +41,7 @@ $(image): $(system_description)
 
 qemu_cmd = \
 	qemu-system-aarch64 \
-		-machine virt -cpu cortex-a53 -m size=2G \
+		-machine virt,virtualization=on -cpu cortex-a53 -m size=2G \
 		-serial mon:stdio \
 		-nographic \
 		-device loader,file=$(image),addr=0x70000000,cpu-num=0 \
