@@ -24,6 +24,7 @@ use sel4_initialize_tls::{TlsImage, TlsReservationLayout, UncheckedTlsImage};
 use sel4_root_task::{
     abort, panicking::catch_unwind, root_task, set_global_allocator_mutex_notification, Never,
 };
+use sel4_stack::Stack;
 
 static SECONDARY_THREAD_STACK: Stack<4096> = Stack::new();
 
@@ -133,7 +134,9 @@ fn find_largest_kernel_untyped(bootinfo: &sel4::BootInfo) -> sel4::cap::Untyped 
 fn create_user_context(f: SecondaryThreadFn) -> sel4::UserContext {
     let mut ctx = sel4::UserContext::default();
 
-    *ctx.sp_mut() = SECONDARY_THREAD_STACK.top().try_into().unwrap();
+    *ctx.sp_mut() = (SECONDARY_THREAD_STACK.bottom().ptr() as usize)
+        .try_into()
+        .unwrap();
     *ctx.pc_mut() = (secondary_thread_entrypoint as usize).try_into().unwrap();
     *ctx.c_param_mut(0) = f.into_arg();
 
@@ -253,23 +256,6 @@ fn get_tls_image() -> TlsImage {
 
 // // //
 
-#[repr(C, align(16))]
-struct Stack<const N: usize>(UnsafeCell<[u8; N]>);
-
-unsafe impl<const N: usize> Sync for Stack<N> {}
-
-impl<const N: usize> Stack<N> {
-    const fn new() -> Self {
-        Self(UnsafeCell::new([0; N]))
-    }
-
-    fn top(&self) -> usize {
-        (self.0.get() as usize) + N
-    }
-}
-
-// // //
-
 #[repr(C, align(4096))]
 struct IpcBufferFrame(UnsafeCell<[u8; GRANULE_SIZE]>);
 
@@ -296,7 +282,7 @@ fn get_user_image_frame_slot(
     extern "C" {
         static __executable_start: usize;
     }
-    let user_image_addr = unsafe { ptr::addr_of!(__executable_start) as usize };
+    let user_image_addr = ptr::addr_of!(__executable_start) as usize;
     bootinfo
         .user_image_frames()
         .index(addr / GRANULE_SIZE - user_image_addr / GRANULE_SIZE)

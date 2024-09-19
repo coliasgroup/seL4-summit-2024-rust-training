@@ -12,6 +12,6 @@ edition = "2021"
 license = "BSD-2-Clause"
 
 [dependencies]
-object = { version = "0.32.1", default-features = false, features = ["read"] }
+object = { version = "0.36.1", default-features = false, features = ["read"] }
 sel4 = { git = "https://github.com/seL4/rust-sel4" }
 sel4-root-task = { git = "https://github.com/seL4/rust-sel4" }
