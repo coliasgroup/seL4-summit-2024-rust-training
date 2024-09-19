@@ -15,19 +15,19 @@ external_examples_dir=$external_rust_seL4_dir/crates/examples
 cp $external_rust_seL4_dir/rust-toolchain.toml .
 
 rm support/targets/*.json
-cp $external_rust_seL4_dir/support/targets/aarch64-*.json support/targets
+cp $external_rust_seL4_dir/support/targets/aarch64-sel4{,-microkit}.json support/targets
 
 find examples -type f \( -name '*.rs' -o -name '*.toml' -o -name '*.system' \) -delete
 
 find examples -type d -empty -delete
 
-examples="\
+examples=" \
     root-task/hello \
     root-task/serial-device \
     root-task/spawn-task \
     root-task/spawn-thread \
     microkit/hello \
-    microkit/banscii
+    microkit/banscii \
 "
 
 for example in $examples; do
