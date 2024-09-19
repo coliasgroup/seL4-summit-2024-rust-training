@@ -28,8 +28,6 @@ build:
 run: build
 	docker run -d --name $(container_name) \
 		$(mount_arg) \
-		--publish 9080:8080/tcp \
-		--publish 9443:8443/tcp \
 		$(image_tag) \
 		sleep inf
 
