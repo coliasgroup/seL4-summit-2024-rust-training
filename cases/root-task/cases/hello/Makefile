@@ -22,14 +22,10 @@ $(crate): $(crate).intermediate
 
 .INTERMDIATE: $(crate).intermediate
 $(crate).intermediate:
-	SEL4_PREFIX=$(sel4_prefix) \
-		cargo build \
-			-Z build-std=core,alloc,compiler_builtins \
-			-Z build-std-features=compiler-builtins-mem \
-			--target-dir $(build_dir)/target \
-			--artifact-dir $(build_dir) \
-			--target aarch64-sel4 \
-			-p $(crate_name)
+	cargo build \
+		--target-dir $(build_dir)/target \
+		--artifact-dir $(build_dir) \
+		-p $(crate_name)
 
 loader_artifacts_dir := $(SEL4_INSTALL_DIR)/bin
 loader := $(loader_artifacts_dir)/sel4-kernel-loader
@@ -57,4 +53,4 @@ simulate: $(image)
 
 .PHONY: test
 test: test.py $(image)
-	PYTHONPATH=../../../testing python3 $< $(qemu_cmd)
+	PYTHONPATH=../../../../test-utils python3 $< $(qemu_cmd)

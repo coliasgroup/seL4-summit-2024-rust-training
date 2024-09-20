@@ -52,13 +52,8 @@ simulate: simulation-context
 
 .PHONY: test
 test: test.py simulation-context
-	PYTHONPATH=$(root_dir)/testing python3 $< $(qemu_cmd)
-
-common_cargo_env := \
-	SEL4_PREFIX=$(sel4_prefix)
+	PYTHONPATH=$(root_dir)/test-utils python3 $< $(qemu_cmd)
 
 common_cargo_args := \
-	-Z build-std=core,alloc,compiler_builtins \
-	-Z build-std-features=compiler-builtins-mem \
 	--target-dir $(build_dir)/target \
 	--artifact-dir $(build_dir)

@@ -9,8 +9,8 @@ examples := \
     cases/root-task/cases/serial-device \
     cases/root-task/cases/spawn-task \
     cases/root-task/cases/spawn-thread \
-    cases/microkit/cases/banscii \
-    cases/microkit/cases/hello
+    # cases/microkit/cases/banscii \
+    # cases/microkit/cases/hello
 
 .PHONY: none
 none:
