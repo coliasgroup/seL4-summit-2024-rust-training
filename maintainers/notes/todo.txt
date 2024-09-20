@@ -1,6 +1,8 @@
 test with empty vscode config
 
-add check that both workspaces use same rust-sel4 commit
+git checks to add:
+    check that both workspaces use same rust-sel4 commit
+    check that step diffs are contained within cases
 
 minimal demos: relegate vscode integration to branch
 
