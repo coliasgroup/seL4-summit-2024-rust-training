@@ -1,0 +1,26 @@
+//
+// Copyright 2024, Colias Group, LLC
+//
+// SPDX-License-Identifier: BSD-2-Clause
+//
+
+{
+    "name": "sel4-rust-tutorial-root-task",
+    "image": "sel4-rust-tutorial",
+
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "rust-lang.rust-analyzer"
+            ],
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": null,
+                "rust-analyzer.check.allTargets": false,
+                "rust-analyzer.cargo.allTargets": false,
+                "rust-analyzer.linkedProjects": [
+                    "workspaces/root-task/Cargo.toml"
+                ]
+            }
+        }
+    }
+}

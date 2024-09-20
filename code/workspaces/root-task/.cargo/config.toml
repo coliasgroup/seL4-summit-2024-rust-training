@@ -1,0 +1,11 @@
+#
+# Copyright 2023, Colias Group, LLC
+#
+# SPDX-License-Identifier: BSD-2-Clause
+#
+
+[env]
+SEL4_PREFIX = { value = "/opt/seL4", relative = false }
+
+[build]
+target = "aarch64-sel4"
