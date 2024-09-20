@@ -20,9 +20,6 @@ $(build_dir):
 
 microkit_board := qemu_virt_aarch64
 microkit_config := debug
-microkit_sdk_config_dir := $(MICROKIT_SDK)/board/$(microkit_board)/$(microkit_config)
-
-sel4_include_dirs := $(microkit_sdk_config_dir)/include
 
 system_description := $(build_dir)/this.system
 
@@ -58,11 +55,6 @@ simulate: simulation-context
 test: test.py simulation-context
 	PYTHONPATH=$(root_dir)/testing python3 $< $(qemu_cmd)
 
-common_cargo_env := \
-	SEL4_INCLUDE_DIRS=$(sel4_include_dirs)
-
 common_cargo_args := \
-	-Z build-std=core,alloc,compiler_builtins \
-	-Z build-std-features=compiler-builtins-mem \
 	--target-dir $(build_dir)/target \
 	--artifact-dir $(build_dir)
