@@ -3,3 +3,5 @@ test with empty vscode config
 add check that both workspaces use same rust-sel4 commit
 
 minimal demos: relegate vscode integration to branch
+
+warnings in #[protection_domain] and memory_region_symbol!()
