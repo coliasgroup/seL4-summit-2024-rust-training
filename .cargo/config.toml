@@ -1,0 +1,13 @@
+#
+# Copyright 2023, Colias Group, LLC
+#
+# SPDX-License-Identifier: BSD-2-Clause
+#
+
+[env]
+RUST_TARGET_PATH = { value = "target-specs", relative = true }
+
+[unstable]
+unstable-options = true
+build-std = ["core", "alloc", "compiler_builtins"]
+build-std-features = ["compiler-builtins-mem"]
