@@ -79,7 +79,7 @@ RUN set -eux; \
         # TODO further develop kernel loader to make KernelArmHypervisorSupport=ON unecessary
         -DKernelArmHypervisorSupport=ON \
         -DKernelVerificationBuild=OFF \
-        -DARM_CPU=cortex-a57 \
+        -DARM_CPU=cortex-a53 \
         -G Ninja \
         -S . \
         -B build; \
