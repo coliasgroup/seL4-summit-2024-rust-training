@@ -5,12 +5,12 @@
 #
 
 examples := \
-    examples/root-task/hello \
-    examples/root-task/serial-device \
-    examples/root-task/spawn-task \
-    examples/root-task/spawn-thread \
-    examples/microkit/banscii \
-    examples/microkit/hello
+    cases/root-task/cases/hello \
+    cases/root-task/cases/serial-device \
+    cases/root-task/cases/spawn-task \
+    cases/root-task/cases/spawn-thread \
+    cases/microkit/cases/banscii \
+    cases/microkit/cases/hello
 
 .PHONY: none
 none:

@@ -9,8 +9,9 @@
 resolver = "2"
 
 members = [
-    "banscii/pds/artist",
-    "banscii/pds/assistant",
-    "banscii/pds/serial-driver",
-    "hello/pds/hello",
+    "cases/hello",
+    "cases/serial-device",
+    "cases/spawn-thread",
+    "cases/spawn-task",
+    "cases/spawn-task/child",
 ]

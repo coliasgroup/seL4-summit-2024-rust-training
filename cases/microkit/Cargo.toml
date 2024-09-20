@@ -1,0 +1,16 @@
+#
+# Copyright 2023, Colias Group, LLC
+#
+# SPDX-License-Identifier: BSD-2-Clause
+#
+
+[workspace]
+
+resolver = "2"
+
+members = [
+    "cases/hello/pds/hello",
+    "cases/banscii/pds/artist",
+    "cases/banscii/pds/assistant",
+    "cases/banscii/pds/serial-driver",
+]
