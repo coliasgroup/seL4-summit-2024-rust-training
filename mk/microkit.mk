@@ -53,7 +53,7 @@ simulate: simulation-context
 
 .PHONY: test
 test: test.py simulation-context
-	PYTHONPATH=$(root_dir)/testing python3 $< $(qemu_cmd)
+	PYTHONPATH=$(root_dir)/test-utils python3 $< $(qemu_cmd)
 
 common_cargo_args := \
 	--target-dir $(build_dir)/target \
