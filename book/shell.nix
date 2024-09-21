@@ -8,11 +8,11 @@ let
 
   nixpkgsPath =
     let
-      rev = "269ce7215bb5b436546786e8d354d37903e102a8";
+      rev = "3a458f7c763ca62c6bf454b8d828bd86b7250671";
     in
       builtins.fetchTarball {
         url = "https://github.com/NixOS/nixpkgs/archive/${rev}.tar.gz";
-        sha256 = "sha256:0lccy0kf2287hmhr38ws9fy1gyxm4wvxrkvca471i57nvfbpjlg0";
+        sha256 = "sha256:119wjr45ypvxhz7qxhydcrllrvlyqxla0ymb0l0wgaqrkdhff9xb";
       };
 
   pkgs = import nixpkgsPath {};

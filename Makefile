@@ -44,11 +44,19 @@ rustdoc:
 	cd examples/microkit && cargo doc \
 		--target-dir $(abspath $(rustdoc_dir)/microkit)
 
+.PHONY: prune-rustdoc
+prune-rustdoc:
+	cd $(rustdoc_dir) && rm -r \
+		*/debug \
+		*/*/debug \
+		*/.*.json \
+		*/CACHEDIR.TAG
+
 .PHONY: exported-rustdoc
 exported-rustdoc: rustdoc | $(build_dir)
 	rm -rf $(exported_rustdoc_dir)
-	rsync -r $(rustdoc_dir)/ $(exported_rustdoc_dir)/ \
-        --info=progress2 --info=name0 \
+	time rsync -av $(rustdoc_dir)/ $(exported_rustdoc_dir)/ \
+		--info=progress2 --info=name0 \
 		--exclude '/*/debug' \
 		--exclude '/*/*/debug' \
 		--exclude '/*/.*.json' \
