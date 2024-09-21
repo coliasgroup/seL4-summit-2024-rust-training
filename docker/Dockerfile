@@ -11,6 +11,7 @@ RUN apt-get update -q && \
         build-essential \
         curl \
         git \
+        rsync \
         # for seL4
         python3-dev \
         python3-venv \
