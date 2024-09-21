@@ -7,7 +7,7 @@
 build_dir := build
 
 repo := coliasgroup/sel4-rust-tutorial
-manual_url := https://sel4.systems/Info/Docs/seL4-manual-12.1.0.pdf
+manual_url := https://sel4.systems/Info/Docs/seL4-manual-13.0.0.pdf
 
 .PHONY: none
 none:
