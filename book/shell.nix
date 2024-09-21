@@ -27,6 +27,8 @@ in {
       rustup
       mdbook
       linkchecker
+    ] ++ lib.optionals hostPlatform.isDarwin [
+      libiconv
     ];
   };
 }
