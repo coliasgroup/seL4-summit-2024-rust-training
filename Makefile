@@ -5,19 +5,15 @@
 #
 
 examples := \
-    root-task/cases/hello \
-    root-task/cases/serial-device \
-    root-task/cases/spawn-task \
-    root-task/cases/spawn-thread \
-    microkit/cases/banscii \
-    microkit/cases/hello
+    examples/root-task/hello \
+    examples/root-task/serial-device \
+    examples/root-task/spawn-task \
+    examples/root-task/spawn-thread \
+    examples/microkit/banscii \
+    examples/microkit/hello
 
 .PHONY: none
 none:
-
-.PHONY: clean-each-example test-each-example
-clean-each-example test-each-example:
-	$(foreach example,$(examples),$(MAKE) -C $(example) $@ &&) true
 
 .PHONY: clean
 clean: clean-each-example
@@ -25,3 +21,7 @@ clean: clean-each-example
 
 .PHONY: test
 test: test-each-example
+
+.PHONY: clean-each-example test-each-example
+clean-each-example test-each-example:
+	$(foreach example,$(examples),$(MAKE) -C $(example) $(subst -each-example,,$@) &&) true
