@@ -25,7 +25,7 @@ system_description := $(build_dir)/this.system
 
 $(system_description): | $(build_dir)
 
-image := $(build_dir)/image.img
+image := $(build_dir)/image.bin
 
 $(image): $(system_description)
 	$(MICROKIT_SDK)/bin/microkit \
