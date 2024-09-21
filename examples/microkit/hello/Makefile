@@ -54,4 +54,4 @@ simulate: $(image)
 
 .PHONY: test
 test: test.py $(image)
-	PYTHONPATH=../../../../test-utils python3 $< $(qemu_cmd)
+	PYTHONPATH=../../../test-utils python3 $< $(qemu_cmd)

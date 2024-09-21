@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 #
 
-include ../../../../mk/root-task.mk
+include ../../../mk/root-task.mk
 
 child_crate_name := spawn-task-child
 child_crate := $(build_dir)/$(child_crate_name).elf

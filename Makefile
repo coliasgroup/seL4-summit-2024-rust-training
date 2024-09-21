@@ -5,22 +5,23 @@
 #
 
 examples := \
-    cases/root-task/cases/hello \
-    cases/root-task/cases/serial-device \
-    cases/root-task/cases/spawn-task \
-    cases/root-task/cases/spawn-thread \
-    # cases/microkit/cases/banscii \
-    # cases/microkit/cases/hello
+    root-task/cases/hello \
+    root-task/cases/serial-device \
+    root-task/cases/spawn-task \
+    root-task/cases/spawn-thread \
+    microkit/cases/banscii \
+    microkit/cases/hello
 
 .PHONY: none
 none:
 
-.PHONY: clean test
-clean test:
+.PHONY: clean-each-example test-each-example
+clean-each-example test-each-example:
 	$(foreach example,$(examples),$(MAKE) -C $(example) $@ &&) true
 
-clean: clean-top-level
-
-.PHONY: clean-top-level
-clean-top-level:
+.PHONY: clean
+clean: clean-each-example
 	rm -rf target
+
+.PHONY: test
+test: test-each-example

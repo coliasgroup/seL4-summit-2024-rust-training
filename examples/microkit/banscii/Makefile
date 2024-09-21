@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 #
 
-include ../../../../mk/microkit.mk
+include ../../../mk/microkit.mk
 
 crate = $(build_dir)/$(1).elf
 

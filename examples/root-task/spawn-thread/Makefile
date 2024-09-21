@@ -4,9 +4,9 @@
 # SPDX-License-Identifier: BSD-2-Clause
 #
 
-include ../../../../mk/root-task.mk
+include ../../../mk/root-task.mk
 
-crate_name := serial-device
+crate_name := spawn-thread
 crate := $(build_dir)/$(crate_name).elf
 
 $(crate): $(crate).intermediate
