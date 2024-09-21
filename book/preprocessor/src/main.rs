@@ -121,6 +121,17 @@ impl This {
     fn render_manual_link(&self, link: &ManualLink) -> String {
         link.render(&self.manual_url)
     }
+
+    fn render_rustdoc_link(&self, parent_names: &[String], config: &str, link: &str) -> String {
+        let target_suffix = match config {
+            "root-task" => "",
+            "microkit" => "-microkit",
+            _ => panic!(),
+        };
+        format!(
+            "{parent_names:?} rustdoc/{config}/aarch64-sel4{target_suffix}/doc/{link}",
+        )
+    }
 }
 
 impl Preprocessor for This {
@@ -160,7 +171,16 @@ impl Preprocessor for This {
                         )
                     }).into_owned();
                 }
-
+                {
+                    let r = Regex::new(r"\{\{\s*#rustdoc_link\s+(?<config>.*?)\s+(?<link>.*?)\s*\}\}").unwrap();
+                    ch.content = r.replace_all(&ch.content, |captures: &Captures| {
+                        self.render_rustdoc_link(
+                            &chapter.parent_names,
+                            captures.name("config").unwrap().as_str(),
+                            captures.name("link").unwrap().as_str(),
+                        )
+                    }).into_owned();
+                }
             }
         });
 
