@@ -3,7 +3,6 @@ use std::path::Path;
 use std::ops::RangeBounds;
 use std::str;
 
-use itertools::Itertools;
 use git2::{Commit, Repository};
 
 const PATH: &str = "../..";
@@ -15,8 +14,9 @@ fn main() {
         .find_commit(repo.refname_to_id("HEAD").unwrap())
         .unwrap();
     let steps = Steps::new(&repo, head);
-    let s = steps.fragment("1.B", "workspaces/root-task/hello/src/main.rs", 3..=14);
+    let s = steps.fragment("1.A", "workspaces/root-task/hello/src/main.rs", 3..=14);
     println!("{}", s);
+    println!("{}", steps.commit_hash("1.A"));
 }
 
 struct Steps<'a> {
@@ -39,6 +39,10 @@ impl<'a> Steps<'a> {
             commit = commit.parent(0).unwrap();
         }
         Self { repo, commits }
+    }
+
+    fn commit_hash(&self, step: &str) -> String {
+        format!("{}", self.commits[step].id())
     }
 
     fn fragment(&self, step: &str, path: impl AsRef<Path>, bounds: impl RangeBounds<usize>) -> String {
