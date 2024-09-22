@@ -5,7 +5,7 @@
 #
 
 [env]
-RUST_TARGET_PATH = { value = "../target-specs", relative = true }
+RUST_TARGET_PATH = { value = "target-specs", relative = true }
 
 [unstable]
 unstable-options = true
