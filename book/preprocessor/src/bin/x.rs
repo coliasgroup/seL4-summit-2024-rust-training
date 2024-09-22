@@ -1,8 +1,9 @@
-use std::{collections::BTreeMap, ops::Bound};
-use std::path::Path;
 use std::ops::RangeBounds;
+use std::path::Path;
 use std::str;
+use std::{collections::BTreeMap, ops::Bound};
 
+use either::Either;
 use git2::{Commit, Repository};
 
 const PATH: &str = "../..";
@@ -21,45 +22,45 @@ fn main() {
 
 struct Steps<'a> {
     repo: &'a Repository,
-    commits: BTreeMap<String, Commit<'a>>,
+    steps: BTreeMap<String, Commit<'a>>,
 }
 
 impl<'a> Steps<'a> {
-    fn new(repo: &'a Repository, tip: Commit<'a>) -> Self {
-        let mut commits = BTreeMap::new();
-        let mut commit = tip;
+    fn new(repo: &'a Repository, last_step: Commit<'a>) -> Self {
+        let mut steps = BTreeMap::new();
+        let mut commit = last_step;
         loop {
             let summary = commit.summary().unwrap();
-            commits.insert(summary.to_owned(), commit.clone());
-            println!("{:?}", summary);
+            steps.insert(summary.to_owned(), commit.clone());
             if summary == "0" {
                 break;
             }
             assert_eq!(commit.parent_count(), 1);
             commit = commit.parent(0).unwrap();
         }
-        Self { repo, commits }
+        Self { repo, steps }
     }
 
     fn commit_hash(&self, step: &str) -> String {
-        format!("{}", self.commits[step].id())
+        format!("{}", self.steps[step].id())
     }
 
-    fn fragment(&self, step: &str, path: impl AsRef<Path>, bounds: impl RangeBounds<usize>) -> String {
-        let a = self.commits[step]
+    fn fragment(
+        &self,
+        step: &str,
+        path: impl AsRef<Path>,
+        bounds: impl RangeBounds<usize>,
+    ) -> String {
+        let blob = self.steps[step]
             .tree()
             .unwrap()
             .get_path(path.as_ref())
             .unwrap()
             .to_object(self.repo)
-            .unwrap();
-        let b = a
+            .unwrap()
             .peel_to_blob()
             .unwrap();
-        let c = b
-            .content();
-        let content = c;
-        let s = str::from_utf8(content).unwrap();
+        let s = str::from_utf8(blob.content()).unwrap();
         let start = match bounds.start_bound() {
             Bound::Included(i) => *i - 1,
             Bound::Excluded(i) => *i,
@@ -70,22 +71,12 @@ impl<'a> Steps<'a> {
             Bound::Excluded(i) => Some(*i - 1),
             Bound::Unbounded => None,
         };
-        let it = s.lines().skip(start);
-        let mut s = String::new();
-        match end {
-            Some(end) => {
-                for line in it.take(end - start) {
-                    s.push_str(line);
-                    s.push_str("\n");
-                }
-            }
-            None => {
-                for line in it {
-                    s.push_str(line);
-                    s.push_str("\n");
-                }
-            }
+        let it = s.lines();
+        let it = match end {
+            Some(end) => Either::Right(it.take(end)),
+            None => Either::Left(it),
         }
-        s
+        .into_iter();
+        it.skip(start).flat_map(|line| [line, "\n"]).collect()
     }
 }

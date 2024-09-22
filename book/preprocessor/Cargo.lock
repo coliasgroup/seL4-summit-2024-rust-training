@@ -974,6 +974,7 @@ name = "mdbook-sel4-tutorial"
 version = "0.1.0"
 dependencies = [
  "clap",
+ "either",
  "git2",
  "itertools",
  "mdbook",
