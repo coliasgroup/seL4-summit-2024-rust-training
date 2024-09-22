@@ -4,7 +4,12 @@
 # SPDX-License-Identifier: BSD-2-Clause
 #
 
-work_root := ..
+ROOT ?= ..
+CMD ?= false
+
+work_root := $(ROOT)
+
+oneshot_cmd := $(CMD)
 
 id := sel4-rust-tutorial
 image_tag := $(id)
@@ -45,10 +50,10 @@ rm-container:
 		docker rm -f $$id; \
 	done
 
-.PHONY: check-examples
-check-examples: build
+.PHONY: oneshot
+oneshot: build
 	docker run --rm \
 		$(mount_arg) \
 		-i $$([ -t 0 ] && echo -t) \
 		$(image_tag) \
-		make test
+		$(oneshot_cmd)

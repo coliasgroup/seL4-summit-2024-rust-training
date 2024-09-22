@@ -40,6 +40,18 @@ clean-all: clean clean-each-example
 .PHONY: test
 test: test-each-example
 
+.PHONY: fmt
+fmt:
+	set -eu; \
+	$(foreach workspace,$(workspaces), \
+		(cd workspaces/$(workspace) && cargo fmt);)
+
+.PHONY: fmt-check
+fmt-check:
+	set -eu; \
+	$(foreach workspace,$(workspaces), \
+		(cd workspaces/$(workspace) && cargo fmt --check);)
+
 rustdoc_dir := $(build_dir)/rustdoc
 
 .PHONY: rustdoc
@@ -59,11 +71,8 @@ prune-rustdoc:
 	cd $(rustdoc_dir); \
 	rm -rf */debug */*/debug
 
-.PHONY: clean-each-example test-each-example
-clean-each-example test-each-example:
-	set -eu; \
-	$(foreach example,$(examples), \
-		$(MAKE) -C workspaces/$(example) $(subst -each-example,,$@);)
+.PHONY: check-step
+check-step: fmt-check test
 
 # exported_rustdoc_dir := $(build_dir)/exported-rustdoc
 

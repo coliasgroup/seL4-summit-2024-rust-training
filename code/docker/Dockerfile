@@ -55,6 +55,7 @@ ARG RUSTUP_CHANNEL
 RUN curl -sSf https://sh.rustup.rs | \
         bash -s -- -y --no-modify-path \
             --default-toolchain $RUSTUP_CHANNEL \
+            --component rustfmt \
             --component rust-src
 
 ENV PATH=/root/.cargo/bin:$PATH
@@ -165,7 +166,7 @@ RUN set -eux; \
             bash -s -- -y --no-modify-path \
                 --default-toolchain $RUSTUP_CHANNEL \
                 --component rustfmt \
-                --component rust-src \
+                --component rust-src; \
     fi;
 
 ENV PATH=/home/x/.cargo/bin:$PATH
