@@ -6,7 +6,7 @@
 
 ROOT = $(abspath .)
 
-real_docker_dir := code/docker
+real_docker_dir := ../code/docker
 
 .PHONY: none
 none:
