@@ -17,5 +17,5 @@ build-dir = "build"
 before = [ "links" ]
 
 [output.html]
-additional-css = ["preprocessor/sel4-tutorial.css"]
+additional-css = ["preprocessor/assets/rust-sel4-tutorial.css"]
 git-repository-url = "https://github.com/coliasgroup/sel4-rust-tutorial"

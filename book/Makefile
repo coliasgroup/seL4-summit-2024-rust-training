@@ -15,15 +15,20 @@ manual_url := https://sel4.systems/Info/Docs/seL4-manual-13.0.0.pdf
 none:
 
 .PHONY: clean
-clean:
-	rm -rf $(build_dir)
+clean: clean-preprocessor clean-book
+
+preprocessor_manifest_path_args := --manifest-path preprocessor/Cargo.toml
 
 .PHONY: build-preprocessor
 build-preprocessor:
-	cargo build --manifest-path preprocessor/Cargo.toml
+	cargo build $(preprocessor_manifest_path_args)
 
-.PHONY: build-book
-build-book:
+.PHONY: clean-preprocessor
+clean-preprocessor:
+	cargo clean $(preprocessor_manifest_path_args)
+
+.PHONY: build-book-mdbook
+build-book-mdbook:
 	MDBOOK_GH_LINK_LOCAL_ROOT=$(abspath ..) \
 	MDBOOK_GH_LINK_REPO=$(repo) \
 	MDBOOK_GH_LINK_REV=$$(git rev-parse HEAD) \
@@ -31,17 +36,27 @@ build-book:
 	PATH=preprocessor/target/debug:$$PATH \
 		mdbook build
 
-.PHONY: build
-build: build-book
+src_rustdoc_dir := ../code/build/rustdoc
+dst_rustdoc_dir := $(build_dir)/rustdoc
+
+.PHONY: build-book
+build-book: build-book-mdbook
 	set -eu -o pipefail; \
-	src=../build/rustdoc; \
-	dst=$(build_dir)/rustdoc; \
+	src=$(src_rustdoc_dir); \
+	dst=$(dst_rustdoc_dir); \
 	[ ! -e "$$dst" ]; \
 	if [ "$(PROD)" = "1" ]; then \
 		cp -r $$src $$dst; \
 	else \
 		ln -s ../$$src $$dst; \
 	fi
+
+.PHONY: clean-book
+clean-book:
+	rm -rf $(build_dir)
+
+.PHONY: build
+build: build-book
 
 .PHONY: check
 check:
