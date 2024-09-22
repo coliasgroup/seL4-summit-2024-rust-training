@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 #
 
-ROOT = $(abspath .)
+ROOT = $(abspath ..)
 
 real_docker_dir := ../code/docker
 
