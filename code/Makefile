@@ -57,8 +57,7 @@ clean-rustdoc:
 prune-rustdoc:
 	set -eu; \
 	cd $(rustdoc_dir); \
-	rm -r */debug */*/debug; \
-	find . -name '*.json' -o -name 'CACHEDIR.TAG' -delet
+	rm -rf */debug */*/debug
 
 # exported_rustdoc_dir := $(build_dir)/exported-rustdoc
 
