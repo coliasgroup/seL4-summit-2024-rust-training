@@ -122,7 +122,13 @@ impl This {
         link.render(&self.manual_url)
     }
 
-    fn render_rustdoc_link(&self, parent_names: &[String], config: &str, path: &str, text: &str) -> String {
+    fn render_rustdoc_link(
+        &self,
+        parent_names: &[String],
+        config: &str,
+        path: &str,
+        text: &str,
+    ) -> String {
         let target_suffix = match config {
             "root-task" => "",
             "microkit" => "-microkit",
@@ -132,9 +138,7 @@ impl This {
         for _parent in parent_names {
             up.push_str("../");
         }
-        format!(
-            "[{text}]({up}rustdoc/{config}/aarch64-sel4{target_suffix}/doc/{path})",
-        )
+        format!("[{text}]({up}rustdoc/{config}/aarch64-sel4{target_suffix}/doc/{path})",)
     }
 }
 
