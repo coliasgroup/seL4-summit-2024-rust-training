@@ -8,6 +8,7 @@ PROD ?= 0
 
 build_dir := build
 
+code_dir := ../code
 repo := coliasgroup/sel4-rust-tutorial
 manual_url := https://sel4.systems/Info/Docs/seL4-manual-13.0.0.pdf
 
@@ -29,14 +30,14 @@ clean-preprocessor:
 
 .PHONY: build-book-mdbook
 build-book-mdbook:
-	MDBOOK_GH_LINK_LOCAL_ROOT=$(abspath ..) \
+	MDBOOK_GH_LINK_LOCAL_ROOT=$(abspath $(code_dir)) \
 	MDBOOK_GH_LINK_REPO=$(repo) \
 	MDBOOK_GH_LINK_REV=$$(git rev-parse HEAD) \
 	MDBOOK_MANUAL_URL=$(manual_url) \
 	PATH=preprocessor/target/debug:$$PATH \
 		mdbook build
 
-src_rustdoc_dir := ../code/build/rustdoc
+src_rustdoc_dir := $(code_dir)/build/rustdoc
 dst_rustdoc_dir := $(build_dir)/rustdoc
 
 .PHONY: build-book
