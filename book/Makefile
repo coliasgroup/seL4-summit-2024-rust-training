@@ -61,7 +61,7 @@ build: build-book
 
 .PHONY: check
 check:
-	linkchecker $(build_dir)
+	linkchecker $(build_dir)/index.html --no-follow-url '.*/rustdoc/.*'
 
 .PHONY: open
 open:

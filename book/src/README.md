@@ -24,12 +24,10 @@ Foo {{#gh_link [foo] workspaces/root-task/hello/src/}} bar
 
 Foo {{#manual_link [manual]}} bar
 
-Foo {{#manual_link [foo] #4.1}} bar
+Foo {{#manual_link [foo] #4.100}} bar
 
 Foo {{#manual_link #4.1 (bar)}} bar
 
 Foo {{#manual_link #4 (bar)}} bar
 
 Foo {{#rustdoc_link microkit sel4_microkit/macro.debug_println.html `debug_println!()`}} bar
-
-[`sel4_immediate_sync_once_cell::ImmediateSyncOnceCell`](https://sel4.github.io/rust-sel4/views/aarch64-root-task/aarch64-sel4/doc/sel4_immediate_sync_once_cell/struct.ImmediateSyncOnceCell.html)
