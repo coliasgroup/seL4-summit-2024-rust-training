@@ -41,15 +41,6 @@ RUN apt-get update -q && \
 
 WORKDIR /tmp
 
-RUN curl -sSf https://sh.rustup.rs | \
-        bash -s -- -y --no-modify-path \
-            --default-toolchain nightly-2024-05-01 \
-            --component rust-src
-
-ENV PATH=/root/.cargo/bin:$PATH
-
-RUN cargo install mdbook@0.4.36
-
 RUN set -eux; \
     host=$(uname -m); \
     url="https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-$host-aarch64-none-elf.tar.xz"; \
@@ -58,6 +49,17 @@ RUN set -eux; \
     curl -sSfL "$url" | tar -xJ -C $dst --strip-components=1;
 
 ENV PATH=/opt/gcc-aarch64-none-elf/bin:$PATH
+
+ARG RUSTUP_CHANNEL
+
+RUN curl -sSf https://sh.rustup.rs | \
+        bash -s -- -y --no-modify-path \
+            --default-toolchain $RUSTUP_CHANNEL \
+            --component rust-src
+
+ENV PATH=/root/.cargo/bin:$PATH
+
+RUN cargo install mdbook@0.4.36
 
 ENV SEL4_INSTALL_DIR=/opt/seL4
 
@@ -160,7 +162,10 @@ USER $UID
 RUN set -eux; \
     if [ $UID -ne 0 ]; then \
         curl -sSf https://sh.rustup.rs | \
-            bash -s -- -y --no-modify-path --default-toolchain none; \
+            bash -s -- -y --no-modify-path \
+                --default-toolchain $RUSTUP_CHANNEL \
+                --component rustfmt \
+                --component rust-src \
     fi;
 
 ENV PATH=/home/x/.cargo/bin:$PATH

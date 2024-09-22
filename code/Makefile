@@ -59,6 +59,12 @@ prune-rustdoc:
 	cd $(rustdoc_dir); \
 	rm -rf */debug */*/debug
 
+.PHONY: clean-each-example test-each-example
+clean-each-example test-each-example:
+	set -eu; \
+	$(foreach example,$(examples), \
+		$(MAKE) -C workspaces/$(example) $(subst -each-example,,$@);)
+
 # exported_rustdoc_dir := $(build_dir)/exported-rustdoc
 
 # .PHONY: exported-rustdoc
