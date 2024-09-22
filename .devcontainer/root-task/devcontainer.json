@@ -18,7 +18,7 @@
                 "rust-analyzer.check.allTargets": false,
                 "rust-analyzer.cargo.allTargets": false,
                 "rust-analyzer.linkedProjects": [
-                    "cases/root-task/Cargo.toml"
+                    "workspaces/root-task/Cargo.toml"
                 ]
             }
         }
