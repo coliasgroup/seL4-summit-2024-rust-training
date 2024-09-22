@@ -144,7 +144,7 @@ impl This {
 
 impl Preprocessor for This {
     fn name(&self) -> &str {
-        "sel4-tutorial"
+        "sel4-rust-training"
     }
 
     fn supports_renderer(&self, renderer: &str) -> bool {

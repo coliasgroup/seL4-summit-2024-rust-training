@@ -9,7 +9,7 @@ PROD ?= 0
 build_dir := build
 
 code_dir := ../code
-repo := coliasgroup/sel4-rust-tutorial
+repo := coliasgroup/seL4-summit-2024-rust-training
 manual_url := https://sel4.systems/Info/Docs/seL4-manual-13.0.0.pdf
 
 .PHONY: none

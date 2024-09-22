@@ -13,9 +13,9 @@ src = "src"
 [build]
 build-dir = "build"
 
-[preprocessor.sel4-tutorial]
+[preprocessor.sel4-rust-training]
 before = [ "links" ]
 
 [output.html]
-additional-css = ["preprocessor/assets/rust-sel4-tutorial.css"]
-git-repository-url = "https://github.com/coliasgroup/sel4-rust-tutorial"
+additional-css = ["preprocessor/assets/sel4-rust-training.css"]
+git-repository-url = "https://github.com/coliasgroup/coliasgroup/seL4-summit-2024-rust-training"

@@ -10,4 +10,4 @@ UNDER CONSTRUCTION
 
 # Using Rust in seL4 Userspace
 
-A tutorial on how to use Rust to build on top of seL4.
+Materials for a training session on how to use Rust to build on top of seL4 to be delivered at the seL4 Summit 2024.
