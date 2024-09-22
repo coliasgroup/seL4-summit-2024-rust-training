@@ -17,5 +17,6 @@ mdbook = "0.4.36"
 regex = "1.10"
 semver = "1"
 serde_json = "1"
+git2 = "0.19.0"
 
 [workspace]

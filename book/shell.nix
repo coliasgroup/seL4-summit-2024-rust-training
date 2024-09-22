@@ -24,11 +24,14 @@ in {
 
   shell = with pkgs; mkShell {
     nativeBuildInputs = [
+      pkg-config
+      openssl
       rustup
       mdbook
       linkchecker
     ] ++ lib.optionals hostPlatform.isDarwin [
       libiconv
+      darwin.apple_sdk.frameworks.Security
     ];
   };
 }
