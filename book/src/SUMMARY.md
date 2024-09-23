@@ -1,7 +1,7 @@
 <!--
-     Copyright 2024, Colias Group, LLC
+^    Copyright 2024, Colias Group, LLC
 
-     SPDX-License-Identifier: CC-BY-SA-4.0
+^    SPDX-License-Identifier: CC-BY-SA-4.0
 -->
 
 # Summary
@@ -13,7 +13,7 @@
 # Part I: The Root Task
 
 - [Overview](root-task/README.md)
-- [Runtime Basics](root-task/runtime-basics.md)
+- [Hello, World!](root-task/hello-world.md)
 - [Serial Device](root-task/serial-device.md)
 - [Spawning a Thread](root-task/spawning-a-thread.md)
 - [Spawning a Task](root-task/spawning-a-task.md)
@@ -23,4 +23,5 @@
 - [Overview](microkit/README.md)
 - [Hello, World!](microkit/hello-world.md)
 - [Banscii](microkit/banscii.md)
+
 <!-- - [A Componentized Interactive Application]() -->

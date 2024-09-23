@@ -143,6 +143,30 @@ impl This {
         }
         format!("[{text}]({up}rustdoc/{config}/aarch64-sel4{target_suffix}/doc/{path})",)
     }
+
+    fn render_step_header(
+        &self,
+        step: &Step,
+    ) -> String {
+        let short_rev = &self.steps.commit_hash(step)[..12];
+        let commit_link = self.step_commit_link(step);
+        let mut s = String::new();
+        writeln!(&mut s, "## [Step {step}]({commit_link}) `({short_rev})`").unwrap();
+        // writeln!(&mut s, "## Step {step}: `{short_rev}` [(view)]({commit_link})").unwrap();
+        // writeln!(&mut s, "<h2>").unwrap();
+        // writeln!(&mut s, "<a>Step {step}").unwrap();
+        // writeln!(&mut s, "Step {step}").unwrap();
+        // writeln!(&mut s, "</h2>").unwrap();
+        s
+    }
+
+    fn step_commit_link(&self, step: &Step) -> String {
+        format!(
+            "https://github.com/{}/commit/{}",
+            self.code_gh_root,
+            self.steps.commit_hash(step),
+        )
+    }
 }
 
 impl Preprocessor for This {
@@ -190,6 +214,14 @@ impl Preprocessor for This {
                             captures.name("config").unwrap().as_str(),
                             captures.name("path").unwrap().as_str(),
                             captures.name("text").unwrap().as_str(),
+                        )
+                    }).into_owned();
+                }
+                {
+                    let r = Regex::new(r"\{\{\s*#step\s+(?<step>.*?)\s*\}\}").unwrap();
+                    ch.content = r.replace_all(&ch.content, |captures: &Captures| {
+                        self.render_step_header(
+                            &Step::parse(captures.name("step").unwrap().as_str()),
                         )
                     }).into_owned();
                 }
