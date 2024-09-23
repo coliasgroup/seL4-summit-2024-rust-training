@@ -49,7 +49,7 @@ build-book:
 ci:
 	$(MAKE) step-list
 	$(MAKE) -C docker ci-in-container
-	$(MAKE) -C build-book
+	$(MAKE) build-book
 
 .PHONY: deep-clean
 deep-clean: clean
