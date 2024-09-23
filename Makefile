@@ -43,7 +43,7 @@ $(step_list): | $(build_dir)
 
 .PHONY: build-book
 build-book:
-	cd $(book_dir) && nix-shell --run '$(MAKE) build'
+	cd $(book_dir) && nix-shell --run '$(MAKE) build-preprocessor && $(MAKE) build'
 
 .PHONY: ci
 ci:

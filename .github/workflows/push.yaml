@@ -17,14 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: seL4/ci-actions/license-check@master
-  check-examples:
-    name: Check examples
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: make -C docker check-examples
-  build-book:
-    name: Build book
+  build-and-check:
+    name: Build and check
     runs-on: ubuntu-latest
     steps:
       - uses: cachix/install-nix-action@v25
@@ -32,13 +26,34 @@ jobs:
           nix_path: nixpkgs=channel:nixos-unstable
       - uses: actions/checkout@v4
       - run: |
-          cd book
-          nix-shell --run "make build-preprocessor && make build && make check"
+          make ci
       - name: Upload Pages artifact
         if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         uses: actions/upload-pages-artifact@v3
         with:
           path: book/build
+  # check-examples:
+  #   name: Check examples
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - run: make -C docker check-examples
+  # build-book:
+  #   name: Build book
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: cachix/install-nix-action@v25
+  #       with:
+  #         nix_path: nixpkgs=channel:nixos-unstable
+  #     - uses: actions/checkout@v4
+  #     - run: |
+  #         cd book
+  #         nix-shell --run "make build-preprocessor && make build && make check"
+  #     - name: Upload Pages artifact
+  #       if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+  #       uses: actions/upload-pages-artifact@v3
+  #       with:
+  #         path: book/build
   deploy-book:
     name: Deploy book
     if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
