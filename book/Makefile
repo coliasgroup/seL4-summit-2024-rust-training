@@ -10,7 +10,7 @@ build_dir := build
 
 top_level_dir := ..
 code_dir := $(top_level_dir)/code
-code_gh_url := coliasgroup/seL4-summit-2024-rust-training
+code_gh_url := coliasgroup/seL4-summit-2024-rust-training-code
 manual_url := https://sel4.systems/Info/Docs/seL4-manual-13.0.0.pdf
 
 .PHONY: none

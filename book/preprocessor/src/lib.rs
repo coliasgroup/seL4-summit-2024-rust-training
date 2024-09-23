@@ -1,8 +1,8 @@
-use std::ops::{RangeBounds, Bound};
-use std::path::Path;
-use std::fmt;
-use std::str;
 use std::collections::BTreeMap;
+use std::fmt;
+use std::ops::{Bound, RangeBounds};
+use std::path::Path;
+use std::str;
 use std::sync::LazyLock;
 
 use either::Either;
@@ -30,7 +30,7 @@ impl Step {
     }
 }
 
-impl Default for Step  {
+impl Default for Step {
     fn default() -> Self {
         Self::parse("0")
     }

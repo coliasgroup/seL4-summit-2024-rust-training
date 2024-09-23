@@ -4,18 +4,17 @@
 // SPDX-License-Identifier: BSD-2-Clause
 //
 
-
 use std::env;
 use std::fmt::Write;
 use std::io;
 use std::ops::RangeBounds;
 
 use clap::{Arg, Command};
-use regex::{Captures, Regex};
-use semver::{Version, VersionReq};
 use mdbook::book::{Book, BookItem};
 use mdbook::errors::Error;
 use mdbook::preprocess::{CmdPreprocessor, Preprocessor, PreprocessorContext};
+use regex::{Captures, Regex};
+use semver::{Version, VersionReq};
 
 use mdbook_sel4_rust_training::{Step, Steps};
 
@@ -105,7 +104,10 @@ impl This {
         format!(
             "[{}]({})",
             link.text(),
-            self.gh_link_url(link, self.steps.kind(link.step(), link.path()).is_directory()),
+            self.gh_link_url(
+                link,
+                self.steps.kind(link.step(), link.path()).is_directory()
+            ),
         )
     }
 
@@ -202,6 +204,7 @@ impl Preprocessor for This {
 struct GitHubLink {
     text: Option<String>,
     step: Step,
+    show_step: bool,
     hidden_path_part: Option<String>,
     visible_path_part: String,
     start: Option<usize>,
@@ -214,7 +217,7 @@ impl GitHubLink {
             r"(?x)
             ^
             (\[(?<text>.*?)\]\s+)?
-            (<(?<step>.*?)>\s+)?
+            (@(?<hide_step>-)?(?<step>.*?)\s+)?
             (\((?<hidden_path_part>.*?)\))?
             (?<visible_path_part>.*?)(:(?<start>\d+)(:(?<end>\d+))?)?
             $
@@ -224,7 +227,11 @@ impl GitHubLink {
         let captures = r.captures(s).unwrap();
         let link = Self {
             text: captures.name("text").map(|m| m.as_str().to_owned()),
-            step: captures.name("step").map(|m| Step::parse(m.as_str())).unwrap_or_default(),
+            step: captures
+                .name("step")
+                .map(|m| Step::parse(m.as_str()))
+                .unwrap_or_default(),
+            show_step: captures.name("step").is_some() || captures.name("hide_step").is_none(),
             hidden_path_part: captures
                 .name("hidden_path_part")
                 .map(|m| m.as_str().to_owned()),
@@ -236,8 +243,11 @@ impl GitHubLink {
             start: captures.name("start").map(|m| m.as_str().parse().unwrap()),
             end: captures.name("end").map(|m| m.as_str().parse().unwrap()),
         };
+        if link.show_step {
+            assert!(!link.step.is_start());
+        }
         if link.start.is_none() {
-            assert!(link.end.is_none())
+            assert!(link.end.is_none());
         }
         link
     }
@@ -259,14 +269,17 @@ impl GitHubLink {
         if let Some(text) = &self.text {
             text.to_owned()
         } else {
-            self.visible()
+            self.default_text()
         }
     }
 
-    fn visible(&self) -> String {
+    fn default_text(&self) -> String {
         let mut s = String::new();
         write!(&mut s, "{}", self.visible_path_part).unwrap();
         write!(&mut s, "{}", self.range_suffix()).unwrap();
+        if self.show_step {
+            write!(&mut s, "after {}", self.step()).unwrap();
+        }
         s
     }
 

@@ -6,9 +6,9 @@
 
 # Introduction
 
-{{#fragment_with_gh_link "rust,ignore" workspaces/root-task/hello/src/main.rs:12:17}}
+{{#fragment_with_gh_link "rust,ignore" workspaces/root-task/hello/src/main.rs:12:19}}
 
-{{#fragment_with_gh_link "rust,ignore" (workspaces/root-task/)hello/src/main.rs:12:17}}
+{{#fragment_with_gh_link "rust,ignore" (workspaces/root-task/)hello/src/main.rs:12:19}}
 
 Foo {{#gh_link workspaces/root-task/hello/src/main.rs:12:17}} bar
 
