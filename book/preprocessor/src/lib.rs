@@ -81,7 +81,6 @@ impl Steps {
             if step.is_start() {
                 break;
             }
-            eprintln!("XXXXX {step:?} {commit:?}");
             assert_eq!(commit.parent_count(), 1);
             commit_id = commit.parent(0).unwrap().id();
         }
