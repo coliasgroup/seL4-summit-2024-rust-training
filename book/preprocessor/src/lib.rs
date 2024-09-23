@@ -81,6 +81,10 @@ impl Steps {
         Self { repo, steps }
     }
 
+    pub fn iter(&self) -> impl Iterator<Item = (&Step, &Oid)> {
+        self.steps.iter()
+    }
+
     pub fn commit_hash(&self, step: &Step) -> String {
         format!("{}", self.steps[step])
     }

@@ -15,10 +15,10 @@ none:
 build run exec rm-container:
 	$(MAKE) -C $(real_docker_dir) $@ ROOT=$(ROOT)
 
-.PHONY: rustdoc
-rustdoc:
+.PHONY: rustdoc prune-rustdoc
+rustdoc prune-rustdoc:
 	$(MAKE) -C $(real_docker_dir) oneshot CMD='make $@'
 
-.PHONY: prune-rustdoc
-prune-rustdoc:
-	$(MAKE) -C $(real_docker_dir) oneshot CMD='make $@'
+.PHONY: ci
+ci:
+	$(MAKE) -C $(real_docker_dir) oneshot ROOT=$(ROOT) CMD='make $@'
