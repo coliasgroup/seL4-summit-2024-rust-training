@@ -55,3 +55,10 @@ ci:
 deep-clean: clean
 	$(MAKE) -C $(book_dir) clean
 	$(MAKE) -C $(code_dir) clean-all
+
+.PHONY: checkout-last-step
+checkout-last-step:
+	set -eu; \
+	rev=$$(tail -n 1 $(step_list)); \
+	cd $(code_dir); \
+	git checkout $$rev
