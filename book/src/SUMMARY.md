@@ -20,7 +20,7 @@
 
 # Part II: Microkit
 
-- [Overview](microkit/README.me)
+- [Overview](microkit/README.md)
 - [Hello, World!](microkit/hello-world.md)
 - [Banscii](microkit/banscii.md)
 <!-- - [A Componentized Interactive Application]() -->
