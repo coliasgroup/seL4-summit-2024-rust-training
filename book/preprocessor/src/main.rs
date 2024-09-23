@@ -151,7 +151,8 @@ impl This {
         let short_rev = &self.steps.commit_hash(step)[..12];
         let commit_link = self.step_commit_link(step);
         let mut s = String::new();
-        writeln!(&mut s, "## [Step {step}]({commit_link}) `{short_rev}`").unwrap();
+        // writeln!(&mut s, "## Step {step} [<i class=\"fa fa-angle-left\"></i>]({commit_link}) `{short_rev}`").unwrap();
+        writeln!(&mut s, "## Step {step} [<i class=\"fa-brands fa-github\"></i>]({commit_link}) `{short_rev}`").unwrap();
         // writeln!(&mut s, "## Step {step}: `{short_rev}` [(view)]({commit_link})").unwrap();
         // writeln!(&mut s, "<h2>").unwrap();
         // writeln!(&mut s, "<a>Step {step}").unwrap();
