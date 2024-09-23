@@ -39,7 +39,7 @@ step-list: $(step_list)
 
 .PHONY: $(step_list)
 $(step_list): | $(build_dir)
-	cd $(preprocessor_dir) && nix-shell .. --run 'cargo run --bin show-steps -- $(abspath $(top_level_dir))' > $(abspath $@)
+	cd $(preprocessor_dir) && nix-shell ../shell.nix --run 'cargo run --bin show-steps -- $(abspath $(top_level_dir))' > $(abspath $@)
 
 .PHONY: build-book
 build-book:
