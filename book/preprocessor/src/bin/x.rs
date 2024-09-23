@@ -1,4 +1,4 @@
-use mdbook_sel4_training::Steps;
+use mdbook_sel4_rust_training::Steps;
 
 const PATH: &str = "../..";
 

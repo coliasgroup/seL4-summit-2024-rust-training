@@ -970,7 +970,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "mdbook-sel4-tutorial"
+name = "mdbook-sel4-rust-training"
 version = "0.1.0"
 dependencies = [
  "clap",

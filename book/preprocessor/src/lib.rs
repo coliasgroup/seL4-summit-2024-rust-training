@@ -3,8 +3,9 @@ use std::path::Path;
 use std::str;
 use std::{collections::BTreeMap, ops::Bound};
 
+use regex::Regex;
 use either::Either;
-use git2::{Commit, Repository, Oid};
+use git2::{Repository, Oid};
 
 pub struct Steps {
     repo: Repository,
@@ -25,6 +26,7 @@ impl Steps {
     }
 
     pub fn new(repo: Repository, last_step: Oid) -> Self {
+        let summary_re = Regex::new(r"^[0-9]+\.[A-Z]$").unwrap();
         let mut steps = BTreeMap::new();
         let mut commit_id = last_step;
         loop {
@@ -34,6 +36,7 @@ impl Steps {
             if summary == "0" {
                 break;
             }
+            assert!(summary_re.is_match(summary));
             assert_eq!(commit.parent_count(), 1);
             commit_id = commit.parent(0).unwrap().id();
         }
