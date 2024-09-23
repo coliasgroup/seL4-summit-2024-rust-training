@@ -8,8 +8,9 @@ PROD ?= 0
 
 build_dir := build
 
-code_dir := ../code
-repo := coliasgroup/seL4-summit-2024-rust-training
+top_level_dir := ..
+code_dir := $(top_level_dir)/code
+code_gh_url := coliasgroup/seL4-summit-2024-rust-training
 manual_url := https://sel4.systems/Info/Docs/seL4-manual-13.0.0.pdf
 
 .PHONY: none
@@ -30,9 +31,10 @@ clean-preprocessor:
 
 .PHONY: build-book-mdbook
 build-book-mdbook:
-	MDBOOK_GH_LINK_LOCAL_ROOT=$(abspath $(code_dir)) \
-	MDBOOK_GH_LINK_REPO=$(repo) \
-	MDBOOK_GH_LINK_REV=$$(git rev-parse HEAD) \
+	MDBOOK_TOP_LEVEL_LOCAL_ROOT=$(abspath $(top_level_dir)) \
+	MDBOOK_CODE_LAST_STEP_REV=$$(cd $(code_dir) && git rev-parse HEAD) \
+	MDBOOK_CODE_LOCAL_ROOT=$(abspath $(code_dir)) \
+	MDBOOK_CODE_GITHUB_ROOT=$(code_gh_url) \
 	MDBOOK_MANUAL_URL=$(manual_url) \
 	PATH=preprocessor/target/debug:$$PATH \
 		mdbook build

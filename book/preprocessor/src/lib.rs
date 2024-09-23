@@ -1,18 +1,51 @@
-use std::ops::RangeBounds;
+use std::ops::{RangeBounds, Bound};
 use std::path::Path;
+use std::fmt;
 use std::str;
-use std::{collections::BTreeMap, ops::Bound};
+use std::collections::BTreeMap;
+use std::sync::LazyLock;
 
 use either::Either;
 use git2::{ObjectType, Oid, Repository};
 use regex::Regex;
 
-pub struct Steps {
-    repo: Repository,
-    steps: BTreeMap<String, Oid>,
+const CODE_SUBMODULE_PATH: &str = "code";
+
+#[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+pub struct Step(String);
+
+impl Step {
+    pub fn parse(s: &str) -> Self {
+        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^[0-9]+\.[A-Z]$").unwrap());
+        assert!(s == "0" || RE.is_match(s));
+        Self(s.to_owned())
+    }
+
+    pub fn as_str(&self) -> &str {
+        self.0.as_str()
+    }
+
+    pub fn is_start(&self) -> bool {
+        self.0 == "0"
+    }
 }
 
-const CODE_SUBMODULE_PATH: &str = "code";
+impl Default for Step  {
+    fn default() -> Self {
+        Self::parse("0")
+    }
+}
+
+impl fmt::Display for Step {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
+pub struct Steps {
+    repo: Repository,
+    steps: BTreeMap<Step, Oid>,
+}
 
 impl Steps {
     pub fn new_simple(top_level_repo_path: impl AsRef<Path>, revspec: &str) -> Self {
@@ -32,30 +65,29 @@ impl Steps {
     }
 
     pub fn new(repo: Repository, last_step: Oid) -> Self {
-        let summary_re = Regex::new(r"^[0-9]+\.[A-Z]$").unwrap();
         let mut steps = BTreeMap::new();
         let mut commit_id = last_step;
         loop {
             let commit = repo.find_commit(commit_id).unwrap();
             let summary = commit.summary().unwrap();
-            steps.insert(summary.to_owned(), commit.id());
-            if summary == "0" {
+            let step = Step::parse(summary);
+            steps.insert(step.clone(), commit.id());
+            if step.is_start() {
                 break;
             }
-            assert!(summary_re.is_match(summary));
             assert_eq!(commit.parent_count(), 1);
             commit_id = commit.parent(0).unwrap().id();
         }
         Self { repo, steps }
     }
 
-    pub fn commit_hash(&self, step: &str) -> String {
+    pub fn commit_hash(&self, step: &Step) -> String {
         format!("{}", self.steps[step])
     }
 
     pub fn fragment(
         &self,
-        step: &str,
+        step: &Step,
         path: impl AsRef<Path>,
         bounds: impl RangeBounds<usize>,
     ) -> String {
@@ -91,7 +123,7 @@ impl Steps {
         it.skip(start).flat_map(|line| [line, "\n"]).collect()
     }
 
-    pub fn kind(&self, step: &str, path: impl AsRef<Path>) -> PathKind {
+    pub fn kind(&self, step: &Step, path: impl AsRef<Path>) -> PathKind {
         let mut obj = self
             .repo
             .find_commit(self.steps[step])
