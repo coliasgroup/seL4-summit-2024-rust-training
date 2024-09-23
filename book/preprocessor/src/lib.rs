@@ -91,7 +91,7 @@ impl Steps {
         it.skip(start).flat_map(|line| [line, "\n"]).collect()
     }
 
-    pub fn kind_simple(&self, step: &str, path: impl AsRef<Path>) -> ObjectType {
+    pub fn kind(&self, step: &str, path: impl AsRef<Path>) -> PathKind {
         let mut obj = self
             .repo
             .find_commit(self.steps[step])
@@ -113,6 +113,25 @@ impl Steps {
                 }
             }
         }
-        obj.kind().unwrap()
+        match obj.kind().unwrap() {
+            ObjectType::Blob => PathKind::File,
+            ObjectType::Tree => PathKind::Directory,
+            _ => panic!(),
+        }
+    }
+}
+
+pub enum PathKind {
+    File,
+    Directory,
+}
+
+impl PathKind {
+    pub fn is_file(&self) -> bool {
+        matches!(self, Self::File)
+    }
+
+    pub fn is_directory(&self) -> bool {
+        matches!(self, Self::Directory)
     }
 }
