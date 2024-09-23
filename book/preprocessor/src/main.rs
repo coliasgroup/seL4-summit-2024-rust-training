@@ -231,7 +231,7 @@ impl GitHubLink {
                 .name("step")
                 .map(|m| Step::parse(m.as_str()))
                 .unwrap_or_default(),
-            show_step: captures.name("step").is_some() || captures.name("hide_step").is_none(),
+            show_step: captures.name("step").is_some() && captures.name("hide_step").is_none(),
             hidden_path_part: captures
                 .name("hidden_path_part")
                 .map(|m| m.as_str().to_owned()),
@@ -278,7 +278,7 @@ impl GitHubLink {
         write!(&mut s, "{}", self.visible_path_part).unwrap();
         write!(&mut s, "{}", self.range_suffix()).unwrap();
         if self.show_step {
-            write!(&mut s, "after {}", self.step()).unwrap();
+            write!(&mut s, " after {}", self.step()).unwrap();
         }
         s
     }
