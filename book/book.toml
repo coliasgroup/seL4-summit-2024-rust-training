@@ -18,4 +18,5 @@ before = [ "links" ]
 
 [output.html]
 additional-css = ["preprocessor/assets/sel4-rust-training.css"]
+additional-js = ["preprocessor/assets/sel4-rust-training.js"]
 git-repository-url = "https://github.com/coliasgroup/coliasgroup/seL4-summit-2024-rust-training"

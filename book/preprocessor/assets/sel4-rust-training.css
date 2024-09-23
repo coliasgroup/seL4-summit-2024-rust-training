@@ -36,3 +36,12 @@ div.step-hint {
 div.step-hint p:last-child {
     margin-bottom: 0;
 }
+
+a.step-heading-clickable {
+    text-decoration: none !important;;
+    color: inherit;
+}
+
+.step-heading-clickable:hover {
+    background-color: var(--theme-hover);
+}

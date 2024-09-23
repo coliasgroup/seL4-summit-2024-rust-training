@@ -148,16 +148,24 @@ impl This {
         &self,
         step: &Step,
     ) -> String {
-        let short_rev = &self.steps.commit_hash(step)[..12];
+        let long_rev = self.steps.commit_hash(step);
+        let short_rev = &long_rev[..12];
         let commit_link = self.step_commit_link(step);
         let mut s = String::new();
-        // writeln!(&mut s, "## Step {step} [<i class=\"fa fa-angle-left\"></i>]({commit_link}) `{short_rev}`").unwrap();
-        writeln!(&mut s, "## Step {step} [<i class=\"fa-brands fa-github\"></i>]({commit_link}) `{short_rev}`").unwrap();
-        // writeln!(&mut s, "## Step {step}: `{short_rev}` [(view)]({commit_link})").unwrap();
-        // writeln!(&mut s, "<h2>").unwrap();
-        // writeln!(&mut s, "<a>Step {step}").unwrap();
-        // writeln!(&mut s, "Step {step}").unwrap();
-        // writeln!(&mut s, "</h2>").unwrap();
+        // writeln!(&mut s, "## Step {step} [<i class=\"fa fa-github\"></i>]({commit_link}) `{short_rev}`").unwrap();
+        // writeln!(&mut s, "## Step {step} `{short_rev}` [<i class=\"fa fa-github\"></i>]({commit_link})").unwrap();
+        // writeln!(&mut s, "<span class=\"step-heading\">").unwrap();
+        write!(&mut s, "## Step {step}");
+        write!(&mut s, "&nbsp;");
+        write!(&mut s, "&nbsp;");
+        write!(&mut s, "&nbsp;");
+        // write!(&mut s, "`{short_rev}`");
+        // write!(&mut s, "&nbsp;");
+        // write!(&mut s, "&nbsp;");
+        write!(&mut s, "<span class=\"step-heading-clickable\" onclick=\"navigator.clipboard.writeText('{long_rev}')\">&nbsp;<i class=\"fa fa-copy\"></i>&nbsp;</span>");
+        write!(&mut s, "<a class=\"step-heading-clickable\" href=\"{commit_link}\">&nbsp;<i class=\"fa fa-github\"></i>&nbsp;</a>");
+        writeln!(&mut s, "");
+        // writeln!(&mut s, "</span>").unwrap();
         s
     }
 
