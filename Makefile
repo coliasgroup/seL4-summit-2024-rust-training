@@ -25,7 +25,7 @@ clean:
 .PHONY: ci-in-container
 ci-in-container:
 	set -eu; \
-	steps=$$(cd $(preprocessor_dir) && cargo run --bin show-steps -- $(abspath $(step_list)); \
+	steps=$$(step_list); \
 	cd code; \
 	for rev in $$steps; do \
 		git checkout $$rev; \
