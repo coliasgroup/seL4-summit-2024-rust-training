@@ -8,27 +8,19 @@
 
 [Introduction](README.md)
 
-# Setup
+[Setup](setup.md)
 
-- [Requirements]()
-- [Docker Container]()
+# Part I: The Root Task
 
-# Background
+- [Overview](root-task/README.md)
+- [Runtime Basics](root-task/runtime-basics.md)
+- [Serial Device](root-task/serial-device.md)
+- [Spawning a Thread](root-task/spawning-a-thread.md)
+- [Spawning a Task](root-task/spawning-a-task.md)
 
-- [seL4]()
-- [seL4 Microkit]()
-- [`#[no_std]`]()
+# Part II: Microkit
 
-# Using the seL4 API
-
-- [Hello, World!]()
-- [Spawning a Thread]()
-- [Spawning a Task]()
-- [Serial Device]()
-
-# Microkit
-
-- [Hello, World!]()
-- [Banscii]()
+- [Overview](placeholder.md)
+- [Hello, World!](placeholder.md)
+- [Banscii](placeholder.md)
 <!-- - [A Componentized Interactive Application]() -->
-- [HTTP Server]()
