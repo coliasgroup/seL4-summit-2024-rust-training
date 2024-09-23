@@ -19,6 +19,6 @@ build run exec rm-container:
 rustdoc prune-rustdoc:
 	$(MAKE) -C $(real_docker_dir) oneshot CMD='make $@'
 
-.PHONY: ci
-ci:
+.PHONY: ci-in-container
+ci-in-container:
 	$(MAKE) -C $(real_docker_dir) oneshot ROOT=$(ROOT) CMD='make $@'
