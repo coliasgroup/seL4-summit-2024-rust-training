@@ -12,11 +12,11 @@ Some text here.
 
 Foo bar.
 
-<details>
-    <summary>
-        What is a capability? (click to expand)
-    </summary>
-    <div class="step-hint">
+<div class="step-hint">
+    <details>
+        <summary>
+            What is a capability? (click to expand)
+        </summary>
         <p>
             fksdajfdsafdsaf jkfl sdajlkf sda
             fksdajfdsafdsaf jkfl sdajlkf sda
@@ -40,8 +40,8 @@ Foo bar.
             fksdajfdsafdsaf jkfl sdajlkf sda
             fksdajfdsafdsaf jkfl sdajlkf sda
         </p>
-    <div>
-</details>
+    </details>
+</div>
 
 <!-- {{#step 1.B}} -->
 
