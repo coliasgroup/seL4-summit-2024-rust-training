@@ -3,9 +3,9 @@ use std::path::Path;
 use std::str;
 use std::{collections::BTreeMap, ops::Bound};
 
-use regex::Regex;
 use either::Either;
-use git2::{Repository, Oid};
+use git2::{ObjectType, Oid, Repository};
+use regex::Regex;
 
 pub struct Steps {
     repo: Repository,
@@ -15,14 +15,20 @@ pub struct Steps {
 const CODE_SUBMODULE_PATH: &str = "code";
 
 impl Steps {
-    pub fn new_at(top_level_repo_path: impl AsRef<Path>) -> Self {
+    pub fn new_simple(top_level_repo_path: impl AsRef<Path>, revspec: &str) -> Self {
         let top_level_repo = Repository::init(top_level_repo_path.as_ref()).unwrap();
-        let code_repo = top_level_repo.find_submodule(CODE_SUBMODULE_PATH).unwrap().open().unwrap();
-        let head = code_repo
-            .find_commit(code_repo.refname_to_id("HEAD").unwrap())
+        let code_repo = top_level_repo
+            .find_submodule(CODE_SUBMODULE_PATH)
+            .unwrap()
+            .open()
+            .unwrap();
+        let last_step = code_repo
+            .revparse_single(revspec)
+            .unwrap()
+            .peel_to_commit()
             .unwrap()
             .id();
-        Self::new(code_repo, head)
+        Self::new(code_repo, last_step)
     }
 
     pub fn new(repo: Repository, last_step: Oid) -> Self {
@@ -53,7 +59,10 @@ impl Steps {
         path: impl AsRef<Path>,
         bounds: impl RangeBounds<usize>,
     ) -> String {
-        let blob = self.repo.find_commit(self.steps[step]).unwrap()
+        let blob = self
+            .repo
+            .find_commit(self.steps[step])
+            .unwrap()
             .tree()
             .unwrap()
             .get_path(path.as_ref())
@@ -80,5 +89,30 @@ impl Steps {
         }
         .into_iter();
         it.skip(start).flat_map(|line| [line, "\n"]).collect()
+    }
+
+    pub fn kind_simple(&self, step: &str, path: impl AsRef<Path>) -> ObjectType {
+        let mut obj = self
+            .repo
+            .find_commit(self.steps[step])
+            .unwrap()
+            .tree()
+            .unwrap()
+            .get_path(path.as_ref())
+            .unwrap()
+            .to_object(&self.repo)
+            .unwrap();
+        loop {
+            match obj.peel(ObjectType::Any) {
+                Ok(new_obj) => {
+                    assert!(new_obj.kind().unwrap() != obj.kind().unwrap());
+                    obj = new_obj;
+                }
+                Err(_) => {
+                    break;
+                }
+            }
+        }
+        obj.kind().unwrap()
     }
 }
