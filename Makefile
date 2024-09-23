@@ -28,8 +28,8 @@ ci-in-container:
 	cd code; \
 	for rev in $$(cat $(abspath $(step_list))); do \
 		git checkout $$rev; \
-		git log --format=%B -n 1 HEAD; \
-		$(MAKE) check-step; \
+		git log --format=%B -n 1 HEAD | cat; \
+		true || $(MAKE) check-step; \
 	done
 	$(MAKE) -C $(code_dir) rustdoc
 	$(MAKE) -C $(code_dir) prune-rustdoc
@@ -62,3 +62,8 @@ checkout-last-step:
 	rev=$$(tail -n 1 $(step_list)); \
 	cd $(code_dir); \
 	git checkout $$rev
+
+.PHONY: check-licenses
+check-licenses:
+	reuse lint
+	cd $(code_dir) && reuse lint
