@@ -13,3 +13,5 @@ git checks to add:
 minimal demos: relegate vscode integration to branch
 
 warnings in #[protection_domain] and memory_region_symbol!()
+
+container registry push
