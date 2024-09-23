@@ -21,3 +21,25 @@
     margin-top: 0;
     /* margin-bottom: 0; */
 }
+
+div.step-hint > p {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+div.step-hint {
+    background-color: rgba(0, 0, 0, 0.1);
+    /* padding: 20px; */
+    /* border-top: 0px; */
+    /* border-bottom: 0px; */
+    /* border: 20px; */
+    /* border-left: 20px; */
+    /* border-right: 20px; */
+    /* border-style: solid; */
+    /* padding-left: 20px; */
+    /* padding-right: 20px; */
+    /* padding-top: 0; */
+    /* padding-bottom: 0; */
+    /* border-color: rgb(0, 0, 0); */
+    /* border-color: rgba(0, 0, 0, 0.1); */
+    /* border-width: 2px; */
+}

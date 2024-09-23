@@ -16,29 +16,31 @@ Foo bar.
     <summary>
         What is a capability? (click to expand)
     </summary>
-    <p>
-        fksdajfdsafdsaf jkfl sdajlkf sda
-        fksdajfdsafdsaf jkfl sdajlkf sda
-        fksdajfdsafdsaf jkfl sdajlkf sda
-        fksdajfdsafdsaf jkfl sdajlkf sda
-        fksdajfdsafdsaf jkfl sdajlkf sda
-        fksdajfdsafdsaf jkfl sdajlkf sda
-        fksdajfdsafdsaf jkfl sdajlkf sda
-        fksdajfdsafdsaf jkfl sdajlkf sda
-        fksdajfdsafdsaf jkfl sdajlkf sda
-    </p>
-    <!---->{{#fragment_with_gh_link "rust,ignore" @1.A (workspaces/root-task/)hello/src/main.rs:12:19}}<!---->
-    <p>
-        fksdajfdsafdsaf jkfl sdajlkf sda
-        fksdajfdsafdsaf jkfl sdajlkf sda
-        fksdajfdsafdsaf jkfl sdajlkf sda
-        fksdajfdsafdsaf jkfl sdajlkf sda
-        fksdajfdsafdsaf jkfl sdajlkf sda
-        fksdajfdsafdsaf jkfl sdajlkf sda
-        fksdajfdsafdsaf jkfl sdajlkf sda
-        fksdajfdsafdsaf jkfl sdajlkf sda
-        fksdajfdsafdsaf jkfl sdajlkf sda
-    </p>
+    <div class="step-hint">
+        <p>
+            fksdajfdsafdsaf jkfl sdajlkf sda
+            fksdajfdsafdsaf jkfl sdajlkf sda
+            fksdajfdsafdsaf jkfl sdajlkf sda
+            fksdajfdsafdsaf jkfl sdajlkf sda
+            fksdajfdsafdsaf jkfl sdajlkf sda
+            fksdajfdsafdsaf jkfl sdajlkf sda
+            fksdajfdsafdsaf jkfl sdajlkf sda
+            fksdajfdsafdsaf jkfl sdajlkf sda
+            fksdajfdsafdsaf jkfl sdajlkf sda
+        </p>
+        <!---->{{#fragment_with_gh_link "rust,ignore" @1.A (workspaces/root-task/)hello/src/main.rs:12:19}}<!---->
+        <p>
+            fksdajfdsafdsaf jkfl sdajlkf sda
+            fksdajfdsafdsaf jkfl sdajlkf sda
+            fksdajfdsafdsaf jkfl sdajlkf sda
+            fksdajfdsafdsaf jkfl sdajlkf sda
+            fksdajfdsafdsaf jkfl sdajlkf sda
+            fksdajfdsafdsaf jkfl sdajlkf sda
+            fksdajfdsafdsaf jkfl sdajlkf sda
+            fksdajfdsafdsaf jkfl sdajlkf sda
+            fksdajfdsafdsaf jkfl sdajlkf sda
+        </p>
+    <div>
 </details>
 
 <!-- {{#step 1.B}} -->
