@@ -227,6 +227,20 @@ impl Preprocessor for This {
                         )
                     }).into_owned();
                 }
+                {
+                    let r = Regex::new(r"\{\{\s*#rev_of_step_0(\s+(?<len>.*))?\s*\}\}").unwrap();
+                    ch.content = r.replace_all(&ch.content, |captures: &Captures| {
+                        let len = captures.name("len").map(|s| s.as_str().parse().unwrap()).unwrap_or(64);
+                        format!("{}", &self.steps.commit_hash(&Step::parse("0"))[..len])
+                    }).into_owned();
+                }
+                {
+                    let r = Regex::new(r"\{\{\s*#rev_of_last_step(\s+(?<len>.*))?\s*\}\}").unwrap();
+                    ch.content = r.replace_all(&ch.content, |captures: &Captures| {
+                        let len = captures.name("len").map(|s| s.as_str().parse().unwrap()).unwrap_or(64);
+                        format!("{}", &self.steps.commit_hash(self.steps.last_step())[..len])
+                    }).into_owned();
+                }
             }
         });
 

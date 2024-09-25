@@ -91,6 +91,11 @@ impl Steps {
         self.steps.iter()
     }
 
+    pub fn last_step(&self) -> &Step {
+        let (step, _) = self.steps.last_key_value().unwrap();
+        step
+    }
+
     pub fn commit_hash(&self, step: &Step) -> String {
         format!("{}", self.steps[step])
     }
