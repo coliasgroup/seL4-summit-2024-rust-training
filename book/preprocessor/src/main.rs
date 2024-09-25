@@ -144,14 +144,14 @@ impl This {
         format!("[{text}]({up}rustdoc/{config}/aarch64-sel4{target_suffix}/doc/{path})",)
     }
 
-    fn render_step_header(&self, step: &Step) -> String {
+    fn render_step_header(&self, step: &Step, text: &str) -> String {
         let long_rev = self.steps.commit_hash(step);
         let commit_link = self.step_commit_link(step);
         let mut s = String::new();
         // writeln!(&mut s, "## Step {step} [<i class=\"fa fa-github\"></i>]({commit_link}) `{short_rev}`").unwrap();
         // writeln!(&mut s, "## Step {step} `{short_rev}` [<i class=\"fa fa-github\"></i>]({commit_link})").unwrap();
         // writeln!(&mut s, "<span class=\"step-heading\">").unwrap();
-        write!(&mut s, "## Step {step}").unwrap();
+        write!(&mut s, "## Step {step}{text}").unwrap();
         write!(&mut s, "&nbsp;").unwrap();
         write!(&mut s, "&nbsp;").unwrap();
         write!(&mut s, "&nbsp;").unwrap();
@@ -220,10 +220,11 @@ impl Preprocessor for This {
                     }).into_owned();
                 }
                 {
-                    let r = Regex::new(r"\{\{\s*#step\s+(?<step>.*?)\s*\}\}").unwrap();
+                    let r = Regex::new(r"\{\{\s*#step\s+(?<step>[0-9]+(\.[A-Z])?)(?<text>.*?)\}\}").unwrap();
                     ch.content = r.replace_all(&ch.content, |captures: &Captures| {
                         self.render_step_header(
                             &Step::parse(captures.name("step").unwrap().as_str()),
+                            captures.name("text").unwrap().as_str(),
                         )
                     }).into_owned();
                 }
@@ -351,7 +352,7 @@ impl GitHubLink {
     fn fragment(&self, steps: &Steps) -> String {
         match (&self.start, &self.end) {
             (Some(start), Some(end)) => self.fragment_helper(steps, start..=end),
-            (Some(start), None) => self.fragment_helper(steps, start..),
+            (Some(start), None) => self.fragment_helper(steps, start..=start),
             (None, Some(end)) => self.fragment_helper(steps, ..=end),
             (None, None) => self.fragment_helper(steps, ..),
         }

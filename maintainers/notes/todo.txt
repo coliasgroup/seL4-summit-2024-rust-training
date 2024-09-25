@@ -15,3 +15,11 @@ minimal demos: relegate vscode integration to branch
 warnings in #[protection_domain] and memory_region_symbol!()
 
 container registry push
+
+-- -- --
+
+rustdoc:
+    root_task macro
+    panic_unwind
+
+fix make image && make test issue

@@ -22,7 +22,7 @@ pub struct Step(String);
 
 impl Step {
     pub fn parse(s: &str) -> Self {
-        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^[0-9]+\.[A-Z]$").unwrap());
+        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^[0-9]+(\.[A-Z])?$").unwrap());
         assert!(s == "0" || RE.is_match(s));
         Self(s.to_owned())
     }
