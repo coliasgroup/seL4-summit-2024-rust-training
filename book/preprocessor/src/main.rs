@@ -228,17 +228,23 @@ impl Preprocessor for This {
                     }).into_owned();
                 }
                 {
-                    let r = Regex::new(r"\{\{\s*#rev_of_step_0(\s+(?<len>.*))?\s*\}\}").unwrap();
+                    let r = Regex::new(r"\{\{\s*#rev_of_step_0(\s+(?<len>[0-9]+))?\s*\}\}").unwrap();
                     ch.content = r.replace_all(&ch.content, |captures: &Captures| {
-                        let len = captures.name("len").map(|s| s.as_str().parse().unwrap()).unwrap_or(64);
+                        let len = captures.name("len").map(|s| s.as_str().parse().unwrap()).unwrap_or(40);
                         format!("{}", &self.steps.commit_hash(&Step::parse("0"))[..len])
                     }).into_owned();
                 }
                 {
-                    let r = Regex::new(r"\{\{\s*#rev_of_last_step(\s+(?<len>.*))?\s*\}\}").unwrap();
+                    let r = Regex::new(r"\{\{\s*#rev_of_last_step(\s+(?<len>[0-9]+))?\s*\}\}").unwrap();
                     ch.content = r.replace_all(&ch.content, |captures: &Captures| {
-                        let len = captures.name("len").map(|s| s.as_str().parse().unwrap()).unwrap_or(64);
+                        let len = captures.name("len").map(|s| s.as_str().parse().unwrap()).unwrap_or(40);
                         format!("{}", &self.steps.commit_hash(self.steps.last_step())[..len])
+                    }).into_owned();
+                }
+                {
+                    let r = Regex::new(r"\{\{\s*#gh_repo_url\s*\}\}").unwrap();
+                    ch.content = r.replace_all(&ch.content, |_captures: &Captures| {
+                        format!("https://github.com/{}", self.code_gh_root)
                     }).into_owned();
                 }
             }

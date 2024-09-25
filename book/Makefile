@@ -72,7 +72,7 @@ check:
 open:
 	open $(build_dir)/index.html
 
-.PHONY: watch
-watch:
+.PHONY: serve
+serve:
 	$(mdbook_env) \
-		mdbook watch
+		mdbook serve
