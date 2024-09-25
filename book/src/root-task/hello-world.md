@@ -73,7 +73,7 @@ The default stack size is {{#rustdoc_link root-task sel4_root_task/constant.DEFA
 
 **Exercise:** Adjust the root task's initial thread's stack size to prevent the stack overflow you just caused.
 
-{{#step 1.F}}
+{{#step 1.F (exercise)}}
 
 By default, the `sel4_root_task` runtime does not include a heap.
 Any attempt to use the `alloc` crate will result in a link-time failure.
