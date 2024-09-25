@@ -10,6 +10,8 @@
 
 [Setup](setup.md)
 
+[Preprocessor Test](preprocessor-test.md)
+
 # Part I: The Root Task
 
 - [Overview](root-task/README.md)
