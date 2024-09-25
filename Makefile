@@ -29,7 +29,7 @@ ci-in-container:
 	for rev in $$(cat $(abspath $(step_list))); do \
 		git checkout $$rev; \
 		git log --format=%B -n 1 HEAD | cat; \
-		true || $(MAKE) check-step; \
+		$(MAKE) check-step; \
 	done
 	$(MAKE) -C $(code_dir) rustdoc
 	$(MAKE) -C $(code_dir) prune-rustdoc
