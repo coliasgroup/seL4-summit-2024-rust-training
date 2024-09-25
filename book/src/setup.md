@@ -51,9 +51,9 @@ The rest of this text assumes that you are in a shell inside the container.
 
 ### Two Workspaces
 
-To simplify our Cargo invocations, Rust code has been divided between two distinct workspaces: {{#gh_link workspaces/root-task}} and {{#gh_link workspaces/microkit}}.
+To simplify our Cargo invocations, this repository's Rust code has been divided between two distinct workspaces: {{#gh_link workspaces/root-task}} and {{#gh_link workspaces/microkit}}.
 Both are subject to the top-level {{#gh_link .cargo/config.toml}}, whereas {{#gh_link workspaces/root-task/.cargo/config.toml}} and {{#gh_link workspaces/microkit/.cargo/config.toml}} each apply to only one.
-These workspace-specific files demonstrate all that is required to configure the crates in the [rust-sel4](https://github.com/seL4/rust-sel4) project:
+These workspace-specific `config.toml` files demonstrate all that is required to configure the crates in the [rust-sel4](https://github.com/seL4/rust-sel4) project:
 
 - An environment variable pointing at `libsel4` (which includes the kernel configuration).
   See {{#rustdoc_link root-task sel4/index.html#building the relevant crate docs}} for information on this environment variable.
@@ -63,3 +63,10 @@ These workspace-specific files demonstrate all that is required to configure the
 
 If you want help from [rust-analyzer](https://rust-analyzer.github.io/), the Rust Language Server, you can use [VSCode with the Dev Containers extension](https://code.visualstudio.com/docs/devcontainers/tutorial).
 This will enable you to run VSCode inside of the container you just built, which contains the seL4 build artifacts that rust-analyzer will require to analyzer your code.
+
+This repository provides a separate Dev Container configuration for each workspace:
+- {{#gh_link .devcontainer/root-task/devcontainer.json}}
+- {{#gh_link .devcontainer/microkit/devcontainer.json}}
+
+To work in a particular workspace, open this repository in VSCode, run `> Dev Containers: Reopen in Container`, and select the corresponding configuration.
+You should now be able to use the rust-analyzer VSCode extension normally for the code in the selected workspace.
