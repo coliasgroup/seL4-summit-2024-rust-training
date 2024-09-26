@@ -17,7 +17,7 @@ Press `ctrl-a x` to exit QEMU.
 
 Here is its source:
 
-{{#fragment_with_gh_link "rust,ignore" @-2 (workspaces/root-task/)hello/src/main.rs:7}}
+{{#fragment_with_gh_link "rust,ignore" @-2 (workspaces/root-task/)hello/src/main.rs:7:17}}
 
 The Rust standard library is divided into three layers:
 - [`core`](https://doc.rust-lang.org/core/): dependency-free foundation
