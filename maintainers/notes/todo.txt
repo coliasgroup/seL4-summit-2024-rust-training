@@ -23,3 +23,5 @@ rustdoc:
     panic_unwind
 
 fix make image && make test issue
+
+git filter-branch --tree-filter 'make fmt' xx..y
