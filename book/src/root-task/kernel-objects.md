@@ -13,6 +13,6 @@ cd workspaces/root-task/kernel-objects
 make simulate
 ```
 
-{{#step 1.A (exercise)}}
+{{#step 2.A (exercise)}}
 
 **Exercise:** Cause a panic.

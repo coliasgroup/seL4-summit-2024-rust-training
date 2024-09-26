@@ -17,7 +17,7 @@ Press `ctrl-a x` to exit QEMU.
 
 Here is its source:
 
-{{#fragment_with_gh_link "rust,ignore" @-1 (workspaces/root-task/)hello/src/main.rs:7}}
+{{#fragment_with_gh_link "rust,ignore" @-2 (workspaces/root-task/)hello/src/main.rs:7}}
 
 The Rust standard library is divided into three layers:
 - [`core`](https://doc.rust-lang.org/core/): dependency-free foundation
@@ -41,26 +41,26 @@ The {{#rustdoc_link root-task sel4_root_task/attr.root_task.html `#[root_task]`}
 The root task has no way to exit, so, to terminate cleanly, it must suspend its own thread.
 `sel4::init_thread::suspend_self()` does exactly this.
 
-{{#step 1.A (exercise)}}
+{{#step 2.A (exercise)}}
 
 **Exercise:** Cause a panic.
 
-{{#step 1.B (exercise)}}
+{{#step 2.B (exercise)}}
 
 **Exercise:** Catch the panic using {{#rustdoc_link root-task sel4_root_task/panicking/fn.catch_unwind.html `sel4_root_task::panicking::catch_unwind()`}}.
 
-{{#step 1.C (exercise)}}
+{{#step 2.C (exercise)}}
 
 You can set a custom panic hook with {{#rustdoc_link root-task sel4_root_task/panicking/type.PanicHook.html `sel4_root_task::panicking::PanicHook`}}.
 The default hook just prints the panic's `ExternalPanicInfo`.
 
 **Exercise:** Set a custom panic hook.
 
-{{#step 1.D (exercise)}}
+{{#step 2.D (exercise)}}
 
 **Exercise:** Cause a stack overflow.
 
-{{#step 1.E (exercise)}}
+{{#step 2.E (exercise)}}
 
 The `#[root_task]` attribute macro accepts a named `stack_size` parameter, which can be any expression of type `usize` and whose value is interpreted as the root task's initial thread's stack size, in bytes.
 For example:
@@ -73,7 +73,7 @@ The default stack size is {{#rustdoc_link root-task sel4_root_task/constant.DEFA
 
 **Exercise:** Adjust the root task's initial thread's stack size to prevent the stack overflow you just caused.
 
-{{#step 1.F (exercise)}}
+{{#step 2.F (exercise)}}
 
 By default, the `sel4_root_task` runtime does not include a heap.
 Any attempt to use the `alloc` crate will result in a link-time failure.
@@ -94,11 +94,11 @@ or
 
 **Exercise:** Add a heap and use it.
 
-{{#step 1.G}}
+{{#step 2.G}}
 
 The `sel4_logging` crate builds on top of the [log](https://docs.rs/log/latest/log/) crate to add utilities for initializing simple loggers in minimal environments, such as a seL4 root task.
 This step demonstrates one way to initialize a logger using this crate:
 
-{{#fragment_with_gh_link "rust,ignore" @1.G (workspaces/root-task/)hello/src/main.rs:17:20}}
+{{#fragment_with_gh_link "rust,ignore" @2.G (workspaces/root-task/)hello/src/main.rs:17:20}}
 
-{{#fragment_with_gh_link "rust,ignore" @1.G (workspaces/root-task/)hello/src/main.rs:41}}
+{{#fragment_with_gh_link "rust,ignore" @2.G (workspaces/root-task/)hello/src/main.rs:41}}

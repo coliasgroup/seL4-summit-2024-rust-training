@@ -8,9 +8,9 @@
 
 {{#fragment_with_gh_link "rust,ignore" workspaces/root-task/hello/src/main.rs:12:19}}
 
-{{#fragment_with_gh_link "rust,ignore" @1.A (workspaces/root-task/)hello/src/main.rs:12:19}}
+{{#fragment_with_gh_link "rust,ignore" @2.A (workspaces/root-task/)hello/src/main.rs:12:19}}
 
-Foo {{#gh_link @-1.A workspaces/root-task/hello/src/main.rs:12:17}} bar
+Foo {{#gh_link @-2.A workspaces/root-task/hello/src/main.rs:12:17}} bar
 
 Foo {{#gh_link workspaces/root-task/hello/src/main.rs:12}} bar
 
@@ -38,7 +38,7 @@ Foo {{#rustdoc_link root-task sel4_root_task/macro.debug_println.html `debug_pri
 
 Some text here.
 
-{{#step 1.A}}
+{{#step 2.A}}
 
 Foo bar.
 
@@ -58,7 +58,7 @@ Foo bar.
             fksdajfdsafdsaf jkfl sdajlkf sda
             fksdajfdsafdsaf jkfl sdajlkf sda
         </p>
-        <!---->{{#fragment_with_gh_link "rust,ignore" @1.A (workspaces/root-task/)hello/src/main.rs:12:19}}<!---->
+        <!---->{{#fragment_with_gh_link "rust,ignore" @2.A (workspaces/root-task/)hello/src/main.rs:12:19}}<!---->
         <p>
             fksdajfdsafdsaf jkfl sdajlkf sda
             fksdajfdsafdsaf jkfl sdajlkf sda
@@ -73,6 +73,6 @@ Foo bar.
     </details>
 </div>
 
-<!-- {{#step 1.B}} -->
+<!-- {{#step 2.B}} -->
 
 Foo baz.
