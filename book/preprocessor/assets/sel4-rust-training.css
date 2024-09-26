@@ -37,7 +37,7 @@ div.step-hint p:last-child {
     margin-bottom: 0;
 }
 
-a.step-heading-clickable {
+a.step-heading-clickable, a.step-heading-clickable:link {
     text-decoration: none !important;;
     color: inherit;
 }
