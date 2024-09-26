@@ -4,7 +4,7 @@
     SPDX-License-Identifier: CC-BY-SA-4.0
 -->
 
-# Introduction
+# This is a Test
 
 {{#fragment_with_gh_link "rust,ignore" workspaces/root-task/hello/src/main.rs:12:19}}
 
@@ -45,7 +45,7 @@ Foo bar.
 <div class="step-hint">
     <details>
         <summary>
-            What is a capability? (click to expand)
+            Hint (click to expand)
         </summary>
         <p>
             fksdajfdsafdsaf jkfl sdajlkf sda

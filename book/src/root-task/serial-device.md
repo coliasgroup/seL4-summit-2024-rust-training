@@ -4,4 +4,4 @@
     SPDX-License-Identifier: CC-BY-SA-4.0
 -->
 
-# The Root Task
+# Using a Serial Device

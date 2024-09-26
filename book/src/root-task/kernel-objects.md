@@ -4,7 +4,7 @@
     SPDX-License-Identifier: CC-BY-SA-4.0
 -->
 
-# Kernel Objects
+# Allocating Kernel Objects
 
 Some text here.
 

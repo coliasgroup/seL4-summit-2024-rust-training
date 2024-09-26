@@ -15,9 +15,9 @@
 
 - [Overview](root-task/README.md)
 - [Hello, World!](root-task/hello-world.md)
-- [Kernel Objects](root-task/kernel-objects.md)
-- [Address Space](root-task/address-space.md)
-- [Serial Device](root-task/serial-device.md)
+- [Allocating Kernel Objects](root-task/kernel-objects.md)
+- [Modifying the Address Space](root-task/address-space.md)
+- [Using a Serial Device](root-task/serial-device.md)
 - [Spawning a Thread](root-task/spawning-a-thread.md)
 - [Spawning a Task](root-task/spawning-a-task.md)
 
@@ -25,6 +25,5 @@
 
 - [Overview](microkit/README.md)
 - [Hello, World!](microkit/hello-world.md)
+- [Using IPC](microkit/ipc.md)
 - [Banscii](microkit/banscii.md)
-
-<!-- - [A Componentized Interactive Application]() -->
