@@ -15,6 +15,8 @@
 
 - [Overview](root-task/README.md)
 - [Hello, World!](root-task/hello-world.md)
+- [Kernel Objects](root-task/kernel-objects.md)
+- [Address Space](root-task/address-space.md)
 - [Serial Device](root-task/serial-device.md)
 - [Spawning a Thread](root-task/spawning-a-thread.md)
 - [Spawning a Task](root-task/spawning-a-task.md)
