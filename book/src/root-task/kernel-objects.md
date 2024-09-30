@@ -19,6 +19,7 @@ See {{#manual_link #2.3 (Kernel Objects)}} for an outline of the core types of k
 In the context of seL4, a capability is a granular, unforgeable token of authority that references a kernel object and carries access rights that limit what the user of a cabability can do with the referenced kernel object.
 In general, a system call in seL4 amounts to refering to a cabability and an action on the kernel object the cabability points to.
 This is called _invoking a capability_.
+The calls themselves are known as _object method invocations_.
 
 <!-- As elaborated in {{#manual_link #2.3 (Kernel Objects)}}, the core kernel object types are:
 - CNode: a table containing capabilites, used to construct so-called capability spaces, which are assigned to threads. When making a syscall, a thread refers to capabilities in its capability space to in turn refer to kernel objects.
@@ -76,3 +77,18 @@ Add a function that finds the largest untyped region passed to the root task:
 {{#fragment_with_gh_link "rust,ignore" @3.B workspaces/root-task/kernel-objects/src/main.rs:32:42}}
 
 The expression `bootinfo.untyped().index(ut_ix).cap()` indexes into `bootinfo.untyped(): SlotRegion<Untyped>` to retrieve a `Slot<Untyped>`, which can be turned into a `Cap<Untyped> (= cap::Untyped)`.
+
+{{#step 3.C}}
+
+In this step, we will allocate a {{#manual_link [Notification] #5}} object.
+
+We already know how to refer to a capability in the current thread's CSpace: a CPtr.
+However, some seL4 kernel object methods allow us to refer to a capability slot in any CSpace whose root CNode is present in the current thread's CSpace.
+In these cases, we must provide:
+- A CPtr, interpreted in the context of the current thread's CSpace, which points to the target CSpace's root CNode
+- A CPtr, interpreted in the context of the target CSpace, which points to the target capability slot
+- A depth, which is the number of bits of the second CPtr to interpret. This allows for the second CPtr to point to a CNode. Why this is necessary is outside the scope of this training, but you can read about it in {{#manual_link #2.4 (CSpace Addressing)}}.
+
+This more flexible method of capability slot addressing is encapsulated in the {{#rustdoc_link root-task sel4/struct.AbsoluteCPtr.html `sel4::AbsoluteCPtr`}} type.
+
+{{#manual_link [`seL4_CNode_Mint`] #10.3.1.4}}

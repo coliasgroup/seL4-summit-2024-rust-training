@@ -427,10 +427,12 @@ impl ManualLink {
             s
         });
         let fragment = if let Some(section) = &self.section {
-            let ty = if section.contains('.') {
-                "section"
-            } else {
-                "chapter"
+            let ty = match section.chars().filter(|c| *c == '.').count() {
+                0 => "chapter",
+                1 => "section",
+                2 => "subsection",
+                3 => "subsubsection",
+                _ => panic!(),
             };
             format!("#{ty}.{section}")
         } else {
