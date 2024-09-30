@@ -37,6 +37,15 @@ We will cover the contents of this crate in future chapters.
 The {{#rustdoc_link root-task sel4_root_task/index.html `sel4_root_task` crate}} implements a Rust language runtime for the root task environment.
 
 The {{#rustdoc_link root-task sel4_root_task/attr.root_task.html `#[root_task]`}} attribute macro declares a function to be the root task's entrypoint.
+The entrypoint function must have a signature of the form:
+
+```rust,ignore
+fn(&sel4::BootInfoPtr) -> T
+where
+    T: sel4_root_task::Termination
+```
+
+(Rustdoc for for {{#rustdoc_link root-task sel4/struct.BootInfoPtr.html `BootInfoPtr`}} and {{#rustdoc_link root-task sel4_root_task/trait.Termination.html `Termination`}})
 
 The root task has no way to exit, so, to terminate cleanly, it must suspend its own thread.
 `sel4::init_thread::suspend_self()` does exactly this.

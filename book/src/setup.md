@@ -71,3 +71,16 @@ This repository provides a separate Dev Container configuration for each workspa
 
 To work in a particular workspace, open this repository in VSCode, run `> Dev Containers: Reopen in Container`, and select the corresponding configuration.
 You should now be able to use the rust-analyzer VSCode extension normally for the code in the selected workspace.
+
+### Rustdoc
+
+Rustdoc for the rust-sel4 project is hosted here:
+
+<https://sel4.github.io/rust-sel4/>
+
+However, for the sake of consistency, rustdoc for the particular configurations studied in this text are hosted here too.
+There is one set of rustdoc for each of the two workspace configurations mentioned in [Two Workspaces](#two-workspaces).
+Rustdoc does not generate an index page, but you can navigate across crates within a workspace configuration using the sidebar present on top-level rustdoc page for any module.
+
+- {{#rustdoc_link root-task sel4/index.html Rustdoc for Part I}}
+- {{#rustdoc_link microkit sel4/index.html Rustdoc for Part II}}
