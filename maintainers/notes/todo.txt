@@ -16,12 +16,18 @@ warnings in #[protection_domain] and memory_region_symbol!()
 
 container registry push
 
+note: git filter-branch --tree-filter 'make fmt' xx..y
+
 -- -- --
 
 rustdoc:
     root_task macro
     panic_unwind
+    AbsoluteCPtr, etc.
 
-fix make image && make test issue
+root task:
+    MessageInfo, IpcBuffer
 
-git filter-branch --tree-filter 'make fmt' xx..y
+ukit:
+    memory_region_symbol
+    MessageInfo (+ using zerocopy)
