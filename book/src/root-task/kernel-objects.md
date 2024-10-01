@@ -89,6 +89,70 @@ In these cases, we must provide:
 - A CPtr, interpreted in the context of the target CSpace, which points to the target capability slot
 - A depth, which is the number of bits of the second CPtr to interpret. This allows for the second CPtr to point to a CNode. Why this is necessary is outside the scope of this training, but you can read about it in {{#manual_link #2.4 (CSpace Addressing)}}.
 
+Consider, for example, the {{#manual_link [`seL4_CNode_Mint`] #10.3.1.4}} object method.
+`dest_*` and `src_*` are both capability slots addressed in this way.
+
 This more flexible method of capability slot addressing is encapsulated in the {{#rustdoc_link root-task sel4/struct.AbsoluteCPtr.html `sel4::AbsoluteCPtr`}} type.
 
-{{#manual_link [`seL4_CNode_Mint`] #10.3.1.4}}
+The {{#manual_link [`seL4_Untyped_Retype`] #10.3.9.1}} method is used for allocating new objects from an untyped object.
+The `_service` parameter is the address of the untyped object as a normal CPtr.
+`root`, `node_index`, and `node_depth` address, in the more flexible way outlined above, the destination CNode into which capabilities for the new objects will be inserted.
+`node_offset` and `num_objects` specify a range of slots within the selected CNode for the new capabilites (and, simultaneously, the number of new objects that will be created).
+
+`type` and `size_bits` specify the shape of the new object(s)
+Note that `size_bits` is relevant for only certain object types (see {{#manual_link #2.4.2 (Summary of Object Sizes)}} for more information).
+This shape information is encapsulated in the {{#rustdoc_link root-task sel4/enum.ObjectBlueprint.html `sel4::ObjectBlueprint`}} type.
+
+Let us now work towards calling {{#rustdoc_link root-task sel4/cap/type.Untyped.html#method.untyped_retype `sel4::cap::Untyped::untyped_retype()`}} on our previously acquired `largest_kernel_ut`.
+We wish to allocate one notification object and insert a capability for it into a free slot in the current thread's own CSpace.
+More precisely, we need a `sel4::AbsoluteCPtr` for the current thread's own CSpace's root CNode, and an index into that CNode for a free slot.
+
+The CPtr for the initial thread's own CSpace root is a constant:
+
+{{#fragment_with_gh_link "rust,ignore" @3.C workspaces/root-task/kernel-objects/src/main.rs:27:27}}
+
+`bootinfo` can tell us about a range of empty slots in this CSpace.
+We can leverage the fact that Rust's `Range<T>` type is an iterator for certain `T` to allocate slots in an ergonomic way:
+
+{{#fragment_with_gh_link "rust,ignore" @3.C workspaces/root-task/kernel-objects/src/main.rs:29:33}}
+
+The {{#rustdoc_link root-task sel4/cap/type.CNode.html#method.relative_self `sel4::cap::CNode::relative_self()`}}  method elaborates a `sel4::cap::Cnode` into a `sel4::AbsoluteCPtr`.
+Interestingly, there are two ways to do this, but the current implementation is just to use a depth of zero.
+
+Now we can invoke our untyped capability to allocate a notification object:
+
+{{#fragment_with_gh_link "rust,ignore" @3.C workspaces/root-task/kernel-objects/src/main.rs:36:43}}
+
+Now that we know that `notification_slot` contains a notification capability, we can cast it and get a {{#rustdoc_link root-task sel4/cap/type.Notification.html `sel4::cap::Notification`}}:
+
+{{#fragment_with_gh_link "rust,ignore" @3.C workspaces/root-task/kernel-objects/src/main.rs:45:47}}
+
+{{#step 3.D (exercise)}}
+
+**Exercies:**: Use {{#rustdoc_link root-task sel4/cap/type.Notification.html#method.signal `sel4::cap::Notification::signal()`}} and {{#rustdoc_link root-task sel4/cap/type.Notification.html#method.wait `sel4::cap::Notification::wait()`}} to signal and then wait on the notification.
+
+{{#step 3.E (exercise)}}
+
+As described in {{#manual_link #5 (Notifications)}}, a notification capability can contain a word-sized mask called a badge.
+When that capability is used to signal the notification, the notification's word-sized state is bit-wise `or`ed with the capability's badge.
+A wait call on the notification returns and clears the notification's state, provided that a signal call has occurred since the last wait call.
+
+{{#rustdoc_link root-task sel4/struct.AbsoluteCPtr.html#method.mint `sel4::AbsoluteCPtr::mint()`}} mints a new capability from an existing capability, updatings its access rights and badge.
+
+**Exercies:**: Allocate a new empty slot in the current CNode.
+
+A slot in the root task's CSpace (i.e. a value of type {{#rustdoc_link root-task sel4/init_thread/struct.Slot.html `sel4::init_thread::Slot`}}) can be turned into an `sel4::AbsoluteCPtr` using {{#rustdoc_link root-task sel4/cap/type.CNode.html#method.relative `sel4::CNode::relative()`}}:
+
+{{#fragment_with_gh_link "rust,ignore" @3.E workspaces/root-task/kernel-objects/src/main.rs:63:63}}
+
+**Exercies:**: Mint a capability based on the capability in `notification_slot` into your newly allocated slot. Use {{#rustdoc_link root-task sel4/struct.CapRights.html#method.all `sel4::CapRights::all()`}} for the `rights` parameter, and specify a non-zero badge value.
+
+**Exercies:**: Signal the notification using your newly minted badged capability. Using the return value of `sel4::Notification::wait()`, compare the badge value it returns with the badge you used to mint the capability.
+
+{{#step 3.F (exercise)}}
+
+**Exercies:**: `sel4::CapRights::all()` is overly-permissive. Use the overly-restrictive `sel4::CapRights::none()` instead and watch the program fail.
+
+{{#step 3.G (exercise)}}
+
+**Exercies:**: Now the minimum rights necessary for the program to run.
