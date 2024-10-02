@@ -37,10 +37,35 @@ Note that, after importing the {{#rustdoc_link root-task sel4/trait.CapTypeForOb
 
 {{#step 4.B}}
 
-{{#step 4.C (exercise)}}
+In order to avoid interacting with intermediate translation structures, let's reserve an aligned granule-sized region in the root task's program image that we can use for our experiment:
 
-**Exercise:** Foo.
+{{#fragment_with_gh_link "rust,ignore" @4.B workspaces/root-task/address-space/src/main.rs:15:20}}
+
+{{#fragment_with_gh_link "rust,ignore" @4.B workspaces/root-task/address-space/src/main.rs:46:49}}
+
+This reservation covers exactly one page in the root task's virtual address space.
+
+{{#step 4.C}}
+
+Let's unmap the page in the root task image that initially backs our reserved region. This will give us a hole in the root task VSpace, which we can use for our experiment.
+
+This function determines the slot in the root task's CSpace of the page capability corresponding to the page in the root task's VSpace which contains the given address:
+
+{{#fragment_with_gh_link "rust,ignore" @4.C workspaces/root-task/address-space/src/main.rs:73:84}}
+
+`__executable_start` is defined by the linker.
+We can use it, along with `addr`, to identify the offset into {{#rustdoc_link root-task sel4/struct.BootInfo.html#method.user_image_frames `bootinfo.user_image_frames()`}} of the capability we are after.
+
+Use the `get_user_image_frame_slot()` function to find the capability corresponding to the frame backing our reserved region, and unmap that frame, leaving a hole in the root task's virtual address space.
+Try to access that region, and observe a page fault:
+
+{{#fragment_with_gh_link "rust,ignore" @4.C workspaces/root-task/address-space/src/main.rs:51:54}}
 
 {{#step 4.D (exercise)}}
 
-**Exercise:** Foo.
+**Exercise:** Map `new_frame` at `page_a_addr` using {{#rustdoc_link root-task sel4/struct.Cap.html#method.frame_map `new_frame.frame_map()`}}, which corresponds to {{#manual_link [seL4_ARM_Page_Map] #10.7.6.6}}.
+
+Here are some hints for the parameters of `.frame_map()`:
+- `vspace`: A capability for the root task's VSpace can be expressed using `sel4::init_thread::slot::VSPACE.cap()`.
+- `rights`: `sel4::CapRights::read_write()` are the most permissive rights, and will work for our purposes.
+- `attrs`: {{#rustdoc_link root-task sel4/struct.Cap.html#method.frame_map `sel4::VmAttributes::default()`}} will work here.
