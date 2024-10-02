@@ -155,4 +155,4 @@ A slot in the root task's CSpace (i.e. a value of type {{#rustdoc_link root-task
 
 {{#step 3.G (exercise)}}
 
-**Exercies:**: Now the minimum rights necessary for the program to run.
+**Exercies:**: Now use the minimum rights necessary for the program to run.
