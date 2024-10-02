@@ -16,7 +16,10 @@ warnings in #[protection_domain] and memory_region_symbol!()
 
 container registry push
 
-note: git filter-branch --tree-filter 'make fmt' xx..y
+note:
+    git filter-branch --tree-filter 'make fmt' xx..y
+note:
+    cargo update -w -p sel4
 
 -- -- --
 
