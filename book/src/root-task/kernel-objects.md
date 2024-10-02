@@ -33,7 +33,7 @@ Just as each thread is associated with a virtual address space which the hardwar
 
 The {{#rustdoc_link root-task sel4/struct.CPtr.html `sel4::CPtr`}} type is a wrapper around a machine word.
 The {{#rustdoc_link root-task sel4/struct.Cap.html `sel4::Cap<T>`}} type wraps a `CPtr` associated with the current thread's CSpace, and thus points to a particular capability slot within the kernel.
-It is paramterized by a capability type `T`, representing the type of capability in that slot.
+It is paramterized by a capability type {{#rustdoc_link root-task sel4/trait.CapType.html ``T: sel4::CapType`}}, representing the type of capability in that slot.
 It is up to the crate user to ensure that `Cap`'s are valid and well-typed in the current thread.
 
 The {{#rustdoc_link root-task sel4/cap/index.html `sel4::cap`}} module contains aliases of the form `sel4::Cap<sel4::cap_type::*>`.
