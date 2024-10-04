@@ -30,7 +30,7 @@ Finally, we will implement a simple loop that echos serial input to serial outpu
 
 First, add some familiar snippets that we will use for allocating CSlots and kernel objects:
 
-{{#fragment_with_gh_link "rust,ignore" @5.A workspaces/root-task/serial-device/src/main.rs:34:43}}
+{{#fragment_with_gh_link "rust,ignore" @5.A workspaces/root-task/serial-device/src/main.rs:34:44}}
 
 {{#fragment_with_gh_link "rust,ignore" @5.A workspaces/root-task/serial-device/src/main.rs:22:27}}
 
