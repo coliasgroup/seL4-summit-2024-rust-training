@@ -103,6 +103,11 @@ The `_service` parameter is the address of the untyped object as a normal CPtr.
 Note that `size_bits` is relevant for only certain object types (see {{#manual_link #2.4.2 (Summary of Object Sizes)}} for more information).
 This shape information is encapsulated in the {{#rustdoc_link root-task sel4/enum.ObjectBlueprint.html `sel4::ObjectBlueprint`}} type.
 
+Multiple kernel objects can be allocated from a single unytped object.
+For each untyped object, the kernel maintains a watermark which tracks how much of the untyped object has been used up for object allocation.
+`seL4_Untyped_Retype` aligns the watermark to the desired object type's size, and then advances it according to the object type size and number of objects.
+This process is detailed in the fourth paragraph of {{#manual_link #2.4.1 (Reusing Memory)}}.
+
 Let us now work towards calling {{#rustdoc_link root-task sel4/cap/type.Untyped.html#method.untyped_retype `sel4::cap::Untyped::untyped_retype()`}} on our previously acquired `largest_kernel_ut`.
 We wish to allocate one notification object and insert a capability for it into a free slot in the current thread's own CSpace.
 More precisely, we need a `sel4::AbsoluteCPtr` for the current thread's own CSpace's root CNode, and an index into that CNode for a free slot.
@@ -129,7 +134,7 @@ Now that we know that `notification_slot` contains a notification capability, we
 
 {{#step 3.D (exercise)}}
 
-**Exercies:**: Use {{#rustdoc_link root-task sel4/cap/type.Notification.html#method.signal `sel4::cap::Notification::signal()`}} and {{#rustdoc_link root-task sel4/cap/type.Notification.html#method.wait `sel4::cap::Notification::wait()`}} to signal and then wait on the notification.
+**Exercise:**: Use {{#rustdoc_link root-task sel4/cap/type.Notification.html#method.signal `sel4::cap::Notification::signal()`}} and {{#rustdoc_link root-task sel4/cap/type.Notification.html#method.wait `sel4::cap::Notification::wait()`}} to signal and then wait on the notification.
 
 {{#step 3.E (exercise)}}
 
@@ -139,20 +144,20 @@ A wait call on the notification returns and clears the notification's state, pro
 
 {{#rustdoc_link root-task sel4/struct.AbsoluteCPtr.html#method.mint `sel4::AbsoluteCPtr::mint()`}} mints a new capability from an existing capability, updatings its access rights and badge.
 
-**Exercies:**: Allocate a new empty slot in the current CNode.
+**Exercise:**: Allocate a new empty slot in the current CNode.
 
 A slot in the root task's CSpace (i.e. a value of type {{#rustdoc_link root-task sel4/init_thread/struct.Slot.html `sel4::init_thread::Slot`}}) can be turned into an `sel4::AbsoluteCPtr` using {{#rustdoc_link root-task sel4/cap/type.CNode.html#method.relative `sel4::CNode::relative()`}}:
 
 {{#fragment_with_gh_link "rust,ignore" @3.E workspaces/root-task/kernel-objects/src/main.rs:63:63}}
 
-**Exercies:**: Mint a capability based on the capability in `notification_slot` into your newly allocated slot. Use {{#rustdoc_link root-task sel4/struct.CapRights.html#method.all `sel4::CapRights::all()`}} for the `rights` parameter, and specify a non-zero badge value.
+**Exercise:**: Mint a capability based on the capability in `notification_slot` into your newly allocated slot. Use {{#rustdoc_link root-task sel4/struct.CapRights.html#method.all `sel4::CapRights::all()`}} for the `rights` parameter, and specify a non-zero badge value.
 
-**Exercies:**: Signal the notification using your newly minted badged capability. Using the return value of `sel4::Notification::wait()`, compare the badge value it returns with the badge you used to mint the capability.
+**Exercise:**: Signal the notification using your newly minted badged capability. Using the return value of `sel4::Notification::wait()`, compare the badge value it returns with the badge you used to mint the capability.
 
 {{#step 3.F (exercise)}}
 
-**Exercies:**: `sel4::CapRights::all()` is overly-permissive. Use the overly-restrictive `sel4::CapRights::none()` instead and watch the program fail.
+**Exercise:**: `sel4::CapRights::all()` is overly-permissive. Use the overly-restrictive `sel4::CapRights::none()` instead and watch the program fail.
 
 {{#step 3.G (exercise)}}
 
-**Exercies:**: Now use the minimum rights necessary for the program to run.
+**Exercise:**: Now use the minimum rights necessary for the program to run.
