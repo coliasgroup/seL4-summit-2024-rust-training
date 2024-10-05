@@ -20,11 +20,11 @@ The module at {{#gh_link @-5 (workspaces/root-task/serial-device/src/)device.rs}
 
 Our first goal will be to map the serial device's MMIO registers into the root task's address space.
 
-After that, we will set up the root task's access to the serial device's IRQ, whose value is:
+After that, we will set up the root task's access to the serial device's interrupt, whose value is:
 
 {{#fragment_with_gh_link "rust,ignore" @-5 workspaces/root-task/serial-device/src/main.rs:18:18}}
 
-Finally, we will implement a simple loop that echos serial input to serial output.
+Finally, we will implement a simple loop that echoes serial input to serial output.
 
 {{#step 5.A}}
 
@@ -79,6 +79,40 @@ where `serial_device_mmio_page_addr: *mut _` is a pointer to where the MMIO regi
 
 {{#step 5.F (exercise)}}
 
+Interrupts are delivered to userspace via notifications.
+A `IRQHandler` capability represents the authority to manage a particular interrupt.
+Specifically, an `IRQHandler` capability ({{#rustdoc_link root-task sel4/cap/type.IrqHandler.html `sel4::cap::IrqHandler`}}) has the following methods:
+- {{#manual_link [`seL4_IRQHandler_SetNotification()`] #10.3.4.3}}:
+Associate the interrupt with the given notification. Userspace can call `seL4_Wait()` or `seL4_Poll()` on this notification to receive the interrupt.
+- {{#manual_link [`seL4_IRQHandler_Clear()`] #10.3.4.3}}:
+Disassociate the notification associated with this interrupts.
+- {{#manual_link [`seL4_IRQHandler_Ack()`] #10.3.4.3}}:
+Tell the kernel to pass on acknowledgement of this interrupt to the interrupt controller.
+
+The Rust bindings for these methods are:
+- {{#rustdoc_link root-task sel4/cap/type.IrqHandler.html#method.irq_handler_set_notification `sel4::cap::IrqHandler::irq_handler_set_notification()`}}
+- {{#rustdoc_link root-task sel4/cap/type.IrqHandler.html#method.irq_handler_clear `sel4::cap::IrqHandler::irq_handler_clear()`}}
+- {{#rustdoc_link root-task sel4/cap/type.IrqHandler.html#method.irq_handler_ack `sel4::cap::IrqHandler::irq_handler_ack()`}}
+
+The root task spawns with a special `IRQControl` capability ({{#rustdoc_link root-task sel4/cap/type.IrqControl.html `sel4::cap::IrqControl`}}) which can be used to create `IRQHandler` capabilities with {{#manual_link [`seL4_IRQControl_Get()`] #10.3.3.1}} ({{#rustdoc_link root-task sel4/cap/type.IrqControl.html#method.irq_control_get `sel4::cap::IrqControl::irq_control_get()`}}).
+
+The intent behind this API is that a highly-privileged component will hold an `IRQControl` capability, which it will use to distribute more finely-grained `IRQHandler` capabilities to less privileged components for the interrupts they will manage.
+
+The root task can access its `IRQControl` capability with {{#rustdoc_link root-task sel4/init_thread/slot/constant.IRQ_CONTROL.html `sel4::init_thread::slot::IRQ_CONTROL.cap()`}}
+
+**Exercise:** Use `sel4::init_thread::slot::IRQ_CONTROL.cap()` to create a `sel4::cap::IrqHandler` for `SERIAL_DEVICE_MMIO_PADDR`.
+
 {{#step 5.G (exercise)}}
 
+**Exercise:** Create a notification object from `largest_kernel_ut` and associate it with the `IRQHandler` you just created using {{#rustdoc_link root-task sel4/cap/type.IrqHandler.html#method.irq_handler_set_notification `sel4::cap::IrqHandler::irq_handler_set_notification()`}}.
+
 {{#step 5.H (exercise)}}
+
+**Exercise:** Use `serial_device: Device`, your `IRQHandler`, and the notification you associated with the interrupt to write a loop that echoes serial input to serial output.
+
+Use `serial_device.clear_all_interrupts()` and `irq_handler_cap.irq_handler_ack()` in sequence to clear the interrupt at the device and interrupt controller levels respectively.
+Note that you should do this at the beginning of the loop in case your loop enters with an interrupt already pending.
+
+Use `irq_notification_cap.wait()` to wait for hte interrupt.
+
+Use `serial_device.get_char()` and `serial_device.put_char()` to read and write data.
