@@ -25,6 +25,12 @@ Our code is more like spawning a thread using `<sel4/sel4.h>` alone.
 
 {{#step 6.A (exercise)}}
 
+`TODO`
+
 {{#step 6.B (exercise)}}
 
+`TODO`
+
 {{#step 6.C (exercise)}}
+
+`TODO`
