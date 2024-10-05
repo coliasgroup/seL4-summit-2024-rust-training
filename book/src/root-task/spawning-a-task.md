@@ -5,3 +5,8 @@
 -->
 
 # Spawning a Task
+
+```
+cd workspaces/root-task/spawn-task
+make simulate
+```
