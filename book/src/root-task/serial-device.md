@@ -76,3 +76,9 @@ Try printing "Hello, World!" to the serial console with something like:
 {{#fragment_with_gh_link "rust,ignore" @5.E workspaces/root-task/serial-device/src/main.rs:100:106}}
 
 where `serial_device_mmio_page_addr: *mut _` is a pointer to where the MMIO registers are mapped in the root task's virtual address space.  
+
+{{#step 5.F (exercise)}}
+
+{{#step 5.G (exercise)}}
+
+{{#step 5.H (exercise)}}
