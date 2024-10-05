@@ -5,3 +5,8 @@
 -->
 
 # Spawning a Thread
+
+```
+cd workspaces/root-task/spawn-thread
+make simulate
+```
