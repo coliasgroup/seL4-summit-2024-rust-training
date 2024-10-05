@@ -25,5 +25,6 @@
 
 - [Overview](microkit/README.md)
 - [Hello, World!](microkit/hello-world.md)
-- [Using IPC](microkit/ipc.md)
-- [Banscii](microkit/banscii.md)
+- [IPC](microkit/ipc.md)
+- [Shared Memory](microkit/shared-memory.md)
+- [Putting It All Together](microkit/banscii.md)
