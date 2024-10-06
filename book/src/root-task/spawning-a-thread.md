@@ -17,15 +17,25 @@ cd workspaces/root-task/spawn-thread
 make simulate
 ```
 
-Take a look at {{#gh_link @-6 (workspaces/root-task/spawn-thread/src/)main.rs}}.
+Explore {{#gh_link @-6 (workspaces/root-task/spawn-thread/src/)main.rs}} at will.
 If you're used to using [seL4_libs](https://github.com/seL4/seL4_libs), you may notice that our Rust code here is much more low-level and verbose.
 That is because we aren't using any higher-level seL4-related libraries such as 
 [`<sel4utils/thread.h>`](https://github.com/seL4/seL4_libs/blob/master/libsel4utils/include/sel4utils/thread.h).
 Our code is more like spawning a thread using `<sel4/sel4.h>` alone.
 
-{{#step 6.A (exercise)}}
+The exercises in this chapter are only concerned with the following two functions, which run concurrently:
 
-`TODO`
+{{#fragment_with_gh_link "rust,ignore" @-6 workspaces/root-task/spawn-thread/src/main.rs:75:79}}
+
+{{#fragment_with_gh_link "rust,ignore" @-6 workspaces/root-task/spawn-thread/src/main.rs:81:85}}
+
+`interact_with_secondary_thread()` runs in the primary thread, whereas `secondary_thread_main()` runs in the secondary thread.
+
+{{#step 6.A}}
+
+Change `inter_thread_nfn: sel4::cap::Notification` to `inter_thread_ep: sel4::cap::Endpoint`.
+
+Replace `inter_thread_nfn.signal()` and `inter_thread_nfn.wait()` with `inter_thread_ep.send()` and `inter_thread_ep.recv()`.
 
 {{#step 6.B (exercise)}}
 
