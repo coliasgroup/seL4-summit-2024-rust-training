@@ -6,6 +6,7 @@
 
 use clap::{Arg, Command};
 
+use itertools::Itertools;
 use mdbook_sel4_rust_training::Steps;
 
 fn main() {
@@ -29,7 +30,11 @@ fn main() {
 
     let steps = Steps::new_simple(top_level_dir, rev);
 
-    for (_step, id) in steps.iter() {
+    for (_step, id) in steps
+        .iter()
+        .map(|(step, id)| (step.structured(), id))
+        .sorted()
+    {
         println!("{id}");
     }
 }

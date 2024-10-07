@@ -34,6 +34,13 @@ impl Step {
     pub fn is_start(&self) -> bool {
         self.0 == "0"
     }
+
+    pub fn structured(&self) -> (i32, &str) {
+        let mut it = self.0.split(".");
+        let chapter = it.next().unwrap().parse().unwrap();
+        let sub = it.next().unwrap_or("");
+        (chapter, sub)
+    }
 }
 
 impl Default for Step {
