@@ -23,18 +23,8 @@ note:
 
 -- -- --
 
-rustdoc:
-    root_task macro
-    panic_unwind
-    AbsoluteCPtr, etc. !!!!
-
-root task:
-    MessageInfo, IpcBuffer
-
-ukit:
-    memory_region_symbol
-    MessageInfo (+ using zerocopy)
-
 PlaceHolder -> Placeholder
 
 frame vs page
+
+https://github.com/seL4/seL4/issues/997: cap invocation, not object method
