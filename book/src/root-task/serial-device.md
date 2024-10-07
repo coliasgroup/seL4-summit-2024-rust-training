@@ -64,7 +64,7 @@ So, we must always keep one child around so that our progress on advancing the w
 
 If your `sel4::cap::Granule` is called `serial_device_frame_cap`, then the following assertion should succeed:
 
-{{#fragment_with_gh_link "rust,ignore" @5.D workspaces/root-task/serial-device/src/main.rs:68:71}}
+{{#fragment_with_gh_link "rust,ignore" @5.D workspaces/root-task/serial-device/src/main.rs:70:73}}
 
 {{#step 5.E (exercise)}}
 
@@ -73,7 +73,7 @@ If your `sel4::cap::Granule` is called `serial_device_frame_cap`, then the follo
 You should now be able interact with the serial device's MMIO registers.
 Try printing "Hello, World!" to the serial console with something like:
 
-{{#fragment_with_gh_link "rust,ignore" @5.E workspaces/root-task/serial-device/src/main.rs:100:106}}
+{{#fragment_with_gh_link "rust,ignore" @5.E workspaces/root-task/serial-device/src/main.rs:102:108}}
 
 where `serial_device_mmio_page_addr: *mut _` is a pointer to where the MMIO registers are mapped in the root task's virtual address space.  
 
