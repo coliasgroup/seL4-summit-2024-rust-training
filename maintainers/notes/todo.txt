@@ -16,6 +16,8 @@ container registry push
 
 note:
     git filter-branch --tree-filter 'make fmt' xx..y
+    git filter-branch --tree-filter "find . -name '*.rs' -exec sed -i s,relative_self,absolute_cptr_for_self, '{}' ';'" xx..y
+    git filter-branch -f --tree-filter "find . -name '*.rs' -exec sed -i s,absolute_cptr_bits_with_depth,absolute_cptr_from_bits_with_depth, '{}' ';'" xx..y
 note:
     cargo update -w -p sel4
 
