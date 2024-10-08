@@ -75,9 +75,9 @@ fields).
 Finally, the kernel passes the `MessageInfo`, and control, to the receiver.
 
 In Rust, the sender and receiver can interact with their own IPC buffer using
-{{#rustdoc_link root-task sel4/fn.with_ipc_buffer.html `with_ipc_buffer`}}
+{{#rustdoc_link root-task sel4/fn.with_ipc_buffer.html `sel4::with_ipc_buffer`}}
 and
-{{#rustdoc_link root-task sel4/fn.with_ipc_buffer_mut.html `with_ipc_buffer_mut`}}.
+{{#rustdoc_link root-task sel4/fn.with_ipc_buffer_mut.html `sel4::with_ipc_buffer_mut`}}.
 Message data is held in the message registers (an array of machine words), which is a field of the IPC buffer (
     {{#rustdoc_link root-task sel4/struct.IpcBuffer.html#method.msg_regs `msg_regs`}}
     and
@@ -106,7 +106,11 @@ Taking all of this together, let's use our IPC endpoint to send an empty message
 
 {{#step 6.B (exercise)}}
 
-`TODO`
+**Exercise:** use
+{{#rustdoc_link root-task sel4/fn.with_ipc_buffer.html `sel4::with_ipc_buffer`}}
+and
+{{#rustdoc_link root-task sel4/fn.with_ipc_buffer_mut.html `sel4::with_ipc_buffer_mut`}}
+to send a message with some data.
 
 {{#step 6.C (exercise)}}
 
