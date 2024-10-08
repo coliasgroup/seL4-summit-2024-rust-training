@@ -12,8 +12,6 @@ git checks to add:
 
 minimal demos: relegate vscode integration to branch
 
-container registry push
-
 note:
     git filter-branch --tree-filter 'make fmt' xx..y
     git filter-branch --tree-filter "find . -name '*.rs' -exec sed -i s,relative_self,absolute_cptr_for_self, '{}' ';'" xx..y
@@ -22,10 +20,6 @@ note:
     cargo update -w -p sel4
 
 -- -- --
-
-PlaceHolder -> Placeholder
-
-frame vs page
 
 https://github.com/seL4/seL4/issues/997: cap invocation, not object method
 
