@@ -4,7 +4,7 @@
     SPDX-License-Identifier: CC-BY-SA-4.0
 -->
 
-# Spawning a Task
+# Spawning a Task (Challenge)
 
 ```
 cd workspaces/root-task/spawn-task
