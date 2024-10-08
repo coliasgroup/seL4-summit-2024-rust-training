@@ -114,4 +114,18 @@ to send a message with some data.
 
 {{#step 6.C (exercise)}}
 
-`TODO`
+See {{#manual_link #4.2.4 (Calling and Replying)}} for a description of the `seL4_Call` syscall ({{#rustdoc_link root-task sel4/cap/type.Endpoint.html#method.call `Endpoint::call()`}} in Rust).
+
+**Exercise:** Change the
+
+```rust
+inter_thread_ep.send()
+```
+
+in `secondary_thread_main()` to
+
+```rust
+inter_thread_ep.call()
+```
+
+and modify `interact_with_secondary_thread()` to {{#rustdoc_link root-task sel4/fn.reply.html `sel4::reply`}} with a message.
