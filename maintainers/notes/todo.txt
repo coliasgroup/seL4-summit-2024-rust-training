@@ -4,24 +4,15 @@
 # SPDX-License-Identifier: BSD-2-Clause
 #
 
-test with empty vscode config
+test on macbook
+check that both workspaces use same rust-sel4 commit
 
-git checks to add:
-    check that both workspaces use same rust-sel4 commit
-    check that step diffs are contained within cases
-
-minimal demos: relegate vscode integration to branch
+? test with empty vscode config
 
 note:
     git filter-branch --tree-filter 'make fmt' xx..y
     git filter-branch --tree-filter "find . -name '*.rs' -exec sed -i s,relative_self,absolute_cptr_for_self, '{}' ';'" xx..y
     git filter-branch -f --tree-filter "find . -name '*.rs' -exec sed -i s,absolute_cptr_bits_with_depth,absolute_cptr_from_bits_with_depth, '{}' ';'" xx..y
+
 note:
     cargo update -w -p sel4
-
--- -- --
-
-https://github.com/seL4/seL4/issues/997: cap invocation, not object method
-
-rustdoc:
-    - message stuff in root-task and microkit
