@@ -9,7 +9,7 @@
 Run the hello world example:
 
 ```
-cd workspaces/root-task/hello
+cd workspaces/root-task/hello-world
 make simulate
 ```
 

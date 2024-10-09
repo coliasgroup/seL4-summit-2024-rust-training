@@ -9,7 +9,7 @@
 Navigate to and run the hello world Microkit example:
 
 ```
-cd workspaces/microkit/hello
+cd workspaces/microkit/hello-world
 make simulate
 ```
 
