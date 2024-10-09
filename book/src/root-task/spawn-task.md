@@ -14,14 +14,10 @@ cd workspaces/root-task/spawn-task
 make simulate
 ```
 
-As was the case in [Chapter 6 (Spawning a Thread)](spawning-a-thread.html)
+Similarly to what we saw in [Chapter 6 (Spawning a Thread)](spawn-thread.html), the code in this example is more low-level and complex compared to what you have seen in code that leverages [`<sel4utils/process.h>`](https://github.com/seL4/seL4_libs/blob/master/libsel4utils/include/sel4utils/process.h).
+Again, our code here is more like spawning a task using `<sel4/sel4.h>` alone.
 
 [Step 4.B](./address-space.html#step-4b)
-
-, we will explore IPC through an example that spawns a secondary thread.
-This example starts with a more interesting program than the other examples we've worked with so far.
-It spawns a secondary thread, and then interacts with it using a notification.
-
 
 {{#step 7.A}}
 
