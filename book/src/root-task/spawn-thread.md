@@ -22,6 +22,10 @@ If you're used to using [seL4_libs](https://github.com/seL4/seL4_libs), you may 
 That is because we aren't using any higher-level seL4-related libraries such as 
 [`<sel4utils/thread.h>`](https://github.com/seL4/seL4_libs/blob/master/libsel4utils/include/sel4utils/thread.h).
 Our code is more like spawning a thread using `<sel4/sel4.h>` alone.
+{{#rustdoc_link root-task sel4_initialize_tls/index.html `sel4-initialize-tls`}}
+and
+{{#rustdoc_link root-task sel4_stack/index.html `sel4-stack`}}
+.
 
 The exercises in this chapter are only concerned with the following two functions, which run concurrently:
 

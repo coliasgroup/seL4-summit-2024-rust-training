@@ -18,8 +18,8 @@
 - [Allocating Kernel Objects](root-task/kernel-objects.md)
 - [Modifying the Address Space](root-task/address-space.md)
 - [Using a Serial Device](root-task/serial-device.md)
-- [Spawning a Thread](root-task/spawning-a-thread.md)
-- [Spawning a Task](root-task/spawning-a-task.md)
+- [Spawning a Thread](root-task/spawn-thread.md)
+- [Spawning a Task](root-task/spawn-task.md)
 
 # Part II: Microkit
 
