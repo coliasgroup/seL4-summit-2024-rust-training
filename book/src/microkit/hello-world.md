@@ -24,4 +24,9 @@ where
     T: sel4_microkit::Handler
 ```
 
-
+An implementation of the {{#rustdoc_link microkit sel4_microkit/trait.Handler.html `Handler`}} trait is used as the event handler for the protection domain's main loop.
+The
+{{#rustdoc_link microkit sel4_microkit/trait.Handler.html#method.notified `notified`}},
+{{#rustdoc_link microkit sel4_microkit/trait.Handler.html#method.protected `protected`}},
+and
+{{#rustdoc_link microkit sel4_microkit/trait.Handler.html#method.fault `fault`}}
