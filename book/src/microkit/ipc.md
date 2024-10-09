@@ -25,6 +25,8 @@ The example system XML file specifies two protection domains, with a channel bet
 ```
 TODO
 - Channel
+- MessageInfo
+- sel4_microkit::with_msg_regs{,_mut}
 ```
 
 {{#step 10.A (exercise)}}
