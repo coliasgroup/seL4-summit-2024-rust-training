@@ -22,6 +22,11 @@ The example system XML file specifies two protection domains, with a channel bet
 
 {{#fragment_with_gh_link "rust,ignore" @-9 (workspaces/microkit/ipc/)pds/server/src/main.rs:12:39}}
 
+```
+TODO
+- channel
+```
+
 {{#step 10.A (exercise)}}
 
 **Exercise:**
