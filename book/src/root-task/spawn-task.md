@@ -20,8 +20,17 @@ Again, our code here is more like spawning a task using `<sel4/sel4.h>` alone.
 This example consists of two programs.
 The {{#gh_link [`spawn-task`] @-7 workspaces/root-task/spawn-task/src/main.rs}} crate is the root task, and the {{#gh_link [`spawn-task-child`] @-7 workspaces/root-task/spawn-task/child/src/main.rs}} crate is the child task.
 
-The child task does not spawn in any standard sort of environment, so is includes its own ad-hoc Rust language runtime in {{#gh_link @-7 (workspaces/root-task/spawn-task/)child/src/runtime.rs}}.
-This runtime is built using 
+The child task does not spawn in any standard sort of environment, so is includes its own ad-hoc Rust language runtime in {{#gh_link @-7 (workspaces/root-task/spawn-task/)child/src/runtime.rs}}, complete with thread-local storage, a global heap allocator, and exception handling.
+This runtime is built using a few Rust langauge runtime building block crates:
+- {{#rustdoc_link root-task sel4_runtime_common/index.html `sel4-runtime-common`}}
+- {{#rustdoc_link root-task sel4_initialize_tls/index.html `sel4-initialize-tls`}}
+- {{#rustdoc_link root-task sel4_dlmalloc/index.html `sel4-dlmalloc`}}
+- {{#rustdoc_link root-task sel4_stack/index.html `sel4-stack`}}
+- {{#rustdoc_link root-task sel4_panicking/index.html `sel4-panicking`}}
+- {{#rustdoc_link root-task sel4_panicking_env/index.html `sel4-panicking-env`}}
+
+This minimal, ad-hoc language runtime is a neat, instructive piece of code.
+If you are interested in learning more about building a new Rust language runtime out of the building blocks provided by the [rust-sel4](https://github.com/seL4/rust-sel4) project, let the instructor know.
 
 [Step 4.B](./address-space.html#step-4b)
 
