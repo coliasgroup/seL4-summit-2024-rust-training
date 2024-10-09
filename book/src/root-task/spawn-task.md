@@ -35,15 +35,29 @@ If you are interested in learning more about building a new Rust language runtim
 Explore the {{#gh_link [root task] @-7 workspaces/root-task/spawn-task/src}} and {{#gh_link [child task] @-7 workspaces/root-task/spawn-task/child/src}} at will.
 Let the instructor know if you would like to discuss any particular aspect of it.
 
-[Step 4.B](./address-space.html#step-4b)
+Right now, all the child task does is send a test message over an endpoint back to the root task.
+The challenge in this chapter, [step 7.D](#step-7d), is to extend the root task so that it sets up the child task to be able to interact with the serial driver, and to extend the child task to implement the same echo loop as in [./serial-device.html#step-5h].
+Steps [7.A](#step-7a), [7.B](#step-7b), and [7.C](#step-7c), which are not exercises, make some incremental extensions towards those goals to help you get started.
 
 {{#step 7.A}}
 
-`TODO`
+This step extends the `create_child_vspace()` function in {{#gh_link @7.A workspaces/root-task/spawn-task/src/child_vspace.rs}} to take an `extra_frames` parameter.
+`create_child_vspace()` now maps these extra frames into the child task's address space, after the end of the program image, and after the IPC buffer frame.
+
+In [step 7.D](#step-7d), you be able to use this parameter to pass in the serial device MMIO register frame to mapped into the child task's address space.
 
 {{#step 7.B}}
 
-`TODO`
+This step extends the `ObjectAllocator` type in {{#gh_link @7.B workspaces/root-task/spawn-task/src/object_allocator.rs}} with the `recklessly_allocate_at()` method.
+This method allocates an object according to the `blueprint` parameter at the given physical address `paddr`.
+Instead of just allocating the object from the largest kernel untyped like the `allocate()` method does, this method searches through the bootinfo to find the initial untyped capability whose corresponding untyped object contains `paddr`, allocates dummy objects from this untyped object until its watermark reaches `paddr`, and then allocates the desired object.
+`recklessly_allocate_at()`'s procedure is similar to that which we followed in [step 5.C](#step-5c).
+
+This implementation is "reckless" because it modifies the state of the untyped capability it allocates from (allocating from it and changing its watermark) without keeping track of having done so.
+So, subsequent calls for `paddr`s contained in the same initial untyped would fail or, worse, misbehave.
+However, we expect to only need to call it once, so we are okay with this caveat.
+
+In [step 7.D](#step-7d), you be able to use this method to allocate the serial device MMIO register frame.
 
 {{#step 7.C}}
 
