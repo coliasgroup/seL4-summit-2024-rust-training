@@ -14,6 +14,12 @@ cd workspaces/microkit/ipc
 make simulate
 ```
 
+The example system XML file specifies two protection domains, with a channel between them:
+
+{{#fragment_with_gh_link "rust,ignore" @-9 (workspaces/microkit/)ipc/ipc.system:7:20}}
+
+The 
+
 {{#step 10.A (exercise)}}
 
 **Exercise:**
@@ -24,4 +30,4 @@ Send something more interesting over IPC using
 and
 {{#rustdoc_link root-task sel4/struct.IpcBuffer.html#method.msg_bytes_mut `msg_bytes_mut`}}
 .
-For example, the [`zerocopy` crate](https://docs.rs/zerocopy/latest/zerocopy/) can be used to view certain types as bytes, and the lightweight [`postcard` crate](https://docs.rs/postcard/latest/postcard/) can be used to serialize a wider range of types using [`serde`](https://serde.rs/).
+For example, the [`zerocopy` crate](https://docs.rs/zerocopy/latest/zerocopy/) can be used to view certain types as bytes and vice versa, and the lightweight [`postcard` crate](https://docs.rs/postcard/latest/postcard/) can be used to serialize and deserialize a wider range of types using [`serde`](https://serde.rs/).
