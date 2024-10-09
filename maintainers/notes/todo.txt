@@ -4,6 +4,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 #
 
+comment spawn-task example
 test on macbook
 check that both workspaces use same rust-sel4 commit
 
