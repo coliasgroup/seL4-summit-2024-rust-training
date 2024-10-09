@@ -29,4 +29,4 @@ Familiarity with the seL4 API isn't necessarily assumed or required, but this te
 Please let the instructor know if you'd like an introduction or review for any seL4 API concepts or details.
 
 [Part II](#sel4-microkit) covers the Rust bindings for the seL4 Microkit API and the runtime for microkit protection domains.
-This part does assume that the reader is familiar with the basics of the Microkit framework and API.
+This part does assume that the reader is familiar with the basics of the Microkit framework and API, or is using a companion resource to learn about the Microkit in parallel.
