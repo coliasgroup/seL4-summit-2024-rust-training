@@ -16,9 +16,11 @@ make simulate
 
 The example system XML file specifies two protection domains, with a channel between them:
 
-{{#fragment_with_gh_link "rust,ignore" @-9 (workspaces/microkit/)ipc/ipc.system:7:20}}
+{{#fragment_with_gh_link "xml" @-9 (workspaces/microkit/ipc/)ipc.system:7:20}}
 
-The 
+{{#fragment_with_gh_link "rust,ignore" @-9 (workspaces/microkit/ipc/)pds/client/src/main.rs:12:32}}
+
+{{#fragment_with_gh_link "rust,ignore" @-9 (workspaces/microkit/ipc/)pds/server/src/main.rs:12:39}}
 
 {{#step 10.A (exercise)}}
 
