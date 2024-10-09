@@ -6,8 +6,6 @@
 
 # IPC
 
-- zerocopy
-
 {{#step 10.A (exercise)}}
 
 **Exercise:**
