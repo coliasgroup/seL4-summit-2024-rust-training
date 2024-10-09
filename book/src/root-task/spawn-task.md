@@ -17,6 +17,12 @@ make simulate
 Similarly to what we saw in [Chapter 6 (Spawning a Thread)](spawn-thread.html), the code in this example is more low-level and complex compared to what you have seen in code that leverages [`<sel4utils/process.h>`](https://github.com/seL4/seL4_libs/blob/master/libsel4utils/include/sel4utils/process.h).
 Again, our code here is more like spawning a task using `<sel4/sel4.h>` alone.
 
+This example consists of two programs.
+The {{#gh_link [`spawn-task`] @-7 workspaces/root-task/spawn-task/src/main.rs}} crate is the root task, and the {{#gh_link [`spawn-task-child`] @-7 workspaces/root-task/spawn-task/child/src/main.rs}} crate is the child task.
+
+The child task does not spawn in any standard sort of environment, so is includes its own ad-hoc Rust language runtime in {{#gh_link @-7 (workspaces/root-task/spawn-task/)child/src/runtime.rs}}.
+This runtime is built using 
+
 [Step 4.B](./address-space.html#step-4b)
 
 {{#step 7.A}}
