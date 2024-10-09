@@ -12,3 +12,5 @@ Here are three such resources:
 - The instructor
 - The [Mirokit manual](https://github.com/seL4/microkit/blob/main/docs/manual.md)
 - The [Mirokit tutorial](https://trustworthy.systems/projects/microkit/tutorial/welcome.html)
+
+This part also assumes that the reader has worked through chapters [2](../root-task/hello-world.html) and [6](../root-task/spawn-thread.html) of [Part I](../root-task/index.html).

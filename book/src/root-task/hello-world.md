@@ -17,7 +17,7 @@ Press `ctrl-a x` to exit QEMU.
 
 Here is its source:
 
-{{#fragment_with_gh_link "rust,ignore" @-2 (workspaces/root-task/)hello/src/main.rs:7:17}}
+{{#fragment_with_gh_link "rust,ignore" @-2 (workspaces/root-task/)hello-world/src/main.rs:7:17}}
 
 The Rust standard library is divided into three layers:
 - [`core`](https://doc.rust-lang.org/core/): dependency-free foundation
@@ -108,6 +108,6 @@ or
 The `sel4_logging` crate builds on top of the [log](https://docs.rs/log/latest/log/) crate to add utilities for initializing simple loggers in minimal environments, such as a seL4 root task.
 This step demonstrates one way to initialize a logger using this crate:
 
-{{#fragment_with_gh_link "rust,ignore" @2.G (workspaces/root-task/)hello/src/main.rs:17:20}}
+{{#fragment_with_gh_link "rust,ignore" @2.G (workspaces/root-task/)hello-world/src/main.rs:17:20}}
 
-{{#fragment_with_gh_link "rust,ignore" @2.G (workspaces/root-task/)hello/src/main.rs:41}}
+{{#fragment_with_gh_link "rust,ignore" @2.G (workspaces/root-task/)hello-world/src/main.rs:41}}
