@@ -29,6 +29,9 @@ Each step header contains two icons.
 Clicking the clipboard copies the commit hash corresponding to the step to the clipboard.
 The GitHub icon is a link to the commit on GitHub.
 
+Use any Git workflow that works for you.
+For example, you could cherry-pick the steps that are not marked as exercises after examining and understanding them, and then attempt the exercises on your own, using those step commits as hints when necessary.
+
 ### Docker
 
 We will work inside of a Docker container built with {{#gh_link docker/Dockerfile}}.
