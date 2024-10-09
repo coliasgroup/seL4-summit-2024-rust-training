@@ -44,7 +44,7 @@ Steps [7.A](#step-7a), [7.B](#step-7b), [7.C](#step-7c), and [7.D](#step-7d), wh
 This step extends the `ObjectAllocator` type in {{#gh_link @7.B workspaces/root-task/spawn-task/src/object_allocator.rs}} with the `recklessly_allocate_at()` method.
 This method allocates an object according to the `blueprint` parameter at the given physical address `paddr`.
 Instead of just allocating the object from the largest kernel untyped like the `allocate()` method does, this method searches through the bootinfo to find the initial untyped capability whose corresponding untyped object contains `paddr`, allocates dummy objects from this untyped object until its watermark reaches `paddr`, and then allocates the desired object.
-`recklessly_allocate_at()`'s procedure is similar to that which we followed in [step 5.C](#step-5c).
+`recklessly_allocate_at()`'s procedure is similar to that which we followed in [step 5.C](./serial-device.html#step-5c).
 
 This implementation is "reckless" because it modifies the state of the untyped capability it allocates from (allocating from it and changing its watermark) without keeping track of having done so.
 So, subsequent calls for `paddr`s contained in the same initial untyped would fail or, worse, misbehave.
