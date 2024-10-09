@@ -6,6 +6,14 @@
 
 # IPC
 
+This chapter covers making and handling protected procedure calls in protection domains written in Rust.
+Navigate to and run the example:
+
+```
+cd workspaces/microkit/ipc
+make simulate
+```
+
 {{#step 10.A (exercise)}}
 
 **Exercise:**
