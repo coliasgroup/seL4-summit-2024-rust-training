@@ -40,7 +40,7 @@ and
 methods correspond to their equivalents in [`<microkit.h>`](https://github.com/seL4/microkit/blob/main/libmicrokit/include/microkit.h).
 
 The default implementations of these methods just panic.
-The simplest `Handler` implementation doesn't override any 
+Our event handler, which we've called `HandlerImpl`, is the simplest possible `Handler` implementation.
 
 ### Language Runtime
 
