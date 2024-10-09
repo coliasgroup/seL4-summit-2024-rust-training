@@ -32,6 +32,9 @@ This runtime is built using a few Rust langauge runtime building block crates:
 This minimal, ad-hoc language runtime is a neat, instructive piece of code.
 If you are interested in learning more about building a new Rust language runtime out of the building blocks provided by the [rust-sel4](https://github.com/seL4/rust-sel4) project, let the instructor know.
 
+Explore the {{#gh_link [root task] @-7 workspaces/root-task/spawn-task/src}} and {{#gh_link [child task] @-7 workspaces/root-task/spawn-task/child/src}} at will.
+Let the instructor know if you would like to discuss any particular aspect of it.
+
 [Step 4.B](./address-space.html#step-4b)
 
 {{#step 7.A}}
