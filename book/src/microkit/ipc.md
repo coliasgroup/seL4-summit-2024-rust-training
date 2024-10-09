@@ -24,12 +24,15 @@ The example system XML file specifies two protection domains, with a channel bet
 
 ```
 TODO
-- channel
+- Channel
 ```
 
 {{#step 10.A (exercise)}}
 
 **Exercise:**
+In the client's `notified()` handler, make a protected procedure call to the server using `SERVER.pp_call()`.
+Handle the call in the server's `protected()` handler.
+Include data in the message using `sel4_microkit::with_msg_regs{,_mut}`.
 
 **Exercise (optional):**
 Send something more interesting over IPC using
