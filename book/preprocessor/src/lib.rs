@@ -4,7 +4,7 @@
 // SPDX-License-Identifier: BSD-2-Clause
 //
 
-use std::collections::BTreeMap;
+use std::collections::HashMap;
 use std::fmt;
 use std::ops::{Bound, RangeBounds};
 use std::path::Path;
@@ -13,6 +13,7 @@ use std::sync::LazyLock;
 
 use either::Either;
 use git2::{ObjectType, Oid, Repository};
+use itertools::Itertools;
 use regex::Regex;
 
 const CODE_SUBMODULE_PATH: &str = "code";
@@ -57,7 +58,7 @@ impl fmt::Display for Step {
 
 pub struct Steps {
     repo: Repository,
-    steps: BTreeMap<Step, Oid>,
+    steps: HashMap<Step, Oid>,
 }
 
 impl Steps {
@@ -78,7 +79,7 @@ impl Steps {
     }
 
     pub fn new(repo: Repository, last_step: Oid) -> Self {
-        let mut steps = BTreeMap::new();
+        let mut steps = HashMap::new();
         let mut commit_id = last_step;
         loop {
             let commit = repo.find_commit(commit_id).unwrap();
@@ -95,11 +96,13 @@ impl Steps {
     }
 
     pub fn iter(&self) -> impl Iterator<Item = (&Step, &Oid)> {
-        self.steps.iter()
+        self.steps
+            .iter()
+            .sorted_by_key(|(step, _id)| step.structured())
     }
 
     pub fn last_step(&self) -> &Step {
-        let (step, _) = self.steps.last_key_value().unwrap();
+        let (step, _) = self.iter().last().unwrap();
         step
     }
 

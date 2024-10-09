@@ -41,12 +41,6 @@ Steps [7.A](#step-7a), [7.B](#step-7b), and [7.C](#step-7c), which are not exerc
 
 {{#step 7.A}}
 
-This step extends the `create_child_vspace()` function in {{#gh_link @7.A workspaces/root-task/spawn-task/src/child_vspace.rs}} to take an `extra_frames` parameter.
-`create_child_vspace()` now maps these extra frames into the child task's address space, after the end of the program image, and after the IPC buffer frame.
-
-In [step 7.D](#step-7d), you be able to use this parameter to pass in the serial device MMIO register frame to mapped into the child task's address space.
-
-{{#step 7.B}}
 
 This step extends the `ObjectAllocator` type in {{#gh_link @7.B workspaces/root-task/spawn-task/src/object_allocator.rs}} with the `recklessly_allocate_at()` method.
 This method allocates an object according to the `blueprint` parameter at the given physical address `paddr`.
@@ -59,9 +53,18 @@ However, we expect to only need to call it once, so we are okay with this caveat
 
 In [step 7.D](#step-7d), you be able to use this method to allocate the serial device MMIO register frame.
 
+{{#step 7.B}}
+
+This step extends the `create_child_vspace()` function in {{#gh_link @7.A workspaces/root-task/spawn-task/src/child_vspace.rs}} to take an `extra_frames` parameter.
+`create_child_vspace()` now maps these extra frames into the child task's address space, after the end of the program image, and after the IPC buffer frame.
+
+In [step 7.D](#step-7d), you be able to use this parameter to pass in the serial device MMIO register frame to mapped into the child task's address space.
+
 {{#step 7.C}}
 
-`TODO`
+This step simply copies the `Device` type from [chapter 5](./serial-device.html) into the child task.
+
+In [step 7.D](#step-7d), you be able to use this type to interact with the serial device's MMIO registers, just like we did in [step 5.E](./serial-device.html#step-5e).
 
 {{#step 7.D (challenge)}}
 

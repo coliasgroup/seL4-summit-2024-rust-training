@@ -25,6 +25,10 @@ Observe the steps ahead:
 git log {{#rev_of_step_0 12}}..{{#rev_of_last_step 12}}
 ```
 
+Each step header contains two icons.
+Clicking the clipboard copies the commit hash corresponding to the step to the clipboard.
+The GitHub icon is a link to the commit on GitHub.
+
 ### Docker
 
 We will work inside of a Docker container built with {{#gh_link docker/Dockerfile}}.
