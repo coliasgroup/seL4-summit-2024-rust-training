@@ -120,7 +120,7 @@ We can leverage the fact that Rust's `Range<T>` type is an iterator for certain 
 
 {{#fragment_with_gh_link "rust,ignore" @3.C workspaces/root-task/kernel-objects/src/main.rs:29:33}}
 
-The {{#rustdoc_link root-task sel4/cap/type.CNode.html#method.relative_self `sel4::cap::CNode::relative_self()`}}  method elaborates a `sel4::cap::Cnode` into a `sel4::AbsoluteCPtr`.
+The {{#rustdoc_link root-task sel4/cap/type.CNode.html#method.absolute_cptr_for_self`sel4::cap::CNode::absolute_cptr_for_self()`}}  method elaborates a `sel4::cap::Cnode` into a `sel4::AbsoluteCPtr`.
 Interestingly, there are two ways to do this, but the current implementation is just to use a depth of zero.
 
 Now we can invoke our untyped capability to allocate a notification object:
@@ -145,7 +145,7 @@ A wait call on the notification returns and clears the notification's state, pro
 
 **Exercise:**: Allocate a new empty slot in the current CNode.
 
-A slot in the root task's CSpace (i.e. a value of type {{#rustdoc_link root-task sel4/init_thread/struct.Slot.html `sel4::init_thread::Slot`}}) can be turned into an `sel4::AbsoluteCPtr` using {{#rustdoc_link root-task sel4/cap/type.CNode.html#method.relative `sel4::CNode::relative()`}}:
+A slot in the root task's CSpace (i.e. a value of type {{#rustdoc_link root-task sel4/init_thread/struct.Slot.html `sel4::init_thread::Slot`}}) can be turned into an `sel4::AbsoluteCPtr` using {{#rustdoc_link root-task sel4/cap/type.CNode.html#method.absolute_cptr`sel4::CNode::absolute_cptr()`}}:
 
 {{#fragment_with_gh_link "rust,ignore" @3.E workspaces/root-task/kernel-objects/src/main.rs:63:63}}
 

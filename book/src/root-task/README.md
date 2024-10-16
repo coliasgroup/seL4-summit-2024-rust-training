@@ -8,7 +8,7 @@
 
 After initializing itself, the seL4 kernel passes control to a userspace program called the root task, whose image is provided to the kernel at boot-time.
 The root task's {{#manual_link [capability space] #3}} contains capabilities for all memory and boot-time objects.
-That is to say, the root task spawns with the maximum priveledge that a userspace program can have.
+That is to say, the root task spawns with the maximum privilege that a userspace program can have.
 The kernel provides the root task with a map of its initial capability space in the form of the {{#manual_link [BootInfo frame] #9.2}}.
 You can read more about the root task's environment in {{#manual_link #9.1}}.
 
