@@ -37,7 +37,7 @@ First, add some familiar snippets that we will use for allocating CSlots and ker
 {{#step 5.B (exercise)}}
 
 `largest_kernel_ut` will be useful for allocating kernel objects whose backing physical addresses don't matter to us, but we must allocate the frame which contains the serial device's MMIO registers at a particular physicall address (`SERIAL_DEVICE_MMIO_PADDR`).
-Furthermore, the seL4 API distinguishes between _general purpose untyped_ _device untyped_. General purpose untyped is backed by normal memory, and can be used to create any type of object. Device untyped is not backed by normal memory, and can only be used to create frames.
+Furthermore, the seL4 API distinguishes between _general purpose untyped_ and _device untyped_. General purpose untyped is backed by normal memory, and can be used to create any type of object. Device untyped is not backed by normal memory, and can only be used to create frames.
 See the last two paragraphs of {{#manual_link #2.4 (Kernel Memory Allocation)}} for more information.
 So, we must allocate the serial device MMIO frame from the particular initial device untyped that contains `SERIAL_DEVICE_MMIO_PADDR`.
 
@@ -100,7 +100,7 @@ The intent behind this API is that a highly-privileged component will hold an `I
 
 The root task can access its `IRQControl` capability with {{#rustdoc_link root-task sel4/init_thread/slot/constant.IRQ_CONTROL.html `sel4::init_thread::slot::IRQ_CONTROL.cap()`}}
 
-**Exercise:** Use `sel4::init_thread::slot::IRQ_CONTROL.cap()` to create a `sel4::cap::IrqHandler` for `SERIAL_DEVICE_MMIO_PADDR`.
+**Exercise:** Use `sel4::init_thread::slot::IRQ_CONTROL.cap()` to create a `sel4::cap::IrqHandler` for `SERIAL_DEVICE_IRQ`.
 
 {{#step 5.G (exercise)}}
 

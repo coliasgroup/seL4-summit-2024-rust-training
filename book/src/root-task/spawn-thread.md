@@ -90,7 +90,7 @@ Message data is held in the message registers (an array of machine words), which
 ).
 The `length` field of the `MessageInfo` specifies how many message registers will be copied into the receiver's IPC buffer.
 
-Once can also view the message registers as an array of bytes using
+One can also view the message registers as an array of bytes using
     {{#rustdoc_link root-task sel4/struct.IpcBuffer.html#method.msg_bytes `msg_bytes`}}
     and
     {{#rustdoc_link root-task sel4/struct.IpcBuffer.html#method.msg_bytes_mut `msg_bytes_mut`}}.
