@@ -4,6 +4,12 @@
     SPDX-License-Identifier: CC-BY-SA-4.0
 -->
 
+```
+!!! NOTE !!!
+```
+
+_This chapter was rushed due to time constraints. Call over the instructor if you want to properly learn about this topic_.
+
 # Shared Memory
 
 This chapter covers interacting with shared memory from protection domains written in Rust.
@@ -60,3 +66,12 @@ The
 {{#rustdoc_link microkit sel4_externally_shared/type.ExternallySharedRef.html `sel4_externally_shared::ExternallySharedRef`}} type alias is the now-abstract
 {{#rustdoc_link microkit sel4_externally_shared/struct.VolatileRef.html `sel4_externally_shared::VolatileRef`}}
 type instantiated with memory access operations suitable for memory that is shared with another protection domain.
+
+The
+{{#rustdoc_link microkit sel4_microkit/macro.memory_region_symbol.html `sel4_microkit::memory_region_symbol!`}}
+macro is like the `sel4_microkit::var!` macro, except specialized for shared memory region virtual address symbols.
+For one, the underlying symbol is always of type `usize` and the macro returns a value of type `NonNull<_>`.
+`memory_region_symbol!` has a few additional features.
+For example, `memory_region_symbol!(foo: *mut [u8] n = BAR)` returns a `NonNull<[u8]>` with a runtime slice length of `BAR`.
+
+See this step's diff for how to put this all together.
