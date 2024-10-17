@@ -16,11 +16,11 @@ make simulate
 
 The example system description specifies two protection domains, with a channel between them:
 
-{{#fragment_with_gh_link "xml" @-9 (workspaces/microkit/ipc/)ipc.system:7:20}}
+{{#fragment_with_gh_link "xml" @-10 (workspaces/microkit/ipc/)ipc.system:7:20}}
 
-{{#fragment_with_gh_link "rust,ignore" @-9 (workspaces/microkit/ipc/)pds/client/src/main.rs:12:32}}
+{{#fragment_with_gh_link "rust,ignore" @-10 (workspaces/microkit/ipc/)pds/client/src/main.rs:12:32}}
 
-{{#fragment_with_gh_link "rust,ignore" @-9 (workspaces/microkit/ipc/)pds/server/src/main.rs:12:39}}
+{{#fragment_with_gh_link "rust,ignore" @-10 (workspaces/microkit/ipc/)pds/server/src/main.rs:12:39}}
 
 The
 {{#rustdoc_link microkit sel4_microkit/struct.Channel.html `Channel`}} type is the Rust equivalent of the
