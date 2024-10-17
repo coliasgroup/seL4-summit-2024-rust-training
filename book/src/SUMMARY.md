@@ -27,4 +27,4 @@
 - [Hello, World!](microkit/hello-world.md)
 - [IPC](microkit/ipc.md)
 - [Shared Memory](microkit/shared-memory.md)
-- [Putting It All Together](microkit/challenge.md)
+- [In Your Project](microkit/challenge.md)
