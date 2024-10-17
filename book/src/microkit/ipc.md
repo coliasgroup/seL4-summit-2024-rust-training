@@ -26,6 +26,7 @@ The
 {{#rustdoc_link microkit sel4_microkit/struct.Channel.html `Channel`}} type is the Rust equivalent of the
 [microkit_channel](https://github.com/seL4/microkit/blob/b8cf3094ba08b37198b1943ec832c3a1168f4409/libmicrokit/include/microkit.h#L14C22-L14C38)
 type alias in `libmicrokit`.
+Note how the functionality corresponding to `libmicrokit`'s `microkit_notify`, `microkit_irq_ack`, and `microkit_ppcall` is implemented in methods for `Channel`.
 
 The
 {{#rustdoc_link microkit sel4_microkit/struct.MessageInfo.html `MessageInfo`}} type is the Rust equivalent of the
