@@ -19,7 +19,7 @@
 - [Modifying the Address Space](root-task/address-space.md)
 - [Using a Serial Device](root-task/serial-device.md)
 - [Spawning a Thread](root-task/spawn-thread.md)
-- [Spawning a Task](root-task/spawn-task.md)
+- [Spawning a Task (Challenge)](root-task/spawn-task.md)
 
 # Part II: Microkit
 
@@ -27,4 +27,4 @@
 - [Hello, World!](microkit/hello-world.md)
 - [IPC](microkit/ipc.md)
 - [Shared Memory](microkit/shared-memory.md)
-- [In Your Project](microkit/challenge.md)
+- [In Your Project (Challenge)](microkit/challenge.md)
