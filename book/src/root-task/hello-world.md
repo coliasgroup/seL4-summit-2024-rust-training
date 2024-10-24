@@ -27,7 +27,7 @@ The Rust standard library is divided into three layers:
 The high-level `std` doesn't support the low-level seL4 root task target.
 [`#![no_std]`](https://docs.rust-embedded.org/book/intro/no-std.html) declares that this crate does not depend on `std`, and prevents rustc from automatically importing it.
 
-Our langauge runtime will handle the program's entrypoint differently than a typical Rust program.
+Our language runtime will handle the program's entrypoint differently than a typical Rust program.
 [`#![no_main]`](https://doc.rust-lang.org/reference/crates-and-source-files.html#the-no_main-attribute) informs rustc of this fact.
 
 The {{#rustdoc_link root-task sel4/index.html `sel4` crate}} binds the seL4 API.
@@ -45,7 +45,7 @@ where
     T: sel4_root_task::Termination
 ```
 
-(Rustdoc for for {{#rustdoc_link root-task sel4/struct.BootInfoPtr.html `BootInfoPtr`}} and {{#rustdoc_link root-task sel4_root_task/trait.Termination.html `Termination`}})
+(Rustdoc for {{#rustdoc_link root-task sel4/struct.BootInfoPtr.html `BootInfoPtr`}} and {{#rustdoc_link root-task sel4_root_task/trait.Termination.html `Termination`}})
 
 The root task has no way to exit, so, to terminate cleanly, it must suspend its own thread.
 `sel4::init_thread::suspend_self()` does exactly this.
